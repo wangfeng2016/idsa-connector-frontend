@@ -282,9 +282,20 @@ const ConnectorStatus = () => {
       {loading ? (
         <LinearProgress sx={{ mb: 2 }} />
       ) : (
-        <Grid container spacing={3}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 3,
+          }}
+        >
           {connectors.map((connector) => (
-            <Grid item xs={12} md={6} lg={4} key={connector.id}>
+            <Box
+              key={connector.id}
+              sx={{
+                flex: { xs: '1 1 100%', md: '1 1 calc(50% - 12px)', lg: '1 1 calc(33.333% - 16px)' },
+              }}
+            >
               <Card>
                 <CardContent>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>

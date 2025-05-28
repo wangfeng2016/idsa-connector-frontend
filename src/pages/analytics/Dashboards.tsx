@@ -215,103 +215,199 @@ const Dashboards = () => {
         数据仪表板
       </Typography>
 
-      {/* 统计卡片 */}
-      <Grid container spacing={3} sx={{ mb: 4, alignItems: 'stretch' }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: 180, display: 'flex', flexDirection: 'column' }}>
-            <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <Typography variant="h6" color="textSecondary" gutterBottom>
-                仪表板总数
-              </Typography>
-              <Typography variant="h3">{dashboardStats.total}</Typography>
-              <Box display="flex" mt={1}>
-                <Chip
-                  icon={<StarIcon fontSize="small" />}
-                  label={`收藏: ${dashboardStats.starred}`}
-                  size="small"
-                  color="primary"
-                  sx={{ mr: 1 }}
-                />
-                <Chip
-                  icon={<ShareIcon fontSize="small" />}
-                  label={`共享: ${dashboardStats.shared}`}
-                  size="small"
-                  color="success"
-                />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: 180, display: 'flex', flexDirection: 'column' }}>
-            <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <Typography variant="h6" color="textSecondary" gutterBottom>
-                图表总数
-              </Typography>
-              <Typography variant="h3">{dashboardStats.charts}</Typography>
-              <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                平均每个仪表板 {(dashboardStats.charts / dashboardStats.total).toFixed(1)} 个图表
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: 180, display: 'flex', flexDirection: 'column' }}>
-            <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <Typography variant="h6" color="textSecondary" gutterBottom>
-                分类统计
-              </Typography>
-              <Box display="flex" flexWrap="wrap" gap={1} mt={1}>
-                <Chip
-                  label={`数据: ${dashboardStats.categories.data}`}
-                  size="small"
-                  color="primary"
-                />
-                <Chip
-                  label={`运营: ${dashboardStats.categories.operations}`}
-                  size="small"
-                  color="success"
-                />
-                <Chip
-                  label={`合规: ${dashboardStats.categories.compliance}`}
-                  size="small"
-                  color="warning"
-                />
-                <Chip
-                  label={`业务: ${dashboardStats.categories.business}`}
-                  size="small"
-                  color="error"
-                />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      {/* 统计卡片 - Flex布局 */}
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          mb: 4,
+          '& > *': {
+            flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 calc(25% - 18px)' },
+            minWidth: { xs: '100%', sm: '280px', md: '240px' }
+          }
+        }}
+      >
+        <Card 
+          sx={{ 
+            height: 180, 
+            display: 'flex', 
+            flexDirection: 'column',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(102, 126, 234, 0.4)'
+            }
+          }}
+        >
+          <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.8)', mb: 1 }}>
+              仪表板总数
+            </Typography>
+            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>{dashboardStats.total}</Typography>
+            <Box display="flex" flexWrap="wrap" gap={1}>
+              <Chip
+                icon={<StarIcon fontSize="small" />}
+                label={`收藏: ${dashboardStats.starred}`}
+                size="small"
+                sx={{ 
+                  bgcolor: 'rgba(255,255,255,0.2)', 
+                  color: 'white',
+                  '& .MuiChip-icon': { color: 'white' }
+                }}
+              />
+              <Chip
+                icon={<ShareIcon fontSize="small" />}
+                label={`共享: ${dashboardStats.shared}`}
+                size="small"
+                sx={{ 
+                  bgcolor: 'rgba(255,255,255,0.2)', 
+                  color: 'white',
+                  '& .MuiChip-icon': { color: 'white' }
+                }}
+              />
+            </Box>
+          </CardContent>
+        </Card>
 
-      {/* 搜索和筛选 */}
-      <Grid container spacing={2} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={6}>
+        <Card 
+          sx={{ 
+            height: 180, 
+            display: 'flex', 
+            flexDirection: 'column',
+            background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(240, 147, 251, 0.4)'
+            }
+          }}
+        >
+          <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.8)', mb: 1 }}>
+              图表总数
+            </Typography>
+            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>{dashboardStats.charts}</Typography>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+              平均每个仪表板 {(dashboardStats.charts / dashboardStats.total).toFixed(1)} 个图表
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card 
+          sx={{ 
+            height: 180, 
+            display: 'flex', 
+            flexDirection: 'column',
+            background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(79, 172, 254, 0.4)'
+            }
+          }}
+        >
+          <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.8)', mb: 2 }}>
+              分类统计
+            </Typography>
+            <Box display="flex" flexWrap="wrap" gap={1}>
+              <Chip
+                label={`数据: ${dashboardStats.categories.data}`}
+                size="small"
+                sx={{ 
+                  bgcolor: 'rgba(255,255,255,0.2)', 
+                  color: 'white'
+                }}
+              />
+              <Chip
+                label={`运营: ${dashboardStats.categories.operations}`}
+                size="small"
+                sx={{ 
+                  bgcolor: 'rgba(255,255,255,0.2)', 
+                  color: 'white'
+                }}
+              />
+              <Chip
+                label={`合规: ${dashboardStats.categories.compliance}`}
+                size="small"
+                sx={{ 
+                  bgcolor: 'rgba(255,255,255,0.2)', 
+                  color: 'white'
+                }}
+              />
+              <Chip
+                label={`业务: ${dashboardStats.categories.business}`}
+                size="small"
+                sx={{ 
+                  bgcolor: 'rgba(255,255,255,0.2)', 
+                  color: 'white'
+                }}
+              />
+            </Box>
+          </CardContent>
+        </Card>
+      </Box>
+
+      {/* 搜索和筛选 - Flex布局 */}
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          mb: 4,
+          alignItems: 'stretch'
+        }}
+      >
+        <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 50%' }, minWidth: '280px' }}>
           <TextField
             fullWidth
+            variant="outlined"
             placeholder="搜索仪表板..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                },
+                '&.Mui-focused': {
+                  boxShadow: '0 4px 12px rgba(25, 118, 210, 0.3)'
+                }
+              }
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon />
+                  <SearchIcon sx={{ color: 'primary.main' }} />
                 </InputAdornment>
               ),
             }}
           />
-        </Grid>
-        <Grid item xs={6} md={3}>
+        </Box>
+        
+        <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 25%' }, minWidth: '200px' }}>
           <TextField
             select
             fullWidth
             label="分类"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
+            sx={{
+              borderRadius: 2,
+              '& .MuiOutlinedInput-notchedOutline': {
+                transition: 'all 0.3s ease'
+              },
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+              }
+            }}
           >
             <MenuItem value="all">全部分类</MenuItem>
             <MenuItem value="data">数据</MenuItem>
@@ -319,108 +415,264 @@ const Dashboards = () => {
             <MenuItem value="compliance">合规</MenuItem>
             <MenuItem value="business">业务</MenuItem>
           </TextField>
-        </Grid>
-        <Grid item xs={6} md={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        </Box>
+        
+        <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 25%' }, minWidth: '200px' }}>
           <Button
+            fullWidth
             variant="contained"
             startIcon={<AddIcon />}
             onClick={handleOpenDialog}
-            sx={{ height: '56px' }}
+            sx={{ 
+              height: '56px',
+              borderRadius: 2,
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 8px 16px rgba(102, 126, 234, 0.4)'
+              }
+            }}
           >
             创建仪表板
           </Button>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
-      {/* 仪表板列表 */}
-      <Grid container spacing={3} sx={{ alignItems: 'stretch' }}>
+      {/* 仪表板列表 - Flex布局 */}
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          '& > *': {
+            flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 calc(33.333% - 16px)', lg: '1 1 calc(25% - 18px)' },
+            minWidth: { xs: '100%', sm: '300px', md: '280px' },
+            maxWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 16px)', lg: 'calc(25% - 18px)' }
+          }
+        }}
+      >
         {dashboards.map((dashboard) => (
-          <Grid item xs={12} sm={6} md={4} key={dashboard.id}>
-            <Card sx={{ height: 400, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
-              <CardHeader
-                title={
-                  <Box display="flex" alignItems="center">
-                    <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
-                      {dashboard.title}
-                    </Typography>
-                    {dashboard.starred && (
-                      <StarIcon color="primary" fontSize="small" sx={{ ml: 1 }} />
-                    )}
-                  </Box>
+          <Card
+            key={dashboard.id}
+            sx={{
+              height: 'fit-content',
+              minHeight: '400px',
+              display: 'flex',
+              flexDirection: 'column',
+              cursor: 'pointer',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              borderRadius: 3,
+              overflow: 'hidden',
+              position: 'relative',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '4px',
+                background: `linear-gradient(90deg, ${getCategoryColor(dashboard.category)}, ${getCategoryColor(dashboard.category)}88)`,
+                opacity: 0,
+                transition: 'opacity 0.3s ease'
+              },
+              '&:hover': {
+                transform: 'translateY(-8px)',
+                boxShadow: '0 16px 32px rgba(0,0,0,0.15)',
+                '&::before': {
+                  opacity: 1
                 }
-                action={
-                  <IconButton
-                    aria-label="settings"
-                    onClick={(e) => handleMenuOpen(e, dashboard)}
+              },
+            }}
+          >
+            <CardHeader
+              title={
+                <Box display="flex" alignItems="center">
+                  <Typography 
+                    variant="h6" 
+                    noWrap 
+                    sx={{ 
+                      flexGrow: 1,
+                      fontWeight: 600,
+                      fontSize: '1.1rem'
+                    }}
                   >
-                    <MoreVertIcon />
-                  </IconButton>
-                }
-                subheader={
-                  <Box display="flex" alignItems="center" mt={0.5}>
-                    <Chip
-                      icon={getCategoryIcon(dashboard.category)}
-                      label={getCategoryName(dashboard.category)}
-                      size="small"
-                      color={getCategoryColor(dashboard.category)}
-                    />
-                    <Typography variant="body2" color="textSecondary" sx={{ ml: 1 }}>
-                      {dashboard.charts} 个图表
-                    </Typography>
-                  </Box>
-                }
-              />
-              <Divider />
-              <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
-                <Box
+                    {dashboard.title}
+                  </Typography>
+                  {dashboard.starred && (
+                    <StarIcon color="warning" fontSize="small" sx={{ ml: 1 }} />
+                  )}
+                </Box>
+              }
+              action={
+                <IconButton
+                  aria-label="settings"
+                  onClick={(e) => handleMenuOpen(e, dashboard)}
                   sx={{
-                    height: 140,
-                    bgcolor: 'action.hover',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    mb: 2,
-                    borderRadius: 1,
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      transform: 'scale(1.1)',
+                      bgcolor: 'rgba(0,0,0,0.04)'
+                    }
                   }}
                 >
-                  <DashboardIcon sx={{ fontSize: 60, color: 'text.secondary', opacity: 0.5 }} />
+                  <MoreVertIcon />
+                </IconButton>
+              }
+              subheader={
+                <Box display="flex" alignItems="center" gap={1} sx={{ mt: 1 }}>
+                  <Chip
+                    icon={getCategoryIcon(dashboard.category)}
+                    label={getCategoryName(dashboard.category)}
+                    size="small"
+                    sx={{
+                      bgcolor: `${getCategoryColor(dashboard.category)}20`,
+                      color: getCategoryColor(dashboard.category),
+                      fontWeight: 500,
+                      border: `1px solid ${getCategoryColor(dashboard.category)}40`
+                    }}
+                  />
+                  {dashboard.shared && (
+                    <Chip
+                      icon={<ShareIcon fontSize="small" />}
+                      label="共享"
+                      size="small"
+                      sx={{
+                        bgcolor: 'rgba(76, 175, 80, 0.1)',
+                        color: '#4caf50',
+                        border: '1px solid rgba(76, 175, 80, 0.3)'
+                      }}
+                    />
+                  )}
                 </Box>
-                <Typography variant="body2" color="textSecondary" paragraph>
-                  {dashboard.description}
-                </Typography>
-                <Box display="flex" alignItems="center" mt="auto" pt={2}>
-                  <PersonIcon fontSize="small" color="action" />
-                  <Typography variant="body2" color="textSecondary" sx={{ ml: 0.5 }}>
-                    {dashboard.creator}
-                  </Typography>
-                  <AccessTimeIcon fontSize="small" color="action" sx={{ ml: 2 }} />
-                  <Typography variant="body2" color="textSecondary" sx={{ ml: 0.5 }}>
-                    更新于 {dashboard.lastModified}
-                  </Typography>
-                </Box>
-              </CardContent>
-              <Divider />
-              <Box display="flex" justifyContent="space-between" p={1} sx={{ height: 48 }}>
-                <Button startIcon={<VisibilityIcon />} size="small">
-                  查看
-                </Button>
-                <Button startIcon={<EditIcon />} size="small">
-                  编辑
-                </Button>
-                {dashboard.shared ? (
-                  <Button startIcon={<ShareIcon />} size="small" color="success">
-                    已共享
-                  </Button>
-                ) : (
-                  <Button startIcon={<ShareIcon />} size="small">
-                    共享
-                  </Button>
-                )}
+              }
+              sx={{ pb: 1 }}
+            />
+            <Divider />
+            <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'auto', pt: 2 }}>
+              <Box
+                sx={{
+                  height: 120,
+                  bgcolor: 'action.hover',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  mb: 2,
+                  borderRadius: 2,
+                  border: '2px dashed rgba(0,0,0,0.1)'
+                }}
+              >
+                <DashboardIcon sx={{ fontSize: 48, color: 'text.secondary', opacity: 0.5 }} />
               </Box>
-            </Card>
-          </Grid>
+              <Typography 
+                variant="body2" 
+                color="textSecondary" 
+                paragraph
+                sx={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  lineHeight: 1.5,
+                  minHeight: '3em'
+                }}
+              >
+                {dashboard.description}
+              </Typography>
+              <Box 
+                display="flex" 
+                alignItems="center" 
+                mt="auto" 
+                pt={2}
+                sx={{
+                  p: 2,
+                  bgcolor: 'rgba(0,0,0,0.02)',
+                  borderRadius: 2,
+                  border: '1px solid rgba(0,0,0,0.06)'
+                }}
+              >
+                <PersonIcon fontSize="small" color="action" />
+                <Typography variant="body2" color="textSecondary" sx={{ ml: 0.5, mr: 2 }}>
+                  {dashboard.creator}
+                </Typography>
+                <AccessTimeIcon fontSize="small" color="action" />
+                <Typography variant="body2" color="textSecondary" sx={{ ml: 0.5 }}>
+                  {dashboard.lastModified}
+                </Typography>
+              </Box>
+            </CardContent>
+            <Divider />
+            <Box display="flex" justifyContent="space-between" p={2} sx={{ height: 'auto' }}>
+              <Button 
+                startIcon={<VisibilityIcon />} 
+                size="small"
+                sx={{
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  fontWeight: 500,
+                  '&:hover': {
+                    bgcolor: 'primary.main',
+                    color: 'white'
+                  }
+                }}
+              >
+                查看
+              </Button>
+              <Button 
+                startIcon={<EditIcon />} 
+                size="small"
+                sx={{
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  fontWeight: 500,
+                  '&:hover': {
+                    bgcolor: 'secondary.main',
+                    color: 'white'
+                  }
+                }}
+              >
+                编辑
+              </Button>
+              {dashboard.shared ? (
+                <Button 
+                  startIcon={<ShareIcon />} 
+                  size="small" 
+                  sx={{
+                    borderRadius: 2,
+                    textTransform: 'none',
+                    fontWeight: 500,
+                    color: 'success.main',
+                    '&:hover': {
+                      bgcolor: 'success.main',
+                      color: 'white'
+                    }
+                  }}
+                >
+                  已共享
+                </Button>
+              ) : (
+                <Button 
+                  startIcon={<ShareIcon />} 
+                  size="small"
+                  sx={{
+                    borderRadius: 2,
+                    textTransform: 'none',
+                    fontWeight: 500,
+                    '&:hover': {
+                      bgcolor: 'info.main',
+                      color: 'white'
+                    }
+                  }}
+                >
+                  共享
+                </Button>
+              )}
+            </Box>
+          </Card>
         ))}
-      </Grid>
+      </Box>
 
       {/* 仪表板操作菜单 */}
       <Menu

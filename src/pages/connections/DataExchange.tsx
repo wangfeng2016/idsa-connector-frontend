@@ -314,57 +314,222 @@ const DataExchange = () => {
         </Box>
       </Box>
 
-      {/* 统计卡片 */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={3}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>交换总数</Typography>
-              <Typography variant="h3">{mockStats.totalExchanges}</Typography>
-              <Box sx={{ display: 'flex', mt: 1 }}>
-                <Chip label={`成功: ${mockStats.completedExchanges}`} size="small" color="success" sx={{ mr: 1 }} />
-                <Chip label={`失败: ${mockStats.failedExchanges}`} size="small" color="error" />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>成功率</Typography>
-              <Typography variant="h3">{mockStats.successRate}%</Typography>
-              <LinearProgress
-                variant="determinate"
-                value={mockStats.successRate}
-                color={mockStats.successRate > 90 ? 'success' : mockStats.successRate > 70 ? 'warning' : 'error'}
-                sx={{ height: 8, borderRadius: 5, mt: 2 }}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>数据传输量</Typography>
-              <Typography variant="h3">{mockStats.totalDataTransferred}</Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                平均传输速率: {mockStats.averageTransferRate}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>当前状态</Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 1 }}>
-                <Chip label={`进行中: ${mockStats.inProgressExchanges}`} color="primary" />
-                <Chip label={`等待中: ${mockStats.pendingExchanges}`} color="default" />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      {/* 搜索和筛选 - Flex布局 */}
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          mb: 3,
+          alignItems: 'stretch'
+        }}
+      >
+        <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 35%' }, minWidth: '280px' }}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="搜索交换记录..."
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                },
+                '&.Mui-focused': {
+                  boxShadow: '0 4px 12px rgba(25, 118, 210, 0.3)'
+                }
+              }
+            }}
+            InputProps={{
+              startAdornment: (
+                <SearchIcon sx={{ mr: 1, color: 'action.active' }} />
+              ),
+            }}
+          />
+        </Box>
+        
+        <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 20%' }, minWidth: '180px' }}>
+          <FormControl fullWidth>
+            <InputLabel>状态筛选</InputLabel>
+            <Select
+              value={filters.status}
+              label="状态筛选"
+              onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+              sx={{
+                borderRadius: 2,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                }
+              }}
+            >
+              <MenuItem value="">全部状态</MenuItem>
+              <MenuItem value="completed">已完成</MenuItem>
+              <MenuItem value="in_progress">进行中</MenuItem>
+              <MenuItem value="failed">失败</MenuItem>
+              <MenuItem value="pending">等待中</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        
+        <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 20%' }, minWidth: '180px' }}>
+          <FormControl fullWidth>
+            <InputLabel>类型筛选</InputLabel>
+            <Select
+              value={filters.exchangeType}
+              label="类型筛选"
+              onChange={(e) => setFilters({ ...filters, exchangeType: e.target.value })}
+              sx={{
+                borderRadius: 2,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                }
+              }}
+            >
+              <MenuItem value="">全部类型</MenuItem>
+              <MenuItem value="push">推送</MenuItem>
+              <MenuItem value="pull">拉取</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        
+        <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 15%' }, minWidth: '140px' }}>
+          <Button
+            fullWidth
+            variant="contained"
+            startIcon={<RefreshIcon />}
+            onClick={handleRefresh}
+            disabled={loading}
+            sx={{ 
+              height: '56px',
+              borderRadius: 2,
+              background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              '&:hover': {
+                background: 'linear-gradient(45deg, #1976D2 30%, #1CB5E0 90%)',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 8px 16px rgba(33, 150, 243, 0.4)'
+              }
+            }}
+          >
+            刷新数据
+          </Button>
+        </Box>
+      </Box>
+
+      {/* 统计卡片 - Flex布局 */}
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          mb: 4,
+          '& > *': {
+            flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 calc(25% - 18px)' },
+            minWidth: { xs: '100%', sm: '280px', md: '220px' }
+          }
+        }}
+      >
+        <Card 
+          sx={{ 
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(102, 126, 234, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
+              交换总数
+            </Typography>
+            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>{mockStats.totalExchanges}</Typography>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <Chip label={`成功: ${mockStats.completedExchanges}`} size="small" sx={{ backgroundColor: 'rgba(76, 175, 80, 0.2)', color: 'rgba(76, 175, 80, 1)' }} />
+              <Chip label={`失败: ${mockStats.failedExchanges}`} size="small" sx={{ backgroundColor: 'rgba(244, 67, 54, 0.2)', color: 'rgba(244, 67, 54, 1)' }} />
+            </Box>
+          </CardContent>
+        </Card>
+
+        <Card 
+          sx={{ 
+            background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(240, 147, 251, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
+              成功率
+            </Typography>
+            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>{mockStats.successRate}%</Typography>
+            <LinearProgress
+              variant="determinate"
+              value={mockStats.successRate}
+              sx={{ 
+                height: 8, 
+                borderRadius: 5, 
+                backgroundColor: 'rgba(255,255,255,0.3)',
+                '& .MuiLinearProgress-bar': {
+                  backgroundColor: mockStats.successRate > 90 ? '#4caf50' : mockStats.successRate > 70 ? '#ff9800' : '#f44336'
+                }
+              }}
+            />
+          </CardContent>
+        </Card>
+
+        <Card 
+          sx={{ 
+            background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(79, 172, 254, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
+              数据传输量
+            </Typography>
+            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>{mockStats.totalDataTransferred}</Typography>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+              平均传输速率: {mockStats.averageTransferRate}
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card 
+          sx={{ 
+            background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(250, 112, 154, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
+              当前状态
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 1 }}>
+              <Chip label={`进行中: ${mockStats.inProgressExchanges}`} sx={{ backgroundColor: 'rgba(33, 150, 243, 0.2)', color: 'rgba(33, 150, 243, 1)' }} />
+              <Chip label={`等待中: ${mockStats.pendingExchanges}`} sx={{ backgroundColor: 'rgba(158, 158, 158, 0.2)', color: 'rgba(158, 158, 158, 1)' }} />
+            </Box>
+          </CardContent>
+        </Card>
+      </Box>
 
       {/* 数据交换记录表格 */}
       <Paper sx={{ flexGrow: 1, width: '100%', overflow: 'hidden' }}>
@@ -449,58 +614,73 @@ const DataExchange = () => {
         <DialogTitle>数据交换详情</DialogTitle>
         <DialogContent>
           {selectedRecord && (
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">ID</Typography>
-                <Typography variant="body1" gutterBottom>{selectedRecord.id}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">状态</Typography>
-                <Typography variant="body1" gutterBottom>{getStatusChip(selectedRecord.status)}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">资源名称</Typography>
-                <Typography variant="body1" gutterBottom>{selectedRecord.resourceName}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">资源类型</Typography>
-                <Typography variant="body1" gutterBottom>{selectedRecord.resourceType}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">源连接器</Typography>
-                <Typography variant="body1" gutterBottom>{selectedRecord.sourceConnector}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">目标连接器</Typography>
-                <Typography variant="body1" gutterBottom>{selectedRecord.targetConnector}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">交换类型</Typography>
-                <Typography variant="body1" gutterBottom>{getExchangeTypeChip(selectedRecord.exchangeType)}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">数据大小</Typography>
-                <Typography variant="body1" gutterBottom>{selectedRecord.dataSize}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">开始时间</Typography>
-                <Typography variant="body1" gutterBottom>{selectedRecord.startTime || '-'}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">结束时间</Typography>
-                <Typography variant="body1" gutterBottom>{selectedRecord.endTime || '-'}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">传输速率</Typography>
-                <Typography variant="body1" gutterBottom>{selectedRecord.transferRate}</Typography>
-              </Grid>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                mt: 1,
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 2,
+                }}
+              >
+                <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 8px)' } }}>
+                  <Typography variant="subtitle2">ID</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedRecord.id}</Typography>
+                </Box>
+                <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 8px)' } }}>
+                  <Typography variant="subtitle2">状态</Typography>
+                  <Typography variant="body1" gutterBottom>{getStatusChip(selectedRecord.status)}</Typography>
+                </Box>
+                <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 8px)' } }}>
+                  <Typography variant="subtitle2">资源名称</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedRecord.resourceName}</Typography>
+                </Box>
+                <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 8px)' } }}>
+                  <Typography variant="subtitle2">资源类型</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedRecord.resourceType}</Typography>
+                </Box>
+                <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 8px)' } }}>
+                  <Typography variant="subtitle2">源连接器</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedRecord.sourceConnector}</Typography>
+                </Box>
+                <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 8px)' } }}>
+                  <Typography variant="subtitle2">目标连接器</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedRecord.targetConnector}</Typography>
+                </Box>
+                <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 8px)' } }}>
+                  <Typography variant="subtitle2">交换类型</Typography>
+                  <Typography variant="body1" gutterBottom>{getExchangeTypeChip(selectedRecord.exchangeType)}</Typography>
+                </Box>
+                <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 8px)' } }}>
+                  <Typography variant="subtitle2">数据大小</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedRecord.dataSize}</Typography>
+                </Box>
+                <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 8px)' } }}>
+                  <Typography variant="subtitle2">开始时间</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedRecord.startTime || '-'}</Typography>
+                </Box>
+                <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 8px)' } }}>
+                  <Typography variant="subtitle2">结束时间</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedRecord.endTime || '-'}</Typography>
+                </Box>
+                <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 8px)' } }}>
+                  <Typography variant="subtitle2">传输速率</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedRecord.transferRate}</Typography>
+                </Box>
+              </Box>
               {selectedRecord.errorMessage && (
-                <Grid item xs={12}>
+                <Box>
                   <Typography variant="subtitle2" color="error">错误信息</Typography>
                   <Typography variant="body1" color="error" gutterBottom>{selectedRecord.errorMessage}</Typography>
-                </Grid>
+                </Box>
               )}
-            </Grid>
+            </Box>
           )}
         </DialogContent>
         <DialogActions>
@@ -522,8 +702,34 @@ const DataExchange = () => {
       >
         <DialogTitle>筛选数据交换记录</DialogTitle>
         <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12} md={6}>
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: 2, 
+            mt: 1,
+            '& .MuiFormControl-root': {
+              borderRadius: 2,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-1px)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+              }
+            },
+            '& .MuiTextField-root': {
+              borderRadius: 2,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-1px)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+              }
+            }
+          }}>
+            <Box sx={{ 
+              display: 'flex', 
+              gap: 2, 
+              flexDirection: { xs: 'column', md: 'row' },
+              '& > *': { flex: 1 }
+            }}>
               <FormControl fullWidth>
                 <InputLabel id="status-filter-label">状态</InputLabel>
                 <Select
@@ -539,8 +745,6 @@ const DataExchange = () => {
                   <MenuItem value="pending">等待中</MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={12} md={6}>
               <FormControl fullWidth>
                 <InputLabel id="exchange-type-filter-label">交换类型</InputLabel>
                 <Select
@@ -554,34 +758,35 @@ const DataExchange = () => {
                   <MenuItem value="pull">拉取</MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="连接器名称"
-                value={filters.connector}
-                onChange={(e) => setFilters({ ...filters, connector: e.target.value })}
-                placeholder="搜索源或目标连接器"
-                InputProps={{
-                  startAdornment: <SearchIcon color="action" sx={{ mr: 1 }} />,
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
+            </Box>
+            <TextField
+              fullWidth
+              label="连接器名称"
+              value={filters.connector}
+              onChange={(e) => setFilters({ ...filters, connector: e.target.value })}
+              placeholder="搜索源或目标连接器"
+              InputProps={{
+                startAdornment: <SearchIcon color="action" sx={{ mr: 1 }} />,
+              }}
+            />
+            <Box sx={{ 
+              display: 'flex', 
+              gap: 2, 
+              flexDirection: { xs: 'column', md: 'row' },
+              '& > *': { flex: 1 }
+            }}>
               <DatePicker
                 label="开始日期"
                 value={filters.startDate}
                 onChange={(newValue) => setFilters({ ...filters, startDate: newValue })}                
               />
-            </Grid>
-            <Grid item xs={12} md={6}>
               <DatePicker
                 label="结束日期"
                 value={filters.endDate}
                 onChange={(newValue) => setFilters({ ...filters, endDate: newValue })}                
               />
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleResetFilters}>重置</Button>

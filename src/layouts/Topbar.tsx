@@ -38,8 +38,8 @@ interface TopbarProps {
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerWidth',
-})(
-  ({ theme, open, drawerWidth }: CustomAppBarProps & { theme?: any }) => ({
+})<CustomAppBarProps>(
+  ({ theme, open, drawerWidth }) => ({
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,

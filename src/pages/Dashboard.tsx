@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
-  Grid,
-  Paper,
   Typography,
   Card,
   CardContent,
@@ -18,7 +16,6 @@ import {
   LinearProgress,
   Chip,
   Stack,
-  Container,
   Avatar,
   useTheme,
   alpha,
@@ -28,15 +25,10 @@ import {
   Policy as PolicyIcon,
   SyncAlt as SyncAltIcon,
   Security as SecurityIcon,
-  Store as StoreIcon,
-  BarChart as BarChartIcon,
-  Settings as SettingsIcon,
   CheckCircle as CheckCircleIcon,
   Warning as WarningIcon,
   Error as ErrorIcon,
   ArrowForward as ArrowForwardIcon,
-  TrendingUp as TrendingUpIcon,
-  Assessment as AssessmentIcon,
   History as HistoryIcon,
   Monitor as MonitorIcon,
 } from '@mui/icons-material';
@@ -93,7 +85,7 @@ const mockData = {
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const responsive = useResponsive();
+  // const responsive = useResponsive(); // 暂时注释掉未使用的变量
   const theme = useTheme();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(mockData);
@@ -135,8 +127,19 @@ const Dashboard = () => {
     }
   };
 
+  // 统计卡片组件类型定义
+  interface StatCardProps {
+    icon: React.ReactNode;
+    title: string;
+    value: string | number;
+    subtitle: string;
+    chips?: React.ReactNode;
+    action?: React.ReactNode;
+    color?: 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
+  }
+
   // 统计卡片组件
-  const StatCard = ({ icon, title, value, subtitle, chips, action, color = 'primary' }) => (
+  const StatCard: React.FC<StatCardProps> = ({ icon, title, value, subtitle, chips, action, color = 'primary' }) => (
     <Card 
       sx={{ 
         height: '100%',

@@ -273,13 +273,33 @@ const Plugins = () => {
       </Box>
 
       {/* 搜索和操作按钮 */}
-      <Grid container spacing={2} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={6}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: 2,
+          mb: 4,
+          alignItems: { xs: 'stretch', md: 'center' },
+        }}
+      >
+        <Box sx={{ flex: { xs: '1 1 auto', md: '1 1 50%' } }}>
           <TextField
             fullWidth
             placeholder="搜索插件..."
             value={searchTerm}
             onChange={handleSearch}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                },
+                '&.Mui-focused': {
+                  boxShadow: '0 4px 12px rgba(25,118,210,0.2)',
+                },
+              },
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -288,12 +308,27 @@ const Plugins = () => {
               ),
             }}
           />
-        </Grid>
-        <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            flex: { xs: '1 1 auto', md: '0 0 auto' },
+            justifyContent: { xs: 'stretch', md: 'flex-end' },
+          }}
+        >
           <Button
             variant="outlined"
             startIcon={<RefreshIcon />}
-            sx={{ mr: 2 }}
+            sx={{
+              borderRadius: 2,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+              },
+              flex: { xs: 1, md: '0 0 auto' },
+            }}
           >
             刷新
           </Button>
@@ -301,16 +336,43 @@ const Plugins = () => {
             variant="contained"
             startIcon={<CloudUploadIcon />}
             onClick={handleOpenUploadDialog}
+            sx={{
+              borderRadius: 2,
+              background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: '0 6px 16px rgba(33,150,243,0.3)',
+                background: 'linear-gradient(45deg, #1976D2 30%, #1CB5E0 90%)',
+              },
+              flex: { xs: 1, md: '0 0 auto' },
+            }}
           >
             上传插件
           </Button>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* 插件卡片列表 */}
-      <Grid container spacing={3}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+        }}
+      >
         {filteredPlugins.map((plugin) => (
-          <Grid item xs={12} sm={6} md={4} key={plugin.id}>
+          <Box
+            key={plugin.id}
+            sx={{
+              flex: {
+                xs: '1 1 100%',
+                sm: '1 1 calc(50% - 12px)',
+                md: '1 1 calc(33.333% - 16px)',
+              },
+              minWidth: 0,
+            }}
+          >
             <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ flexGrow: 1 }}>
                 <Box display="flex" alignItems="center" mb={1}>
@@ -365,9 +427,9 @@ const Plugins = () => {
                 )}
               </CardActions>
             </Card>
-          </Grid>
+          </Box>
         ))}
-      </Grid>
+      </Box>
 
       {/* 插件详情对话框 */}
       {selectedPlugin && (
@@ -383,8 +445,8 @@ const Plugins = () => {
             </Box>
           </DialogTitle>
           <DialogContent dividers>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Box>
                 <Box display="flex" alignItems="center" mb={1}>
                   <Chip
                     label={getPluginTypeName(selectedPlugin.type)}
@@ -405,13 +467,20 @@ const Plugins = () => {
                     版本: {selectedPlugin.version}
                   </Typography>
                 </Box>
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box>
                 <Typography variant="body1" paragraph>
                   {selectedPlugin.description}
                 </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: { xs: 'column', sm: 'row' },
+                  gap: 2,
+                }}
+              >
+                <Box sx={{ flex: { xs: '1 1 auto', sm: '1 1 50%' } }}>
                 <Paper variant="outlined" sx={{ p: 2 }}>
                   <Typography variant="subtitle2" gutterBottom>
                     基本信息
@@ -455,44 +524,45 @@ const Plugins = () => {
                     </ListItem>
                   </List>
                 </Paper>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Paper variant="outlined" sx={{ p: 2 }}>
-                  <Typography variant="subtitle2" gutterBottom>
-                    依赖和权限
-                  </Typography>
-                  <Typography variant="body2" gutterBottom>
-                    依赖项:
-                  </Typography>
-                  <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
-                    {selectedPlugin.dependencies.map((dep) => (
-                      <Chip key={dep} label={dep} size="small" />
-                    ))}
-                  </Box>
-                  <Typography variant="body2" gutterBottom>
-                    所需权限:
-                  </Typography>
-                  <Box display="flex" flexWrap="wrap" gap={1}>
-                    {selectedPlugin.permissions.map((perm) => (
-                      <Chip
-                        key={perm}
-                        label={perm}
-                        size="small"
-                        icon={perm === 'security' || perm === 'network' ? <SecurityIcon fontSize="small" /> : undefined}
-                        color={perm === 'security' || perm === 'network' ? 'warning' : 'default'}
-                      />
-                    ))}
-                  </Box>
-                </Paper>
-              </Grid>
+                </Box>
+                <Box sx={{ flex: { xs: '1 1 auto', sm: '1 1 50%' } }}>
+                  <Paper variant="outlined" sx={{ p: 2 }}>
+                    <Typography variant="subtitle2" gutterBottom>
+                      依赖和权限
+                    </Typography>
+                    <Typography variant="body2" gutterBottom>
+                      依赖项:
+                    </Typography>
+                    <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
+                      {selectedPlugin.dependencies.map((dep) => (
+                        <Chip key={dep} label={dep} size="small" />
+                      ))}
+                    </Box>
+                    <Typography variant="body2" gutterBottom>
+                      所需权限:
+                    </Typography>
+                    <Box display="flex" flexWrap="wrap" gap={1}>
+                      {selectedPlugin.permissions.map((perm) => (
+                        <Chip
+                          key={perm}
+                          label={perm}
+                          size="small"
+                          icon={perm === 'security' || perm === 'network' ? <SecurityIcon fontSize="small" /> : undefined}
+                          color={perm === 'security' || perm === 'network' ? 'warning' : 'default'}
+                        />
+                      ))}
+                    </Box>
+                  </Paper>
+                </Box>
+              </Box>
               {selectedPlugin.status === 'error' && (
-                <Grid item xs={12}>
+                <Box>
                   <Alert severity="error">
                     此插件当前存在错误。错误原因：依赖冲突或配置问题。请检查系统日志获取详细信息。
                   </Alert>
-                </Grid>
+                </Box>
               )}
-            </Grid>
+            </Box>
           </DialogContent>
           <DialogActions>
             <Button

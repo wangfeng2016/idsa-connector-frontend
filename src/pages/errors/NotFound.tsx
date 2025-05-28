@@ -98,67 +98,100 @@ const NotFound = () => {
 
           <Divider sx={{ my: 4 }} />
 
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={6}>
-              <Card variant="outlined">
-                <CardContent>
-                  <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
-                    <SearchIcon sx={{ mr: 1 }} /> Looking for something?
-                  </Typography>
-                  <Typography variant="body2" paragraph>
-                    Here are some popular pages that might help you find what you're looking for:
-                  </Typography>
-                  <List dense>
-                    {suggestedRoutes.map((route) => (
-                      <ListItem 
-                        button 
-                        key={route.path} 
-                        onClick={() => navigate(route.path)}
-                        sx={{ borderRadius: 1, '&:hover': { bgcolor: 'action.hover' } }}
-                      >
-                        <ListItemIcon>
-                          {route.icon}
-                        </ListItemIcon>
-                        <ListItemText primary={route.name} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Card variant="outlined">
-                <CardContent>
-                  <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
-                    <HelpIcon sx={{ mr: 1 }} /> Need Help?
-                  </Typography>
-                  <Typography variant="body2" paragraph>
-                    If you believe this is an error, please try the following:
-                  </Typography>
-                  <List dense>
-                    <ListItem>
-                      <ListItemText 
-                        primary="Check the URL" 
-                        secondary="Make sure the URL is spelled correctly and doesn't contain any typos." 
-                      />
+          {/* 帮助信息 - Flex布局 */}
+          <Box 
+            sx={{ 
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 4,
+              '& > *': {
+                flex: { xs: '1 1 100%', md: '1 1 calc(50% - 16px)' },
+                minWidth: { xs: '100%', md: '300px' }
+              }
+            }}
+          >
+            <Card 
+              variant="outlined"
+              sx={{
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: '0 8px 16px rgba(0,0,0,0.15)'
+                }
+              }}
+            >
+              <CardContent>
+                <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                  <SearchIcon sx={{ mr: 1, color: 'primary.main' }} /> Looking for something?
+                </Typography>
+                <Typography variant="body2" paragraph>
+                  Here are some popular pages that might help you find what you're looking for:
+                </Typography>
+                <List dense>
+                  {suggestedRoutes.map((route) => (
+                    <ListItem 
+                      button 
+                      key={route.path} 
+                      onClick={() => navigate(route.path)}
+                      sx={{ 
+                        borderRadius: 2, 
+                        transition: 'all 0.2s ease',
+                        '&:hover': { 
+                          bgcolor: 'action.hover',
+                          transform: 'translateX(8px)'
+                        } 
+                      }}
+                    >
+                      <ListItemIcon>
+                        {route.icon}
+                      </ListItemIcon>
+                      <ListItemText primary={route.name} />
                     </ListItem>
-                    <ListItem>
-                      <ListItemText 
-                        primary="Clear your browser cache" 
-                        secondary="Sometimes outdated cached pages can cause issues." 
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText 
-                        primary="Contact system administrator" 
-                        secondary="If you believe this page should exist, contact your system administrator." 
-                      />
-                    </ListItem>
-                  </List>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+                  ))}
+                </List>
+              </CardContent>
+            </Card>
+            
+            <Card 
+              variant="outlined"
+              sx={{
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: '0 8px 16px rgba(0,0,0,0.15)'
+                }
+              }}
+            >
+              <CardContent>
+                <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                  <HelpIcon sx={{ mr: 1, color: 'warning.main' }} /> Need Help?
+                </Typography>
+                <Typography variant="body2" paragraph>
+                  If you believe this is an error, please try the following:
+                </Typography>
+                <List dense>
+                  <ListItem>
+                    <ListItemText 
+                      primary="Check the URL" 
+                      secondary="Make sure the URL is spelled correctly and doesn't contain any typos." 
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText 
+                      primary="Clear your browser cache" 
+                      secondary="Sometimes outdated cached pages can cause issues." 
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText 
+                      primary="Contact system administrator" 
+                      secondary="If you believe this page should exist, contact your system administrator." 
+                    />
+                  </ListItem>
+                </List>
+              </CardContent>
+            </Card>
+          </Box>
         </Paper>
       </Fade>
     </Container>

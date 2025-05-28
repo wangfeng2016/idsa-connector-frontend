@@ -202,80 +202,154 @@ const ComplianceReports = () => {
         合规报告
       </Typography>
 
-      {/* 统计卡片 */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" color="textSecondary" gutterBottom>
-                报告总数
-              </Typography>
-              <Typography variant="h3">{complianceStats.totalReports}</Typography>
-              <Box display="flex" mt={1}>
-                <Chip
-                  label={`通过: ${complianceStats.passedReports}`}
-                  size="small"
-                  color="success"
-                  sx={{ mr: 1 }}
-                />
-                <Chip
-                  label={`警告: ${complianceStats.warningReports}`}
-                  size="small"
-                  color="warning"
-                  sx={{ mr: 1 }}
-                />
-                <Chip
-                  label={`失败: ${complianceStats.failedReports}`}
-                  size="small"
-                  color="error"
-                />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" color="textSecondary" gutterBottom>
-                平均合规评分
-              </Typography>
-              <Box display="flex" alignItems="center">
-                <Typography variant="h3" sx={{ mr: 1 }}>{complianceStats.avgScore}</Typography>
-                <Typography variant="body1">/100</Typography>
-              </Box>
-              <LinearProgress
-                variant="determinate"
-                value={complianceStats.avgScore}
-                color={complianceStats.avgScore >= 90 ? 'success' : complianceStats.avgScore >= 70 ? 'warning' : 'error'}
-                sx={{ mt: 1, mb: 1, height: 8, borderRadius: 4 }}
+      {/* 统计卡片 - Flex布局 */}
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          mb: 4,
+          '& > *': {
+            flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 calc(33.333% - 16px)' },
+            minWidth: { xs: '100%', sm: '280px', md: '240px' }
+          }
+        }}
+      >
+        <Card 
+          sx={{ 
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(102, 126, 234, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
+              报告总数
+            </Typography>
+            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>{complianceStats.totalReports}</Typography>
+            <Box display="flex" flexWrap="wrap" gap={1}>
+              <Chip
+                label={`通过: ${complianceStats.passedReports}`}
+                size="small"
+                sx={{ 
+                  bgcolor: 'rgba(76, 175, 80, 0.3)', 
+                  color: 'white',
+                  border: '1px solid rgba(76, 175, 80, 0.5)'
+                }}
               />
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" color="textSecondary" gutterBottom>
-                发现问题
-              </Typography>
-              <Typography variant="h3">{complianceStats.totalIssues}</Typography>
-              <Typography variant="body2" color="error" sx={{ mt: 1 }}>
-                <ErrorIcon sx={{ verticalAlign: 'middle', mr: 0.5, fontSize: 18 }} />
-                其中 {complianceStats.criticalIssues} 个严重问题
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+              <Chip
+                label={`警告: ${complianceStats.warningReports}`}
+                size="small"
+                sx={{ 
+                  bgcolor: 'rgba(255, 152, 0, 0.3)', 
+                  color: 'white',
+                  border: '1px solid rgba(255, 152, 0, 0.5)'
+                }}
+              />
+              <Chip
+                label={`失败: ${complianceStats.failedReports}`}
+                size="small"
+                sx={{ 
+                  bgcolor: 'rgba(244, 67, 54, 0.3)', 
+                  color: 'white',
+                  border: '1px solid rgba(244, 67, 54, 0.5)'
+                }}
+              />
+            </Box>
+          </CardContent>
+        </Card>
 
-      {/* 搜索和筛选 */}
-      <Grid container spacing={2} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={4}>
+        <Card 
+          sx={{ 
+            background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(240, 147, 251, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
+              平均合规评分
+            </Typography>
+            <Box display="flex" alignItems="center" mb={2}>
+              <Typography variant="h3" sx={{ mr: 1, fontWeight: 'bold' }}>{complianceStats.avgScore}</Typography>
+              <Typography variant="body1">/100</Typography>
+            </Box>
+            <LinearProgress
+              variant="determinate"
+              value={complianceStats.avgScore}
+              sx={{ 
+                height: 8, 
+                borderRadius: 4,
+                bgcolor: 'rgba(255,255,255,0.3)',
+                '& .MuiLinearProgress-bar': {
+                  bgcolor: complianceStats.avgScore >= 90 ? '#4caf50' : complianceStats.avgScore >= 70 ? '#ff9800' : '#f44336'
+                }
+              }}
+            />
+          </CardContent>
+        </Card>
+
+        <Card 
+          sx={{ 
+            background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(79, 172, 254, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
+              发现问题
+            </Typography>
+            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>{complianceStats.totalIssues}</Typography>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+              <ErrorIcon sx={{ verticalAlign: 'middle', mr: 0.5, fontSize: 18 }} />
+              其中 {complianceStats.criticalIssues} 个严重问题
+            </Typography>
+          </CardContent>
+        </Card>
+      </Box>
+
+      {/* 搜索和筛选 - Flex布局 */}
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          mb: 3,
+          alignItems: 'stretch'
+        }}
+      >
+        <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 35%' }, minWidth: '280px' }}>
           <TextField
             fullWidth
-            placeholder="搜索报告标题或作者..."
+            variant="outlined"
+            placeholder="搜索报告..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                },
+                '&.Mui-focused': {
+                  boxShadow: '0 4px 12px rgba(25, 118, 210, 0.3)'
+                }
+              }
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -284,39 +358,55 @@ const ComplianceReports = () => {
               ),
             }}
           />
-        </Grid>
-        <Grid item xs={6} md={3}>
+        </Box>
+        
+        <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 20%' }, minWidth: '180px' }}>
           <FormControl fullWidth>
-            <InputLabel>报告类型</InputLabel>
+            <InputLabel>状态筛选</InputLabel>
+            <Select
+              value={statusFilter}
+              label="状态筛选"
+              onChange={(e) => setStatusFilter(e.target.value)}
+              sx={{
+                borderRadius: 2,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                }
+              }}
+            >
+              <MenuItem value="all">全部状态</MenuItem>
+              <MenuItem value="passed">通过</MenuItem>
+              <MenuItem value="warning">警告</MenuItem>
+              <MenuItem value="failed">失败</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        
+        <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 20%' }, minWidth: '180px' }}>
+          <FormControl fullWidth>
+            <InputLabel>类型筛选</InputLabel>
             <Select
               value={typeFilter}
-              label="报告类型"
+              label="类型筛选"
               onChange={(e) => setTypeFilter(e.target.value)}
+              sx={{
+                borderRadius: 2,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                }
+              }}
             >
-              <MenuItem value="all">全部</MenuItem>
+              <MenuItem value="all">全部类型</MenuItem>
               <MenuItem value="gdpr">数据隐私</MenuItem>
               <MenuItem value="security">安全审计</MenuItem>
               <MenuItem value="quality">数据质量</MenuItem>
               <MenuItem value="usage">使用合规</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
-        <Grid item xs={6} md={3}>
-          <FormControl fullWidth>
-            <InputLabel>状态</InputLabel>
-            <Select
-              value={statusFilter}
-              label="状态"
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <MenuItem value="all">全部</MenuItem>
-              <MenuItem value="passed">通过</MenuItem>
-              <MenuItem value="warning">警告</MenuItem>
-              <MenuItem value="failed">失败</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* 报告表格 */}
       <TableContainer component={Paper} sx={{ mb: 4 }}>

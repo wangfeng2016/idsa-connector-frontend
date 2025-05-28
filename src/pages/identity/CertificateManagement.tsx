@@ -207,82 +207,135 @@ const CertificateManagement = () => {
         </Box>
       </Box>
 
-      {/* 统计卡片 */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={3}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <CertificateIcon color="success" sx={{ fontSize: 40, mr: 2 }} />
-                <Box>
-                  <Typography variant="h4">
-                    {certificates.filter(c => c.status === 'valid').length}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">有效证书</Typography>
-                </Box>
+      {/* 统计卡片 - Flex布局 */}
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          mb: 3,
+          '& > *': {
+            flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 calc(25% - 18px)' },
+            minWidth: { xs: '100%', sm: '200px', md: '180px' }
+          }
+        }}
+      >
+        <Card 
+          sx={{
+            background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(76, 175, 80, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <CertificateIcon sx={{ fontSize: 40, mr: 2, color: 'rgba(255,255,255,0.9)' }} />
+              <Box>
+                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                  {certificates.filter(c => c.status === 'valid').length}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>有效证书</Typography>
               </Box>
-            </CardContent>
-          </Card>
-        </Grid>
+            </Box>
+          </CardContent>
+        </Card>
 
-        <Grid item xs={12} md={3}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <WarningIcon color="error" sx={{ fontSize: 40, mr: 2 }} />
-                <Box>
-                  <Typography variant="h4">
-                    {certificates.filter(c => c.status === 'expired').length}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">过期证书</Typography>
-                </Box>
+        <Card 
+          sx={{
+            background: 'linear-gradient(135deg, #f44336 0%, #ef5350 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(244, 67, 54, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <WarningIcon sx={{ fontSize: 40, mr: 2, color: 'rgba(255,255,255,0.9)' }} />
+              <Box>
+                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                  {certificates.filter(c => c.status === 'expired').length}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>过期证书</Typography>
               </Box>
-            </CardContent>
-          </Card>
-        </Grid>
+            </Box>
+          </CardContent>
+        </Card>
 
-        <Grid item xs={12} md={3}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <SecurityIcon color="info" sx={{ fontSize: 40, mr: 2 }} />
-                <Box>
-                  <Typography variant="h4">
-                    {certificates.filter(c => c.type === 'x509').length}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">X.509证书</Typography>
-                </Box>
+        <Card 
+          sx={{
+            background: 'linear-gradient(135deg, #2196f3 0%, #42a5f5 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(33, 150, 243, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <SecurityIcon sx={{ fontSize: 40, mr: 2, color: 'rgba(255,255,255,0.9)' }} />
+              <Box>
+                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                  {certificates.filter(c => c.type === 'x509').length}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>X.509证书</Typography>
               </Box>
-            </CardContent>
-          </Card>
-        </Grid>
+            </Box>
+          </CardContent>
+        </Card>
 
-        <Grid item xs={12} md={3}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <KeyIcon color="warning" sx={{ fontSize: 40, mr: 2 }} />
-                <Box>
-                  <Typography variant="h4">
-                    {certificates.filter(c => ['jwt', 'oauth'].includes(c.type)).length}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">令牌/密钥</Typography>
-                </Box>
+        <Card 
+          sx={{
+            background: 'linear-gradient(135deg, #ff9800 0%, #ffb74d 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(255, 152, 0, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <KeyIcon sx={{ fontSize: 40, mr: 2, color: 'rgba(255,255,255,0.9)' }} />
+              <Box>
+                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                  {certificates.filter(c => ['jwt', 'oauth'].includes(c.type)).length}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>令牌/密钥</Typography>
               </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+            </Box>
+          </CardContent>
+        </Card>
+      </Box>
 
       {/* 证书列表 */}
       <Paper sx={{ flexGrow: 1, overflow: 'auto' }}>
         {loading ? (
           <LinearProgress />
         ) : (
-          <Grid container spacing={2} sx={{ p: 2 }}>
+          <Box 
+            sx={{ 
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 2,
+              p: 2,
+              '& > *': {
+                flex: { xs: '1 1 100%', md: '1 1 calc(50% - 8px)', lg: '1 1 calc(33.333% - 11px)' },
+                minWidth: { xs: '100%', md: '300px', lg: '280px' }
+              }
+            }}
+          >
             {certificates.map((cert) => (
-              <Grid item xs={12} md={6} lg={4} key={cert.id}>
-                <Card>
+                <Card key={cert.id}>
                   <CardContent>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                       {getCertTypeIcon(cert.type)}
@@ -340,9 +393,8 @@ const CertificateManagement = () => {
                     )}
                   </CardActions>
                 </Card>
-              </Grid>
             ))}
-          </Grid>
+          </Box>
         )}
       </Paper>
 
@@ -351,48 +403,75 @@ const CertificateManagement = () => {
         <DialogTitle>证书详情</DialogTitle>
         <DialogContent>
           {selectedCert && (
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">证书名称</Typography>
-                <Typography variant="body1" gutterBottom>{selectedCert.name}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">类型</Typography>
-                <Typography variant="body1" gutterBottom>{selectedCert.type.toUpperCase()}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">颁发者</Typography>
-                <Typography variant="body1" gutterBottom>{selectedCert.issuer}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">主题</Typography>
-                <Typography variant="body1" gutterBottom>{selectedCert.subject}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">生效时间</Typography>
-                <Typography variant="body1" gutterBottom>{selectedCert.validFrom}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">过期时间</Typography>
-                <Typography variant="body1" gutterBottom>{selectedCert.validTo}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">状态</Typography>
-                <Typography variant="body1" gutterBottom>{getStatusChip(selectedCert.status)}</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle2">指纹</Typography>
+            <Box sx={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: 3, 
+              mt: 1,
+              '& .cert-field': {
+                padding: 2,
+                borderRadius: 2,
+                background: 'linear-gradient(135deg, rgba(25, 118, 210, 0.05) 0%, rgba(156, 39, 176, 0.05) 100%)',
+                border: '1px solid rgba(25, 118, 210, 0.1)',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                  background: 'linear-gradient(135deg, rgba(25, 118, 210, 0.08) 0%, rgba(156, 39, 176, 0.08) 100%)'
+                }
+              }
+            }}>
+              <Box sx={{ 
+                display: 'flex', 
+                flexWrap: 'wrap',
+                gap: 2,
+                '& > *': { 
+                  flex: { xs: '1 1 100%', md: '1 1 calc(50% - 8px)' },
+                  minWidth: 0
+                }
+              }}>
+                <Box className="cert-field">
+                  <Typography variant="subtitle2" sx={{ color: 'primary.main', fontWeight: 600, mb: 1 }}>证书名称</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedCert.name}</Typography>
+                </Box>
+                <Box className="cert-field">
+                  <Typography variant="subtitle2" sx={{ color: 'primary.main', fontWeight: 600, mb: 1 }}>类型</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedCert.type.toUpperCase()}</Typography>
+                </Box>
+                <Box className="cert-field">
+                  <Typography variant="subtitle2" sx={{ color: 'primary.main', fontWeight: 600, mb: 1 }}>颁发者</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedCert.issuer}</Typography>
+                </Box>
+                <Box className="cert-field">
+                  <Typography variant="subtitle2" sx={{ color: 'primary.main', fontWeight: 600, mb: 1 }}>主题</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedCert.subject}</Typography>
+                </Box>
+                <Box className="cert-field">
+                  <Typography variant="subtitle2" sx={{ color: 'primary.main', fontWeight: 600, mb: 1 }}>生效时间</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedCert.validFrom}</Typography>
+                </Box>
+                <Box className="cert-field">
+                  <Typography variant="subtitle2" sx={{ color: 'primary.main', fontWeight: 600, mb: 1 }}>过期时间</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedCert.validTo}</Typography>
+                </Box>
+                <Box className="cert-field">
+                  <Typography variant="subtitle2" sx={{ color: 'primary.main', fontWeight: 600, mb: 1 }}>状态</Typography>
+                  <Typography variant="body1" gutterBottom>{getStatusChip(selectedCert.status)}</Typography>
+                </Box>
+              </Box>
+              <Box className="cert-field" sx={{ flex: '1 1 100%' }}>
+                <Typography variant="subtitle2" sx={{ color: 'primary.main', fontWeight: 600, mb: 1 }}>指纹</Typography>
                 <Typography variant="body2" sx={{ fontFamily: 'monospace', wordBreak: 'break-all' }}>
                   {selectedCert.fingerprint}
                 </Typography>
-              </Grid>
+              </Box>
               {selectedCert.description && (
-                <Grid item xs={12}>
-                  <Typography variant="subtitle2">描述</Typography>
+                <Box className="cert-field" sx={{ flex: '1 1 100%' }}>
+                  <Typography variant="subtitle2" sx={{ color: 'primary.main', fontWeight: 600, mb: 1 }}>描述</Typography>
                   <Typography variant="body1" gutterBottom>{selectedCert.description}</Typography>
-                </Grid>
+                </Box>
               )}
-            </Grid>
+            </Box>
           )}
         </DialogContent>
         <DialogActions>

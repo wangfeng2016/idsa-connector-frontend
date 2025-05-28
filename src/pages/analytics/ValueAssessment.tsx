@@ -171,85 +171,164 @@ const ValueAssessment = () => {
         数据资产价值评估
       </Typography>
 
-      {/* 统计卡片 */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" color="textSecondary" gutterBottom>
-                总货币价值
-              </Typography>
-              <Typography variant="h3">{formatCurrency(valueStats.totalMonetaryValue)}</Typography>
-              <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                <MonetizationOnIcon sx={{ verticalAlign: 'middle', mr: 0.5 }} />
-                所有资产评估总价值
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" color="textSecondary" gutterBottom>
-                平均质量评分
-              </Typography>
-              <Box display="flex" alignItems="center">
-                <Typography variant="h3" sx={{ mr: 1 }}>{valueStats.avgQualityScore}</Typography>
-                <Typography variant="body1">/100</Typography>
-              </Box>
-              <LinearProgress
-                variant="determinate"
-                value={valueStats.avgQualityScore}
-                color="success"
-                sx={{ mt: 1, mb: 1, height: 8, borderRadius: 4 }}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" color="textSecondary" gutterBottom>
-                评估资产数
-              </Typography>
-              <Typography variant="h3">{valueStats.totalAssets}</Typography>
-              <Box display="flex" mt={1}>
-                <Chip label="数据: 2" size="small" color="primary" sx={{ mr: 1 }} />
-                <Chip label="服务: 1" size="small" color="secondary" sx={{ mr: 1 }} />
-                <Chip label="应用: 1" size="small" color="error" />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" color="textSecondary" gutterBottom>
-                平均风险评分
-              </Typography>
-              <Box display="flex" alignItems="center">
-                <Typography variant="h3" sx={{ mr: 1 }}>{valueStats.avgRiskScore}</Typography>
-                <Typography variant="body1">/100</Typography>
-              </Box>
-              <LinearProgress
-                variant="determinate"
-                value={valueStats.avgRiskScore}
-                color="error"
-                sx={{ mt: 1, mb: 1, height: 8, borderRadius: 4 }}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      {/* 统计卡片 - Flex布局 */}
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          mb: 4,
+          '& > *': {
+            flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 calc(25% - 18px)' },
+            minWidth: { xs: '100%', sm: '280px', md: '220px' }
+          }
+        }}
+      >
+        <Card 
+          sx={{ 
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(102, 126, 234, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
+              总货币价值
+            </Typography>
+            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>{formatCurrency(valueStats.totalMonetaryValue)}</Typography>
+            <Typography variant="body2" sx={{ color: 'rgba(76, 175, 80, 0.9)' }}>
+              <MonetizationOnIcon sx={{ verticalAlign: 'middle', mr: 0.5, fontSize: 18 }} />
+              所有资产评估总价值
+            </Typography>
+          </CardContent>
+        </Card>
 
-      {/* 搜索和筛选 */}
-      <Grid container spacing={2} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={6}>
+        <Card 
+          sx={{ 
+            background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(240, 147, 251, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
+              平均质量评分
+            </Typography>
+            <Box display="flex" alignItems="center" sx={{ mb: 2 }}>
+              <Typography variant="h3" sx={{ fontWeight: 'bold', mr: 1 }}>{valueStats.avgQualityScore}</Typography>
+              <Typography variant="body1">/100</Typography>
+            </Box>
+            <LinearProgress
+              variant="determinate"
+              value={valueStats.avgQualityScore}
+              sx={{ 
+                height: 8, 
+                borderRadius: 4,
+                bgcolor: 'rgba(255,255,255,0.3)',
+                '& .MuiLinearProgress-bar': {
+                  bgcolor: '#4caf50'
+                }
+              }}
+            />
+          </CardContent>
+        </Card>
+
+        <Card 
+          sx={{ 
+            background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(79, 172, 254, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
+              评估资产数
+            </Typography>
+            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>{valueStats.totalAssets}</Typography>
+            <Box display="flex" flexWrap="wrap" gap={0.5}>
+              <Chip label="数据: 2" size="small" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
+              <Chip label="服务: 1" size="small" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
+              <Chip label="应用: 1" size="small" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
+            </Box>
+          </CardContent>
+        </Card>
+
+        <Card 
+          sx={{ 
+            background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+            color: 'white',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 20px rgba(250, 112, 154, 0.4)'
+            }
+          }}
+        >
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
+              平均风险评分
+            </Typography>
+            <Box display="flex" alignItems="center" sx={{ mb: 2 }}>
+              <Typography variant="h3" sx={{ fontWeight: 'bold', mr: 1 }}>{valueStats.avgRiskScore}</Typography>
+              <Typography variant="body1">/100</Typography>
+            </Box>
+            <LinearProgress
+              variant="determinate"
+              value={valueStats.avgRiskScore}
+              sx={{ 
+                height: 8, 
+                borderRadius: 4,
+                bgcolor: 'rgba(255,255,255,0.3)',
+                '& .MuiLinearProgress-bar': {
+                  bgcolor: '#f44336'
+                }
+              }}
+            />
+          </CardContent>
+        </Card>
+      </Box>
+
+      {/* 搜索和筛选 - Flex布局 */}
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          mb: 4,
+          alignItems: 'stretch'
+        }}
+      >
+        <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 60%' }, minWidth: '280px' }}>
           <TextField
             fullWidth
+            variant="outlined"
             placeholder="搜索资产名称..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                },
+                '&.Mui-focused': {
+                  boxShadow: '0 4px 12px rgba(25, 118, 210, 0.3)'
+                }
+              }
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -258,14 +337,22 @@ const ValueAssessment = () => {
               ),
             }}
           />
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </Box>
+        
+        <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 35%' }, minWidth: '200px' }}>
           <FormControl fullWidth>
             <InputLabel>资产类型</InputLabel>
             <Select
               value={typeFilter}
               label="资产类型"
               onChange={(e) => setTypeFilter(e.target.value)}
+              sx={{
+                borderRadius: 2,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                }
+              }}
             >
               <MenuItem value="all">全部</MenuItem>
               <MenuItem value="data">数据</MenuItem>
@@ -273,8 +360,8 @@ const ValueAssessment = () => {
               <MenuItem value="application">应用</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* 评估表格 */}
       <TableContainer component={Paper} sx={{ mb: 4 }}>

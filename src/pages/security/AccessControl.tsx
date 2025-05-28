@@ -118,23 +118,61 @@ const AccessControl = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Card>
-            <CardContent>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-                <Typography variant="h5" component="h2">
-                  <SecurityIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-                  访问控制策略
-                </Typography>
-                <Button
-                  variant="contained"
-                  startIcon={<AddIcon />}
-                  onClick={() => handleOpenDialog()}
-                >
-                  添加策略
-                </Button>
-              </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <Card 
+          sx={{
+            borderRadius: 3,
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 40px rgba(0,0,0,0.15)'
+            }
+          }}
+        >
+          <CardContent>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+              <Typography variant="h5" component="h2" sx={{ fontWeight: 600 }}>
+                <SecurityIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+                访问控制策略
+              </Typography>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => handleOpenDialog()}
+                sx={{
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  backdropFilter: 'blur(10px)',
+                  borderRadius: 2,
+                  color: 'white',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.3)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.2)'
+                  }
+                }}
+              >
+                添加策略
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
+        
+        <Card 
+          sx={{
+            borderRadius: 3,
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              boxShadow: '0 8px 30px rgba(0,0,0,0.12)'
+            }
+          }}
+        >
+          <CardContent>
 
               <TableContainer component={Paper}>
                 <Table>
@@ -204,8 +242,8 @@ const AccessControl = () => {
               </TableContainer>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* 添加/编辑策略对话框 */}
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="sm" fullWidth>

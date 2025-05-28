@@ -299,16 +299,26 @@ const PolicyEdit = () => {
       </Box>
 
       <Paper sx={{ flexGrow: 1, p: 3, overflow: 'auto' }}>
-        <Grid container spacing={3}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           {/* 基本信息 */}
-          <Grid item xs={12}>
+          <Box>
             <Typography variant="h6" gutterBottom>
               基本信息
             </Typography>
             <Divider sx={{ mb: 2 }} />
-          </Grid>
+          </Box>
           
-          <Grid item xs={12} md={6}>
+          <Box 
+            sx={{ 
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 3,
+              '& > *': {
+                flex: { xs: '1 1 100%', md: '1 1 calc(50% - 12px)' },
+                minWidth: { xs: '100%', md: '250px' }
+              }
+            }}
+          >
             <TextField
               fullWidth
               label="策略名称"
@@ -317,10 +327,17 @@ const PolicyEdit = () => {
               error={!!errors.name}
               helperText={errors.name}
               required
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                  }
+                }
+              }}
             />
-          </Grid>
-          
-          <Grid item xs={12} md={6}>
+            
             <FormControl fullWidth>
               <InputLabel id="policy-type-label">策略类型</InputLabel>
               <Select
@@ -328,6 +345,13 @@ const PolicyEdit = () => {
                 value={policy.type}
                 label="策略类型"
                 onChange={(e) => handleInputChange('type', e.target.value)}
+                sx={{
+                  borderRadius: 2,
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                  }
+                }}
               >
                 <MenuItem value="access">访问控制</MenuItem>
                 <MenuItem value="usage">使用控制</MenuItem>
@@ -335,23 +359,40 @@ const PolicyEdit = () => {
                 <MenuItem value="sharing">数据共享</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
+          </Box>
           
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="策略描述"
-              value={policy.description}
-              onChange={(e) => handleInputChange('description', e.target.value)}
-              error={!!errors.description}
-              helperText={errors.description}
-              multiline
-              rows={3}
-              required
+          <TextField
+            fullWidth
+            label="策略描述"
+            value={policy.description}
+            onChange={(e) => handleInputChange('description', e.target.value)}
+            error={!!errors.description}
+            helperText={errors.description}
+            multiline
+            rows={3}
+            required
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                }
+              }
+            }}
             />
-          </Grid>
           
-          <Grid item xs={12} md={4}>
+          <Box 
+            sx={{ 
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 3,
+              '& > *': {
+                flex: { xs: '1 1 100%', md: '1 1 calc(33.333% - 16px)' },
+                minWidth: { xs: '100%', md: '200px' }
+              }
+            }}
+          >
             <FormControl fullWidth>
               <InputLabel id="status-label">状态</InputLabel>
               <Select
@@ -359,15 +400,20 @@ const PolicyEdit = () => {
                 value={policy.status}
                 label="状态"
                 onChange={(e) => handleInputChange('status', e.target.value)}
+                sx={{
+                  borderRadius: 2,
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                  }
+                }}
               >
                 <MenuItem value="draft">草稿</MenuItem>
                 <MenuItem value="active">激活</MenuItem>
                 <MenuItem value="inactive">停用</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
-          
-          <Grid item xs={12} md={4}>
+            
             <FormControl fullWidth>
               <InputLabel id="priority-label">优先级</InputLabel>
               <Select
@@ -375,15 +421,20 @@ const PolicyEdit = () => {
                 value={policy.priority}
                 label="优先级"
                 onChange={(e) => handleInputChange('priority', e.target.value)}
+                sx={{
+                  borderRadius: 2,
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                  }
+                }}
               >
                 <MenuItem value="low">低</MenuItem>
                 <MenuItem value="medium">中</MenuItem>
                 <MenuItem value="high">高</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
-          
-          <Grid item xs={12} md={4}>
+            
             <FormControl fullWidth>
               <InputLabel id="enforcement-label">执行模式</InputLabel>
               <Select
@@ -391,23 +442,40 @@ const PolicyEdit = () => {
                 value={policy.enforcement}
                 label="执行模式"
                 onChange={(e) => handleInputChange('enforcement', e.target.value)}
+                sx={{
+                  borderRadius: 2,
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                  }
+                }}
               >
                 <MenuItem value="strict">严格执行</MenuItem>
                 <MenuItem value="warning">警告模式</MenuItem>
                 <MenuItem value="log_only">仅记录</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
+          </Box>
 
           {/* 目标资源和用户 */}
-          <Grid item xs={12}>
+          <Box>
             <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
               目标资源和用户
             </Typography>
             <Divider sx={{ mb: 2 }} />
-          </Grid>
+          </Box>
           
-          <Grid item xs={12} md={6}>
+          <Box 
+            sx={{ 
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 3,
+              '& > *': {
+                flex: { xs: '1 1 100%', md: '1 1 calc(50% - 12px)' },
+                minWidth: { xs: '100%', md: '250px' }
+              }
+            }}
+          >
             <Autocomplete
               multiple
               options={mockResources}
@@ -425,12 +493,19 @@ const PolicyEdit = () => {
                   error={!!errors.targetResources}
                   helperText={errors.targetResources}
                   required
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                      }
+                    }
+                  }}
                 />
               )}
             />
-          </Grid>
-          
-          <Grid item xs={12} md={6}>
+            
             <Autocomplete
               multiple
               options={mockUsers}
@@ -448,44 +523,81 @@ const PolicyEdit = () => {
                   error={!!errors.targetUsers}
                   helperText={errors.targetUsers}
                   required
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                      }
+                    }
+                  }}
                 />
               )}
             />
-          </Grid>
+          </Box>
 
           {/* 有效期 */}
-          <Grid item xs={12}>
+          <Box>
             <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
               有效期设置
             </Typography>
             <Divider sx={{ mb: 2 }} />
-          </Grid>
+          </Box>
           
-          <Grid item xs={12} md={6}>
-            <DateTimePicker
-              label="生效时间"
-              value={policy.validFrom}
-              onChange={(newValue) => handleInputChange('validFrom', newValue)}
-              
-            />
-          </Grid>
-          
-          <Grid item xs={12} md={6}>
-            <DateTimePicker
-              label="失效时间"
-              value={policy.validTo}
-              onChange={(newValue) => handleInputChange('validTo', newValue)}
-              
-            />
-            {errors.validTo && (
-              <Typography variant="caption" color="error" sx={{ mt: 1, display: 'block' }}>
-                {errors.validTo}
-              </Typography>
-            )}
-          </Grid>
+          <Box 
+            sx={{ 
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 3,
+              '& > *': {
+                flex: { xs: '1 1 100%', md: '1 1 calc(50% - 12px)' },
+                minWidth: { xs: '100%', md: '250px' }
+              }
+            }}
+          >
+            <Box sx={{ width: '100%' }}>
+              <DateTimePicker
+                label="生效时间"
+                value={policy.validFrom}
+                onChange={(newValue) => handleInputChange('validFrom', newValue)}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                    }
+                  }
+                }}
+              />
+            </Box>
+            
+            <Box sx={{ width: '100%' }}>
+              <DateTimePicker
+                label="失效时间"
+                value={policy.validTo}
+                onChange={(newValue) => handleInputChange('validTo', newValue)}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                    }
+                  }
+                }}
+              />
+              {errors.validTo && (
+                <Typography variant="caption" color="error" sx={{ mt: 1, display: 'block' }}>
+                  {errors.validTo}
+                </Typography>
+              )}
+            </Box>
+          </Box>
 
           {/* 策略规则 */}
-          <Grid item xs={12}>
+          <Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2, mb: 2 }}>
               <Typography variant="h6">
                 策略规则
@@ -494,14 +606,22 @@ const PolicyEdit = () => {
                 variant="outlined"
                 startIcon={<AddIcon />}
                 onClick={handleAddRule}
+                sx={{
+                  borderRadius: 2,
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                    transform: 'translateY(-1px)'
+                  }
+                }}
               >
                 添加规则
               </Button>
             </Box>
             <Divider sx={{ mb: 2 }} />
-          </Grid>
+          </Box>
           
-          <Grid item xs={12}>
+          <Box>
             {policy.rules.length === 0 ? (
               <Alert severity="info" icon={<InfoIcon />}>
                 暂无策略规则，请点击"添加规则"按钮创建规则。
@@ -509,104 +629,159 @@ const PolicyEdit = () => {
             ) : (
               <Stack spacing={2}>
                 {policy.rules.map((rule, index) => (
-                  <Card key={rule.id} variant="outlined">
+                  <Card 
+                    key={rule.id} 
+                    variant="outlined"
+                    sx={{
+                      borderRadius: 2,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                        transform: 'translateY(-2px)'
+                      }
+                    }}
+                  >
                     <CardContent>
-                      <Grid container spacing={2}>
-                        <Grid item xs={12} md={3}>
-                          <FormControl fullWidth size="small">
-                            <InputLabel>规则类型</InputLabel>
-                            <Select
-                              value={rule.type}
-                              label="规则类型"
-                              onChange={(e) => handleUpdateRule(rule.id, 'type', e.target.value)}
-                            >
-                              {ruleTypes.map((type) => (
-                                <MenuItem key={type.value} value={type.value}>
-                                  {type.label}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </FormControl>
-                        </Grid>
+                      <Box 
+                        sx={{ 
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          gap: 2,
+                          alignItems: 'flex-start',
+                          '& > *': {
+                            minWidth: { xs: '100%', sm: '150px' }
+                          }
+                        }}
+                      >
+                        <FormControl 
+                          size="small"
+                          sx={{ 
+                            flex: { xs: '1 1 100%', md: '1 1 calc(25% - 12px)' },
+                            minWidth: '150px'
+                          }}
+                        >
+                          <InputLabel>规则类型</InputLabel>
+                          <Select
+                            value={rule.type}
+                            label="规则类型"
+                            onChange={(e) => handleUpdateRule(rule.id, 'type', e.target.value)}
+                            sx={{ borderRadius: 2 }}
+                          >
+                            {ruleTypes.map((type) => (
+                              <MenuItem key={type.value} value={type.value}>
+                                {type.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
                         
-                        <Grid item xs={12} md={2}>
-                          <FormControl fullWidth size="small">
-                            <InputLabel>操作符</InputLabel>
-                            <Select
-                              value={rule.operator}
-                              label="操作符"
-                              onChange={(e) => handleUpdateRule(rule.id, 'operator', e.target.value)}
-                            >
-                              {operators.map((op) => (
-                                <MenuItem key={op.value} value={op.value}>
-                                  {op.label}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </FormControl>
-                        </Grid>
+                        <FormControl 
+                          size="small"
+                          sx={{ 
+                            flex: { xs: '1 1 100%', md: '1 1 calc(16.666% - 12px)' },
+                            minWidth: '120px'
+                          }}
+                        >
+                          <InputLabel>操作符</InputLabel>
+                          <Select
+                            value={rule.operator}
+                            label="操作符"
+                            onChange={(e) => handleUpdateRule(rule.id, 'operator', e.target.value)}
+                            sx={{ borderRadius: 2 }}
+                          >
+                            {operators.map((op) => (
+                              <MenuItem key={op.value} value={op.value}>
+                                {op.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
                         
-                        <Grid item xs={12} md={2}>
-                          <TextField
-                            fullWidth
-                            size="small"
-                            label="值"
-                            value={rule.value}
-                            onChange={(e) => handleUpdateRule(rule.id, 'value', e.target.value)}
-                            error={!!errors[`rule_${index}_value`]}
-                            helperText={errors[`rule_${index}_value`]}
-                          />
-                        </Grid>
+                        <TextField
+                          size="small"
+                          label="值"
+                          value={rule.value}
+                          onChange={(e) => handleUpdateRule(rule.id, 'value', e.target.value)}
+                          error={!!errors[`rule_${index}_value`]}
+                          helperText={errors[`rule_${index}_value`]}
+                          sx={{ 
+                            flex: { xs: '1 1 100%', md: '1 1 calc(16.666% - 12px)' },
+                            minWidth: '120px',
+                            '& .MuiOutlinedInput-root': {
+                              borderRadius: 2
+                            }
+                          }}
+                        />
                         
-                        <Grid item xs={12} md={4}>
-                          <TextField
-                            fullWidth
-                            size="small"
-                            label="描述"
-                            value={rule.description}
-                            onChange={(e) => handleUpdateRule(rule.id, 'description', e.target.value)}
-                            error={!!errors[`rule_${index}_description`]}
-                            helperText={errors[`rule_${index}_description`]}
-                          />
-                        </Grid>
+                        <TextField
+                          size="small"
+                          label="描述"
+                          value={rule.description}
+                          onChange={(e) => handleUpdateRule(rule.id, 'description', e.target.value)}
+                          error={!!errors[`rule_${index}_description`]}
+                          helperText={errors[`rule_${index}_description`]}
+                          sx={{ 
+                            flex: { xs: '1 1 100%', md: '1 1 calc(33.333% - 12px)' },
+                            minWidth: '200px',
+                            '& .MuiOutlinedInput-root': {
+                              borderRadius: 2
+                            }
+                          }}
+                        />
                         
-                        <Grid item xs={12} md={1}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <IconButton
                             color="error"
                             onClick={() => handleDeleteRule(rule.id)}
                             size="small"
+                            sx={{
+                              borderRadius: 2,
+                              transition: 'all 0.3s ease',
+                              '&:hover': {
+                                transform: 'scale(1.1)',
+                                backgroundColor: 'rgba(244, 67, 54, 0.1)'
+                              }
+                            }}
                           >
                             <DeleteIcon />
                           </IconButton>
-                        </Grid>
-                      </Grid>
+                        </Box>
+                      </Box>
                     </CardContent>
                   </Card>
                 ))}
               </Stack>
             )}
-          </Grid>
+          </Box>
 
           {/* 其他设置 */}
-          <Grid item xs={12}>
+          <Box>
             <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
               其他设置
             </Typography>
             <Divider sx={{ mb: 2 }} />
-          </Grid>
+          </Box>
           
-          <Grid item xs={12}>
+          <Box>
             <FormControlLabel
               control={
                 <Switch
                   checked={policy.notifications}
                   onChange={(e) => handleInputChange('notifications', e.target.checked)}
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: 'primary.main'
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: 'primary.main'
+                    }
+                  }}
                 />
               }
               label="启用通知"
             />
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Paper>
     </Box>
   );
