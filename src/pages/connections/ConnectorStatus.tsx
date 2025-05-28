@@ -415,9 +415,9 @@ const ConnectorStatus = () => {
                   </Tooltip>
                 </CardActions>
               </Card>
-            </Grid>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       )}
 
       {/* 日志对话框 */}

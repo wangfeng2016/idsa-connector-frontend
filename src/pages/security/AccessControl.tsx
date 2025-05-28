@@ -117,8 +117,9 @@ const AccessControl = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+    <>
+      <Box sx={{ p: 3 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         <Card 
           sx={{
             borderRadius: 3,
@@ -173,8 +174,7 @@ const AccessControl = () => {
           }}
         >
           <CardContent>
-
-              <TableContainer component={Paper}>
+            <TableContainer component={Paper}>
                 <Table>
                   <TableHead>
                     <TableRow>
@@ -242,8 +242,8 @@ const AccessControl = () => {
               </TableContainer>
             </CardContent>
           </Card>
+          </Box>
         </Box>
-      </Box>
 
       {/* 添加/编辑策略对话框 */}
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="sm" fullWidth>
@@ -329,7 +329,7 @@ const AccessControl = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </>
   );
 };
 
