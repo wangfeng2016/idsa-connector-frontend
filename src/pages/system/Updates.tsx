@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   Box,
   Typography,
-  Grid,
   Card,
   CardContent,
   TextField,
@@ -45,7 +44,9 @@ import {
   BugReport as BugFixIcon,
   NewReleases as NewFeatureIcon,
   Search as SearchIcon,
-  FilterList as FilterIcon
+  FilterList as FilterIcon,
+  Description as DescriptionIcon,
+  List as ListIcon
 } from '@mui/icons-material';
 
 // Types
@@ -272,45 +273,82 @@ const Updates = () => {
       </Typography>
 
       {/* Summary Cards */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>可用更新</Typography>
-              <Typography variant="h4">{availableUpdates.length}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>紧急更新</Typography>
-              <Typography variant="h4" color={criticalUpdates.length > 0 ? 'error' : 'inherit'}>
-                {criticalUpdates.length}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>已安装更新</Typography>
-              <Typography variant="h4">{installedUpdates.length}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>最后更新</Typography>
-              <Typography variant="h6">
-                {installedUpdates
-                  .sort((a, b) => new Date(b.installDate || '').getTime() - new Date(a.installDate || '').getTime())[0]?.installDate || '从未'}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      <Box sx={{ 
+        display: 'flex', 
+        flexWrap: 'wrap', 
+        gap: 3, 
+        mb: 3,
+        '& > *': {
+          flex: '1 1 250px',
+          minWidth: '250px'
+        }
+      }}>
+        <Card sx={{ 
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          transition: 'transform 0.2s ease-in-out',
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: '0 8px 25px rgba(102, 126, 234, 0.3)'
+          }
+        }}>
+          <CardContent>
+            <Typography color="inherit" gutterBottom sx={{ opacity: 0.9 }}>可用更新</Typography>
+            <Typography variant="h4" sx={{ fontWeight: 'bold' }}>{availableUpdates.length}</Typography>
+          </CardContent>
+        </Card>
+        <Card sx={{ 
+          background: criticalUpdates.length > 0 
+            ? 'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)'
+            : 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+          color: 'white',
+          transition: 'transform 0.2s ease-in-out',
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: criticalUpdates.length > 0 
+              ? '0 8px 25px rgba(255, 107, 107, 0.3)'
+              : '0 8px 25px rgba(168, 237, 234, 0.3)'
+          }
+        }}>
+          <CardContent>
+            <Typography color="inherit" gutterBottom sx={{ opacity: 0.9 }}>紧急更新</Typography>
+            <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+              {criticalUpdates.length}
+            </Typography>
+          </CardContent>
+        </Card>
+        <Card sx={{ 
+          background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+          color: 'white',
+          transition: 'transform 0.2s ease-in-out',
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: '0 8px 25px rgba(79, 172, 254, 0.3)'
+          }
+        }}>
+          <CardContent>
+            <Typography color="inherit" gutterBottom sx={{ opacity: 0.9 }}>已安装更新</Typography>
+            <Typography variant="h4" sx={{ fontWeight: 'bold' }}>{installedUpdates.length}</Typography>
+          </CardContent>
+        </Card>
+        <Card sx={{ 
+          background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+          color: 'white',
+          transition: 'transform 0.2s ease-in-out',
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: '0 8px 25px rgba(250, 112, 154, 0.3)'
+          }
+        }}>
+          <CardContent>
+            <Typography color="inherit" gutterBottom sx={{ opacity: 0.9 }}>最后更新</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+              {installedUpdates
+                .sort((a, b) => new Date(b.installDate || '').getTime() - new Date(a.installDate || '').getTime())[0]?.installDate || '从未'}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Box>
 
       {/* Tabs */}
       <Tabs 
@@ -323,8 +361,14 @@ const Updates = () => {
       </Tabs>
 
       {/* Search and Filters */}
-      <Grid container spacing={2} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={4}>
+      <Box sx={{ 
+        display: 'flex', 
+        flexWrap: 'wrap', 
+        gap: 2, 
+        mb: 3,
+        alignItems: 'flex-end'
+      }}>
+        <Box sx={{ flex: '2 1 300px', minWidth: '300px' }}>
           <TextField
             fullWidth
             placeholder="搜索更新..."
@@ -333,9 +377,21 @@ const Updates = () => {
             InputProps={{
               startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />
             }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                },
+                '&.Mui-focused': {
+                  boxShadow: '0 4px 20px rgba(25, 118, 210, 0.2)'
+                }
+              }
+            }}
           />
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </Box>
+        <Box sx={{ flex: '1 1 200px', minWidth: '200px' }}>
           <TextField
             select
             fullWidth
@@ -345,6 +401,11 @@ const Updates = () => {
             SelectProps={{
               native: true,
             }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2
+              }
+            }}
           >
             <option value="all">所有类型</option>
             <option value="security">安全更新</option>
@@ -352,8 +413,8 @@ const Updates = () => {
             <option value="bugfix">错误修复</option>
             <option value="performance">性能优化</option>
           </TextField>
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </Box>
+        <Box sx={{ flex: '1 1 200px', minWidth: '200px' }}>
           <TextField
             select
             fullWidth
@@ -363,6 +424,11 @@ const Updates = () => {
             SelectProps={{
               native: true,
             }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2
+              }
+            }}
           >
             <option value="all">所有优先级</option>
             <option value="critical">紧急</option>
@@ -370,13 +436,12 @@ const Updates = () => {
             <option value="medium">中等</option>
             <option value="low">低</option>
           </TextField>
-        </Grid>
-        <Grid item xs={12} md={2}>
-          {tabValue === 0 && (
+        </Box>
+        {tabValue === 0 && (
+          <Box sx={{ flex: '0 1 auto' }}>
             <Button 
               variant="contained" 
               color="primary" 
-              fullWidth 
               startIcon={<UpdateIcon />}
               disabled={availableUpdates.length === 0}
               onClick={() => {
@@ -385,12 +450,28 @@ const Updates = () => {
                 setSnackbarSeverity('info');
                 setSnackbarOpen(true);
               }}
+              sx={{
+                borderRadius: 2,
+                px: 3,
+                py: 1.5,
+                background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  background: 'linear-gradient(45deg, #1565c0, #1976d2)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 6px 20px rgba(25, 118, 210, 0.3)'
+                },
+                '&:disabled': {
+                  background: 'rgba(0, 0, 0, 0.12)',
+                  transform: 'none'
+                }
+              }}
             >
               全部安装
             </Button>
-          )}
-        </Grid>
-      </Grid>
+          </Box>
+        )}
+      </Box>
 
       {/* Updates Table */}
       <TableContainer component={Paper}>
@@ -476,62 +557,181 @@ const Updates = () => {
               </Box>
             </DialogTitle>
             <DialogContent>
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                  <Typography variant="subtitle1">详细信息</Typography>
-                  <List dense>
-                    <ListItem>
-                      <ListItemText primary="版本" secondary={selectedUpdate.version} />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText primary="类型" secondary={
-                        <Chip 
-                          icon={getTypeIcon(selectedUpdate.type)}
-                          label={selectedUpdate.type.charAt(0).toUpperCase() + selectedUpdate.type.slice(1)} 
-                          size="small" 
-                          color={selectedUpdate.type === 'security' ? 'error' : 'default'}
-                        />
-                      } />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText primary="优先级" secondary={
-                        <Chip 
-                          label={selectedUpdate.priority.charAt(0).toUpperCase() + selectedUpdate.priority.slice(1)} 
-                          size="small" 
-                          color={getPriorityColor(selectedUpdate.priority)}
-                        />
-                      } />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText primary="大小" secondary={selectedUpdate.size} />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText 
-                        primary={selectedUpdate.status === 'installed' ? '安装日期' : '发布日期'} 
-                        secondary={selectedUpdate.status === 'installed' ? selectedUpdate.installDate : selectedUpdate.releaseDate} 
-                      />
-                    </ListItem>
-                  </List>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Typography variant="subtitle1">描述</Typography>
-                  <Typography variant="body2" paragraph>
-                    {selectedUpdate.description}
+              <Box sx={{ 
+                display: 'flex', 
+                flexDirection: { xs: 'column', md: 'row' },
+                gap: 3,
+                minHeight: '400px'
+              }}>
+                <Box sx={{ 
+                  flex: '1 1 300px',
+                  minWidth: '300px',
+                  background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+                  borderRadius: 2,
+                  p: 2,
+                  border: '1px solid rgba(0,0,0,0.08)'
+                }}>
+                  <Typography variant="subtitle1" sx={{ 
+                    fontWeight: 'bold', 
+                    mb: 2,
+                    color: 'primary.main',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    <InfoIcon sx={{ mr: 1, fontSize: 20 }} />
+                    详细信息
                   </Typography>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center',
+                      p: 1.5,
+                      backgroundColor: 'white',
+                      borderRadius: 1,
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                    }}>
+                      <Typography variant="body2" color="textSecondary">版本</Typography>
+                      <Typography variant="body2" fontWeight="bold">{selectedUpdate.version}</Typography>
+                    </Box>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center',
+                      p: 1.5,
+                      backgroundColor: 'white',
+                      borderRadius: 1,
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                    }}>
+                      <Typography variant="body2" color="textSecondary">类型</Typography>
+                      <Chip 
+                        icon={getTypeIcon(selectedUpdate.type)}
+                        label={selectedUpdate.type.charAt(0).toUpperCase() + selectedUpdate.type.slice(1)} 
+                        size="small" 
+                        color={selectedUpdate.type === 'security' ? 'error' : 'default'}
+                        sx={{ fontWeight: 'bold' }}
+                      />
+                    </Box>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center',
+                      p: 1.5,
+                      backgroundColor: 'white',
+                      borderRadius: 1,
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                    }}>
+                      <Typography variant="body2" color="textSecondary">优先级</Typography>
+                      <Chip 
+                        label={selectedUpdate.priority.charAt(0).toUpperCase() + selectedUpdate.priority.slice(1)} 
+                        size="small" 
+                        color={getPriorityColor(selectedUpdate.priority)}
+                        sx={{ fontWeight: 'bold' }}
+                      />
+                    </Box>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center',
+                      p: 1.5,
+                      backgroundColor: 'white',
+                      borderRadius: 1,
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                    }}>
+                      <Typography variant="body2" color="textSecondary">大小</Typography>
+                      <Typography variant="body2" fontWeight="bold">{selectedUpdate.size}</Typography>
+                    </Box>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center',
+                      p: 1.5,
+                      backgroundColor: 'white',
+                      borderRadius: 1,
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                    }}>
+                      <Typography variant="body2" color="textSecondary">
+                        {selectedUpdate.status === 'installed' ? '安装日期' : '发布日期'}
+                      </Typography>
+                      <Typography variant="body2" fontWeight="bold">
+                        {selectedUpdate.status === 'installed' ? selectedUpdate.installDate : selectedUpdate.releaseDate}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box sx={{ 
+                  flex: '1 1 300px',
+                  minWidth: '300px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2
+                }}>
+                  <Box sx={{
+                    background: 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)',
+                    borderRadius: 2,
+                    p: 2,
+                    border: '1px solid rgba(25, 118, 210, 0.2)'
+                  }}>
+                    <Typography variant="subtitle1" sx={{ 
+                      fontWeight: 'bold', 
+                      mb: 1,
+                      color: 'primary.main',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}>
+                      <DescriptionIcon sx={{ mr: 1, fontSize: 20 }} />
+                      描述
+                    </Typography>
+                    <Typography variant="body2" sx={{ 
+                      lineHeight: 1.6,
+                      color: 'text.primary'
+                    }}>
+                      {selectedUpdate.description}
+                    </Typography>
+                  </Box>
                   
-                  <Typography variant="subtitle1">更新日志</Typography>
-                  <List dense>
-                    {selectedUpdate.changelog.map((item, index) => (
-                      <ListItem key={index}>
-                        <ListItemIcon sx={{ minWidth: 30 }}>
-                          <CheckCircle fontSize="small" color="success" />
-                        </ListItemIcon>
-                        <ListItemText primary={item} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Grid>
-              </Grid>
+                  <Box sx={{
+                    background: 'linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%)',
+                    borderRadius: 2,
+                    p: 2,
+                    border: '1px solid rgba(156, 39, 176, 0.2)',
+                    flex: 1
+                  }}>
+                    <Typography variant="subtitle1" sx={{ 
+                      fontWeight: 'bold', 
+                      mb: 2,
+                      color: 'secondary.main',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}>
+                      <ListIcon sx={{ mr: 1, fontSize: 20 }} />
+                      更新日志
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                      {selectedUpdate.changelog.map((item, index) => (
+                        <Box key={index} sx={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: 1,
+                          p: 1,
+                          backgroundColor: 'rgba(255,255,255,0.7)',
+                          borderRadius: 1,
+                          transition: 'all 0.2s ease-in-out',
+                          '&:hover': {
+                            backgroundColor: 'rgba(255,255,255,0.9)',
+                            transform: 'translateX(4px)'
+                          }
+                        }}>
+                          <CheckCircle sx={{ fontSize: 16, color: 'success.main', mt: 0.2 }} />
+                          <Typography variant="body2" sx={{ flex: 1, lineHeight: 1.4 }}>
+                            {item}
+                          </Typography>
+                        </Box>
+                      ))}
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
               
               {isInstalling && (
                 <Box sx={{ mt: 2 }}>

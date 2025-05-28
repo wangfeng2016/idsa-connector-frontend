@@ -135,56 +135,76 @@ const Transactions = () => {
         <CompareArrowsIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
         交易记录
       </Typography>
-      <Grid container spacing={2} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={4}>
-          <TextField
-            fullWidth
-            placeholder="搜索交易标题、资产或对方..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Grid>
-        <Grid item xs={6} md={3}>
-          <FormControl fullWidth>
-            <InputLabel>交易类型</InputLabel>
-            <Select
-              value={typeFilter}
-              label="交易类型"
-              onChange={(e) => setTypeFilter(e.target.value)}
-            >
-              <MenuItem value="all">全部</MenuItem>
-              <MenuItem value="purchase">采购</MenuItem>
-              <MenuItem value="sale">出售</MenuItem>
-              <MenuItem value="exchange">交换</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={6} md={3}>
-          <FormControl fullWidth>
-            <InputLabel>状态</InputLabel>
-            <Select
-              value={statusFilter}
-              label="状态"
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <MenuItem value="all">全部</MenuItem>
-              <MenuItem value="completed">已完成</MenuItem>
-              <MenuItem value="pending">待处理</MenuItem>
-              <MenuItem value="failed">失败</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
-      <Grid container spacing={3}>
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 2,
+          mb: 4,
+          '& > *': {
+            flex: '1 1 200px',
+            minWidth: 200
+          },
+          '& > *:first-of-type': {
+            flex: '2 1 300px'
+          }
+        }}
+      >
+        <TextField
+          fullWidth
+          placeholder="搜索交易标题、资产或对方..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <FormControl fullWidth>
+          <InputLabel>交易类型</InputLabel>
+          <Select
+            value={typeFilter}
+            label="交易类型"
+            onChange={(e) => setTypeFilter(e.target.value)}
+          >
+            <MenuItem value="all">全部</MenuItem>
+            <MenuItem value="purchase">采购</MenuItem>
+            <MenuItem value="sale">出售</MenuItem>
+            <MenuItem value="exchange">交换</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel>状态</InputLabel>
+          <Select
+            value={statusFilter}
+            label="状态"
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <MenuItem value="all">全部</MenuItem>
+            <MenuItem value="completed">已完成</MenuItem>
+            <MenuItem value="pending">待处理</MenuItem>
+            <MenuItem value="failed">失败</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          justifyContent: 'flex-start',
+          alignItems: 'stretch',
+          '& > *': {
+            flex: '1 1 300px',
+            minWidth: 300,
+            maxWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 16px)' }
+          }
+        }}
+      >
         {transactions.map((tx) => (
-          <Grid item xs={12} sm={6} md={4} key={tx.id}>
             <Card>
               <CardContent>
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
@@ -238,9 +258,8 @@ const Transactions = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
         ))}
-      </Grid>
+      </Box>
       <Box display="flex" justifyContent="center" mt={4}>
         <Pagination count={5} color="primary" />
       </Box>

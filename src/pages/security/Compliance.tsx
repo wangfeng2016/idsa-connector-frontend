@@ -9,6 +9,9 @@ import {
   StepLabel,
   Tabs,
   Tab,
+  Button,
+} from '@mui/material';
+import {
   Timeline,
   TimelineItem,
   TimelineSeparator,
@@ -16,9 +19,7 @@ import {
   TimelineContent,
   TimelineDot,
   TimelineOppositeContent,
-  Button,
-  Grid,
-} from '@mui/material';
+} from '@mui/lab';
 import {
   CheckCircle as CheckCircleIcon,
   Warning as WarningIcon,
@@ -184,29 +185,89 @@ const Compliance = () => {
 
           {/* 合规策略列表 */}
           {tabValue === 0 && (
-            <Grid container spacing={2} sx={{ mt: 2 }}>
+            <Box 
+              sx={{ 
+                mt: 3,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                '@media (min-width: 768px)': {
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  gap: 3,
+                },
+              }}
+            >
               {mockPolicies.map((policy) => (
-                <Grid item xs={12} md={6} key={policy.id}>
-                  <Card variant="outlined">
-                    <CardContent>
-                      <Box display="flex" justifyContent="space-between" alignItems="center">
-                        <Typography variant="h6">{policy.name}</Typography>
+                <Box 
+                  key={policy.id}
+                  sx={{
+                    flex: '1 1 100%',
+                    minWidth: 0,
+                    '@media (min-width: 768px)': {
+                      flex: '1 1 calc(50% - 12px)',
+                      maxWidth: 'calc(50% - 12px)',
+                    },
+                    '@media (min-width: 1200px)': {
+                      flex: '1 1 calc(33.333% - 16px)',
+                      maxWidth: 'calc(33.333% - 16px)',
+                    },
+                  }}
+                >
+                  <Card 
+                    variant="outlined"
+                    sx={{
+                      height: '100%',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-2px)',
+                        boxShadow: 3,
+                      },
+                    }}
+                  >
+                    <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                      <Box 
+                        sx={{
+                          display: 'flex', 
+                          justifyContent: 'space-between', 
+                          alignItems: 'flex-start',
+                          mb: 2,
+                        }}
+                      >
+                        <Typography variant="h6" sx={{ flex: 1, mr: 1 }}>
+                          {policy.name}
+                        </Typography>
                         {getStatusIcon(policy.result)}
                       </Box>
-                      <Typography color="textSecondary" gutterBottom>
+                      <Typography 
+                        color="textSecondary" 
+                        sx={{ 
+                          mb: 2,
+                          flex: 1,
+                          lineHeight: 1.5,
+                        }}
+                      >
                         {policy.description}
                       </Typography>
-                      <Typography variant="body2">
-                        最后检查时间: {policy.lastChecked}
-                      </Typography>
-                      <Typography variant="body2">
-                        状态: {policy.status === 'active' ? '启用' : '禁用'}
-                      </Typography>
+                      <Box sx={{ mt: 'auto' }}>
+                        <Typography variant="body2" sx={{ mb: 0.5 }}>
+                          最后检查时间: {policy.lastChecked}
+                        </Typography>
+                        <Typography 
+                          variant="body2"
+                          sx={{
+                            color: policy.status === 'active' ? 'success.main' : 'text.secondary',
+                            fontWeight: 500,
+                          }}
+                        >
+                          状态: {policy.status === 'active' ? '启用' : '禁用'}
+                        </Typography>
+                      </Box>
                     </CardContent>
                   </Card>
-                </Grid>
+                </Box>
               ))}
-            </Grid>
+            </Box>
           )}
 
           {/* 合规历史记录 */}

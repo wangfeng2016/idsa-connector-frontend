@@ -120,8 +120,24 @@ const Marketplace = () => {
       </Typography>
 
       {/* 搜索和筛选 */}
-      <Grid container spacing={2} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={6}>
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 2,
+          mb: 4,
+          alignItems: 'center',
+          '& > *:first-of-type': {
+            flex: '2 1 300px',
+            minWidth: 300
+          },
+          '& > *:not(:first-of-type)': {
+            flex: '1 1 200px',
+            minWidth: 200
+          }
+        }}
+      >
+        <Box>
           <TextField
             fullWidth
             placeholder="搜索数据资产、服务或应用..."
@@ -135,8 +151,8 @@ const Marketplace = () => {
               ),
             }}
           />
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </Box>
+        <Box>
           <FormControl fullWidth>
             <InputLabel>资产类型</InputLabel>
             <Select
@@ -150,13 +166,25 @@ const Marketplace = () => {
               <MenuItem value="app">应用</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* 市场资产列表 */}
-      <Grid container spacing={3}>
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          justifyContent: 'flex-start',
+          alignItems: 'stretch',
+          '& > *': {
+            flex: '1 1 300px',
+            minWidth: 300,
+            maxWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 16px)' }
+          }
+        }}
+      >
         {items.map((item) => (
-          <Grid item xs={12} sm={6} md={4} key={item.id}>
             <Card>
               <CardMedia
                 component="img"
@@ -216,9 +244,8 @@ const Marketplace = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
         ))}
-      </Grid>
+      </Box>
 
       {/* 分页 */}
       <Box display="flex" justifyContent="center" mt={4}>

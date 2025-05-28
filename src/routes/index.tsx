@@ -21,7 +21,7 @@ const LoadingFallback = () => (
 );
 
 // 懒加载包装器
-const lazyLoad = (Component: React.LazyExoticComponent<() => JSX.Element>) => (
+const lazyLoad = (Component: React.LazyExoticComponent<React.ComponentType<any>>) => (
   <Suspense fallback={<LoadingFallback />}>
     <Component />
   </Suspense>

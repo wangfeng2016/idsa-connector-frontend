@@ -183,8 +183,24 @@ const Participants = () => {
       </Typography>
 
       {/* 搜索和筛选 */}
-      <Grid container spacing={2} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={4}>
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 2,
+          mb: 4,
+          alignItems: 'center',
+          '& > *:first-of-type': {
+            flex: '2 1 300px',
+            minWidth: 300
+          },
+          '& > *:not(:first-of-type)': {
+            flex: '1 1 200px',
+            minWidth: 200
+          }
+        }}
+      >
+        <Box>
           <TextField
             fullWidth
             placeholder="搜索参与者名称、描述或标签..."
@@ -198,8 +214,8 @@ const Participants = () => {
               ),
             }}
           />
-        </Grid>
-        <Grid item xs={6} md={3}>
+        </Box>
+        <Box>
           <FormControl fullWidth>
             <InputLabel>参与者类型</InputLabel>
             <Select
@@ -213,8 +229,8 @@ const Participants = () => {
               <MenuItem value="government">政府</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
-        <Grid item xs={6} md={3}>
+        </Box>
+        <Box>
           <FormControl fullWidth>
             <InputLabel>角色</InputLabel>
             <Select
@@ -228,13 +244,25 @@ const Participants = () => {
               <MenuItem value="both">双重角色</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* 参与者列表 */}
-      <Grid container spacing={3}>
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          justifyContent: 'flex-start',
+          alignItems: 'stretch',
+          '& > *': {
+            flex: '1 1 400px',
+            minWidth: 400,
+            maxWidth: { xs: '100%', md: 'calc(50% - 12px)' }
+          }
+        }}
+      >
         {participants.map((participant) => (
-          <Grid item xs={12} md={6} key={participant.id}>
             <Card>
               <CardContent>
                 <Box display="flex" alignItems="center" mb={2}>
@@ -271,24 +299,34 @@ const Participants = () => {
                 <Typography color="textSecondary" variant="body2" sx={{ mb: 2 }}>
                   {participant.description}
                 </Typography>
-                <Grid container spacing={1}>
-                  <Grid item xs={12} sm={6}>
+                <Box 
+                  sx={{ 
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: 1,
+                    '& > *': {
+                      flex: '1 1 200px',
+                      minWidth: 200
+                    }
+                  }}
+                >
+                  <Box>
                     <Box display="flex" alignItems="center" mb={1}>
                       <EmailIcon sx={{ mr: 1, fontSize: 20 }} />
                       <Typography variant="body2" color="textSecondary" noWrap>
                         {participant.contact}
                       </Typography>
                     </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
+                  </Box>
+                  <Box>
                     <Box display="flex" alignItems="center" mb={1}>
                       <LanguageIcon sx={{ mr: 1, fontSize: 20 }} />
                       <Typography variant="body2" color="textSecondary" noWrap>
                         {participant.website}
                       </Typography>
                     </Box>
-                  </Grid>
-                </Grid>
+                  </Box>
+                </Box>
                 <Divider sx={{ my: 1 }} />
                 <Typography variant="subtitle2" gutterBottom>
                   <CategoryIcon sx={{ mr: 1, fontSize: 18, verticalAlign: 'text-bottom' }} />
@@ -340,9 +378,8 @@ const Participants = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
         ))}
-      </Grid>
+      </Box>
 
       {/* 分页 */}
       <Box display="flex" justifyContent="center" mt={4}>

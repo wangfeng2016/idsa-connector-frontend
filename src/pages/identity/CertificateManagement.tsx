@@ -26,7 +26,7 @@ import {
 import {
   Security as SecurityIcon,
   Key as KeyIcon,
-  Certificate as CertificateIcon,
+  VerifiedUser as CertificateIcon,
   Add as AddIcon,
   Refresh as RefreshIcon,
   Delete as DeleteIcon,

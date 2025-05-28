@@ -189,59 +189,79 @@ const ServiceDiscovery = () => {
       </Typography>
 
       {/* 搜索和筛选 */}
-      <Grid container spacing={2} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={4}>
-          <TextField
-            fullWidth
-            placeholder="搜索服务名称、描述或提供商..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Grid>
-        <Grid item xs={6} md={3}>
-          <FormControl fullWidth>
-            <InputLabel>服务类别</InputLabel>
-            <Select
-              value={categoryFilter}
-              label="服务类别"
-              onChange={(e) => setCategoryFilter(e.target.value)}
-            >
-              <MenuItem value="all">全部</MenuItem>
-              <MenuItem value="data">数据服务</MenuItem>
-              <MenuItem value="infrastructure">基础设施</MenuItem>
-              <MenuItem value="security">安全服务</MenuItem>
-              <MenuItem value="analytics">分析服务</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={6} md={3}>
-          <FormControl fullWidth>
-            <InputLabel>状态</InputLabel>
-            <Select
-              value={statusFilter}
-              label="状态"
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <MenuItem value="all">全部</MenuItem>
-              <MenuItem value="active">活跃</MenuItem>
-              <MenuItem value="maintenance">维护中</MenuItem>
-              <MenuItem value="deprecated">已弃用</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 2,
+          mb: 4,
+          '& > *': {
+            flex: '1 1 200px',
+            minWidth: 200
+          },
+          '& > *:first-of-type': {
+            flex: '2 1 300px'
+          }
+        }}
+      >
+        <TextField
+          fullWidth
+          placeholder="搜索服务名称、描述或提供商..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <FormControl fullWidth>
+          <InputLabel>服务类别</InputLabel>
+          <Select
+            value={categoryFilter}
+            label="服务类别"
+            onChange={(e) => setCategoryFilter(e.target.value)}
+          >
+            <MenuItem value="all">全部</MenuItem>
+            <MenuItem value="data">数据服务</MenuItem>
+            <MenuItem value="infrastructure">基础设施</MenuItem>
+            <MenuItem value="security">安全服务</MenuItem>
+            <MenuItem value="analytics">分析服务</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel>状态</InputLabel>
+          <Select
+            value={statusFilter}
+            label="状态"
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <MenuItem value="all">全部</MenuItem>
+            <MenuItem value="active">活跃</MenuItem>
+            <MenuItem value="maintenance">维护中</MenuItem>
+            <MenuItem value="deprecated">已弃用</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
       {/* 服务列表 */}
-      <Grid container spacing={3}>
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          justifyContent: 'flex-start',
+          alignItems: 'stretch',
+          '& > *': {
+            flex: '1 1 400px',
+            minWidth: 400,
+            maxWidth: { xs: '100%', md: 'calc(50% - 12px)' }
+          }
+        }}
+      >
         {services.map((service) => (
-          <Grid item xs={12} md={6} key={service.id}>
             <Card>
               <CardContent>
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
@@ -315,9 +335,8 @@ const ServiceDiscovery = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
         ))}
-      </Grid>
+      </Box>
 
       {/* 分页 */}
       <Box display="flex" justifyContent="center" mt={4}>

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   Box,
   Typography,
-  Grid,
   Card,
   CardContent,
   TextField,
@@ -212,57 +211,96 @@ const Backup = () => {
       </Typography>
 
       {/* Summary Cards */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>备份数量</Typography>
-              <Typography variant="h4">{backups.length}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>备份大小</Typography>
-              <Typography variant="h4">
-                {backups
-                  .filter(b => b.status === 'completed')
-                  .reduce((acc, curr) => acc + parseFloat(curr.size.replace(' GB', '')), 0)
-                  .toFixed(2)} GB
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>最近备份时间</Typography>
-              <Typography variant="h6">
-                {backups
-                  .filter(b => b.status === 'completed')
-                  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0]?.date || 'None'}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>下次备份时间</Typography>
-              <Typography variant="h6">
-                {backups
-                  .filter(b => b.status === 'scheduled')
-                  .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())[0]?.date || 'None'}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      <Box sx={{ 
+        display: 'flex', 
+        flexWrap: 'wrap', 
+        gap: 3, 
+        mb: 3,
+        '& > *': {
+          flex: '1 1 250px',
+          minWidth: '250px'
+        }
+      }}>
+        <Card sx={{ 
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          transition: 'transform 0.2s ease-in-out',
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: '0 8px 25px rgba(102, 126, 234, 0.3)'
+          }
+        }}>
+          <CardContent>
+            <Typography color="inherit" gutterBottom sx={{ opacity: 0.9 }}>备份数量</Typography>
+            <Typography variant="h4" sx={{ fontWeight: 'bold' }}>{backups.length}</Typography>
+          </CardContent>
+        </Card>
+        <Card sx={{ 
+          background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+          color: 'white',
+          transition: 'transform 0.2s ease-in-out',
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: '0 8px 25px rgba(240, 147, 251, 0.3)'
+          }
+        }}>
+          <CardContent>
+            <Typography color="inherit" gutterBottom sx={{ opacity: 0.9 }}>备份大小</Typography>
+            <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+              {backups
+                .filter(b => b.status === 'completed')
+                .reduce((acc, curr) => acc + parseFloat(curr.size.replace(' GB', '')), 0)
+                .toFixed(2)} GB
+            </Typography>
+          </CardContent>
+        </Card>
+        <Card sx={{ 
+          background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+          color: 'white',
+          transition: 'transform 0.2s ease-in-out',
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: '0 8px 25px rgba(79, 172, 254, 0.3)'
+          }
+        }}>
+          <CardContent>
+            <Typography color="inherit" gutterBottom sx={{ opacity: 0.9 }}>最近备份时间</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+              {backups
+                .filter(b => b.status === 'completed')
+                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0]?.date || 'None'}
+            </Typography>
+          </CardContent>
+        </Card>
+        <Card sx={{ 
+          background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+          color: 'white',
+          transition: 'transform 0.2s ease-in-out',
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: '0 8px 25px rgba(250, 112, 154, 0.3)'
+          }
+        }}>
+          <CardContent>
+            <Typography color="inherit" gutterBottom sx={{ opacity: 0.9 }}>下次备份时间</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+              {backups
+                .filter(b => b.status === 'scheduled')
+                .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())[0]?.date || 'None'}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Box>
 
       {/* Search and Filters */}
-      <Grid container spacing={2} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={4}>
+      <Box sx={{ 
+        display: 'flex', 
+        flexWrap: 'wrap', 
+        gap: 2, 
+        mb: 3,
+        alignItems: 'flex-end'
+      }}>
+        <Box sx={{ flex: '2 1 300px', minWidth: '300px' }}>
           <TextField
             fullWidth
             placeholder="查找备份..."
@@ -271,9 +309,21 @@ const Backup = () => {
             InputProps={{
               startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />
             }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                },
+                '&.Mui-focused': {
+                  boxShadow: '0 4px 20px rgba(25, 118, 210, 0.2)'
+                }
+              }
+            }}
           />
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </Box>
+        <Box sx={{ flex: '1 1 200px', minWidth: '200px' }}>
           <TextField
             select
             fullWidth
@@ -283,14 +333,19 @@ const Backup = () => {
             SelectProps={{
               native: true,
             }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2
+              }
+            }}
           >
             <option value="all">所有类型</option>
             <option value="full">全量</option>
             <option value="incremental">增量</option>
             <option value="configuration">个性化</option>
           </TextField>
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </Box>
+        <Box sx={{ flex: '1 1 200px', minWidth: '200px' }}>
           <TextField
             select
             fullWidth
@@ -300,6 +355,11 @@ const Backup = () => {
             SelectProps={{
               native: true,
             }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2
+              }
+            }}
           >
             <option value="all">所有状态</option>
             <option value="completed">已完成</option>
@@ -307,19 +367,30 @@ const Backup = () => {
             <option value="failed">失败</option>
             <option value="scheduled">计划中</option>
           </TextField>
-        </Grid>
-        <Grid item xs={12} md={2}>
+        </Box>
+        <Box sx={{ flex: '0 1 auto' }}>
           <Button 
             variant="contained" 
             color="primary" 
-            fullWidth 
             startIcon={<BackupIcon />}
             onClick={() => setOpenCreateDialog(true)}
+            sx={{
+              borderRadius: 2,
+              px: 3,
+              py: 1.5,
+              background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
+              transition: 'all 0.2s ease-in-out',
+              '&:hover': {
+                background: 'linear-gradient(45deg, #1565c0, #1976d2)',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 6px 20px rgba(25, 118, 210, 0.3)'
+              }
+            }}
           >
             创建备份
           </Button>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* Backups Table */}
       <TableContainer component={Paper}>

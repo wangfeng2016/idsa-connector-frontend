@@ -11,7 +11,7 @@ import {
   MenuItem,
   Grid,
 } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import {
   History as HistoryIcon,
   Person as PersonIcon,
@@ -108,8 +108,7 @@ const AuditLogs = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           <Card>
             <CardContent>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
@@ -120,8 +119,19 @@ const AuditLogs = () => {
               </Box>
 
               {/* 筛选器 */}
-              <Grid container spacing={2} sx={{ mb: 3 }}>
-                <Grid item xs={12} sm={4}>
+              <Box 
+                sx={{ 
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 2,
+                  mb: 3,
+                  '& > *': {
+                    flex: '1 1 200px',
+                    minWidth: 200
+                  }
+                }}
+              >
+                <Box>
                   <FormControl fullWidth>
                     <InputLabel>时间范围</InputLabel>
                     <Select
@@ -135,8 +145,8 @@ const AuditLogs = () => {
                       <MenuItem value="custom">自定义范围</MenuItem>
                     </Select>
                   </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={4}>
+                </Box>
+                <Box>
                   <FormControl fullWidth>
                     <InputLabel>操作类型</InputLabel>
                     <Select
@@ -150,15 +160,15 @@ const AuditLogs = () => {
                       <MenuItem value="auth">认证操作</MenuItem>
                     </Select>
                   </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={4}>
+                </Box>
+                <Box>
                   <TextField
                     fullWidth
                     label="搜索用户"
                     variant="outlined"
                   />
-                </Grid>
-              </Grid>
+                </Box>
+              </Box>
 
               {/* 日志表格 */}
               <div style={{ height: 400, width: '100%' }}>
@@ -173,8 +183,7 @@ const AuditLogs = () => {
               </div>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+      </Box>
     </Box>
   );
 };

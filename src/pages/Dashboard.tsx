@@ -155,7 +155,7 @@ const Dashboard = () => {
           left: 0,
           right: 0,
           height: 4,
-          background: `linear-gradient(90deg, ${theme.palette[color].main}, ${theme.palette[color].light})`,
+          background: `linear-gradient(90deg, ${theme.palette[color as keyof typeof theme.palette]?.['main'] || theme.palette.primary.main}, ${theme.palette[color as keyof typeof theme.palette]?.['light'] || theme.palette.primary.light})`,
         }
       }}
     >

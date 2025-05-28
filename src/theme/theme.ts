@@ -11,6 +11,9 @@ declare module '@mui/material/styles' {
       danger?: string;
     };
   }
+  interface BreakpointOverrides {
+    xxl: true;
+  }
 }
 
 // 定义响应式断点
@@ -27,19 +30,6 @@ const breakpoints = {
 
 // 创建主题
 export const theme = createTheme({
-  // 配置字体
-  typography: {
-    fontFamily: [
-      'Noto Sans SC',
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-    ].join(','),
-  },
   // 添加自定义断点
   breakpoints,
   
@@ -86,7 +76,17 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: '"PingFang SC", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: [
+      'Noto Sans SC',
+      'PingFang SC',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+    ].join(','),
     fontSize: 14,
     fontWeightLight: 300,
     fontWeightRegular: 400,

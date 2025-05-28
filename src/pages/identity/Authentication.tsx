@@ -53,7 +53,7 @@ import {
   Add as AddIcon,
   Refresh as RefreshIcon,
   VpnKey as VpnKeyIcon,
-  Certificate as CertificateIcon,
+  VerifiedUser as CertificateIcon,
   Lock as LockIcon,
   LockOpen as LockOpenIcon,
   Warning as WarningIcon,
@@ -438,9 +438,21 @@ const Authentication = () => {
         </Button>
       </Box>
       
-      <Grid container spacing={2}>
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 2,
+          justifyContent: 'flex-start',
+          alignItems: 'stretch',
+          '& > *': {
+            flex: '1 1 300px',
+            minWidth: 300,
+            maxWidth: { xs: '100%', sm: 'calc(50% - 8px)', lg: 'calc(33.333% - 11px)' }
+          }
+        }}
+      >
         {certificates.map((cert) => (
-          <Grid item xs={12} md={6} lg={4} key={cert.id}>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -485,9 +497,8 @@ const Authentication = () => {
                 )}
               </CardActions>
             </Card>
-          </Grid>
         ))}
-      </Grid>
+      </Box>
     </Box>
   );
 
@@ -559,8 +570,21 @@ const Authentication = () => {
       </Typography>
 
       {/* 统计卡片 */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={3}>
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 3,
+          mb: 3,
+          justifyContent: 'space-between',
+          alignItems: 'stretch',
+          '& > *': {
+            flex: '1 1 240px',
+            minWidth: 240,
+            maxWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(25% - 18px)' }
+          }
+        }}
+      >
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -572,10 +596,8 @@ const Authentication = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
         
-        <Grid item xs={12} md={3}>
-          <Card>
+        <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <CertificateIcon color="success" sx={{ fontSize: 40, mr: 2 }} />
@@ -586,10 +608,8 @@ const Authentication = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
         
-        <Grid item xs={12} md={3}>
-          <Card>
+        <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <SecurityIcon color="info" sx={{ fontSize: 40, mr: 2 }} />
@@ -600,10 +620,8 @@ const Authentication = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
         
-        <Grid item xs={12} md={3}>
-          <Card>
+        <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <WarningIcon color="warning" sx={{ fontSize: 40, mr: 2 }} />
@@ -614,8 +632,7 @@ const Authentication = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+      </Box>
 
       {/* 标签页 */}
       <Paper sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
@@ -637,40 +654,51 @@ const Authentication = () => {
         <DialogTitle>用户详情</DialogTitle>
         <DialogContent>
           {selectedUser && (
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12} md={6}>
+            <Box 
+              sx={{ 
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 2,
+                mt: 1,
+                '& > *': {
+                  flex: '1 1 250px',
+                  minWidth: 250
+                }
+              }}
+            >
+              <Box>
                 <Typography variant="subtitle2">用户名</Typography>
                 <Typography variant="body1" gutterBottom>{selectedUser.username}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box>
                 <Typography variant="subtitle2">全名</Typography>
                 <Typography variant="body1" gutterBottom>{selectedUser.fullName}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box>
                 <Typography variant="subtitle2">邮箱</Typography>
                 <Typography variant="body1" gutterBottom>{selectedUser.email}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box>
                 <Typography variant="subtitle2">角色</Typography>
                 <Typography variant="body1" gutterBottom>{selectedUser.role}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box>
                 <Typography variant="subtitle2">状态</Typography>
                 <Typography variant="body1" gutterBottom>{getStatusChip(selectedUser.status)}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box>
                 <Typography variant="subtitle2">最后登录</Typography>
                 <Typography variant="body1" gutterBottom>{selectedUser.lastLogin}</Typography>
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box sx={{ flex: '1 1 100%', width: '100%' }}>
                 <Typography variant="subtitle2">权限列表</Typography>
                 <Box sx={{ mt: 1 }}>
                   {selectedUser.permissions.map((permission, index) => (
                     <Chip key={index} label={permission} sx={{ mr: 1, mb: 1 }} />
                   ))}
                 </Box>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           )}
         </DialogContent>
         <DialogActions>
@@ -683,42 +711,53 @@ const Authentication = () => {
         <DialogTitle>证书详情</DialogTitle>
         <DialogContent>
           {selectedCert && (
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12} md={6}>
+            <Box 
+              sx={{ 
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 2,
+                mt: 1,
+                '& > *': {
+                  flex: '1 1 250px',
+                  minWidth: 250
+                }
+              }}
+            >
+              <Box>
                 <Typography variant="subtitle2">证书名称</Typography>
                 <Typography variant="body1" gutterBottom>{selectedCert.name}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box>
                 <Typography variant="subtitle2">类型</Typography>
                 <Typography variant="body1" gutterBottom>{selectedCert.type.toUpperCase()}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box>
                 <Typography variant="subtitle2">颁发者</Typography>
                 <Typography variant="body1" gutterBottom>{selectedCert.issuer}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box>
                 <Typography variant="subtitle2">主题</Typography>
                 <Typography variant="body1" gutterBottom>{selectedCert.subject}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box>
                 <Typography variant="subtitle2">生效时间</Typography>
                 <Typography variant="body1" gutterBottom>{selectedCert.validFrom}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box>
                 <Typography variant="subtitle2">过期时间</Typography>
                 <Typography variant="body1" gutterBottom>{selectedCert.validTo}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box>
                 <Typography variant="subtitle2">状态</Typography>
                 <Typography variant="body1" gutterBottom>{getStatusChip(selectedCert.status)}</Typography>
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box sx={{ flex: '1 1 100%', width: '100%' }}>
                 <Typography variant="subtitle2">指纹</Typography>
                 <Typography variant="body2" sx={{ fontFamily: 'monospace', wordBreak: 'break-all' }}>
                   {selectedCert.fingerprint}
                 </Typography>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           )}
         </DialogContent>
         <DialogActions>
