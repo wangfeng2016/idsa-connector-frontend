@@ -163,6 +163,14 @@ const ResourceList = () => {
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [resourceToDelete, setResourceToDelete] = useState<DataResource | null>(null);
+  
+  // 列可见性控制
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({
+    type: !responsive.isDown('xs'),
+    size: !responsive.isDown('xs'),
+    createdAt: !responsive.isDown('sm'),
+    updatedAt: !responsive.isDown('md'),
+  });
 
   useEffect(() => {
     // 模拟API请求
@@ -235,7 +243,6 @@ const ResourceList = () => {
         headerName: '类型', 
         width: responsive.value({ xs: 100, sm: 120, md: 130 }, 130),
         flex: responsive.isDown('sm') ? undefined : 0.7,
-        hide: responsive.isDown('xs'),
       },
       { 
         field: 'format', 
@@ -248,7 +255,6 @@ const ResourceList = () => {
         headerName: '大小', 
         width: responsive.value({ xs: 80, sm: 90, md: 100 }, 100),
         flex: responsive.isDown('sm') ? undefined : 0.5,
-        hide: responsive.isDown('xs'),
       },
       {
         field: 'status',
@@ -262,14 +268,12 @@ const ResourceList = () => {
         headerName: '创建日期', 
         width: responsive.value({ xs: 110, sm: 120, md: 130 }, 130),
         flex: responsive.isDown('sm') ? undefined : 0.7,
-        hide: responsive.isDown('sm'),
       },
       { 
         field: 'updatedAt', 
         headerName: '更新日期', 
         width: responsive.value({ xs: 110, sm: 120, md: 130 }, 130),
         flex: responsive.isDown('sm') ? undefined : 0.7,
-        hide: responsive.isDown('md'),
       },
       {
         field: 'actions',
@@ -368,10 +372,12 @@ const ResourceList = () => {
             loading={loading}
             autoPageSize
             disableRowSelectionOnClick
-            components={{
-              Toolbar: GridToolbar,
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={setColumnVisibilityModel}
+            slots={{
+              toolbar: GridToolbar,
             }}
-            componentsProps={{
+            slotProps={{
               toolbar: {
                 showQuickFilter: true,
                 quickFilterProps: { debounceMs: 500 },

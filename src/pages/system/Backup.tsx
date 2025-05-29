@@ -35,7 +35,8 @@ import {
 } from '@mui/icons-material';
 
 // 类型定义
-type BackupStatus = 'completed' | 'in_progress' | 'failed' | 'scheduled';
+// type BackupStatus = 'completed' | 'in_progress' | 'failed' | 'scheduled';
+type BackupStatus = '完成' | '进行中' | '失败' | '计划中';
 
 interface BackupItem {
   id: string;
@@ -43,7 +44,7 @@ interface BackupItem {
   date: string;
   size: string;
   status: BackupStatus;
-  type: 'full' | 'incremental' | 'configuration';
+  type: '全量' | '增量' | '配置';
   description: string;
 }
 
@@ -123,10 +124,10 @@ const Backup = () => {
   // 获取状态颜色
   const getStatusColor = (status: BackupStatus) => {
     switch (status) {
-      case 'completed': return 'success';
-      case 'in_progress': return 'info';
-      case 'failed': return 'error';
-      case 'scheduled': return 'warning';
+      case '完成': return 'success';
+      case '进行中': return 'info';
+      case '失败': return 'error';
+      case '计划中': return 'warning';
       default: return 'default';
     }
   };
@@ -134,10 +135,10 @@ const Backup = () => {
   // 获取状态图标
   const getStatusIcon = (status: BackupStatus) => {
     switch (status) {
-      case 'completed': return <CheckCircle fontSize="small" color="success" />;
-      case 'in_progress': return <CircularProgress size={16} />;
-      case 'failed': return <ErrorIcon fontSize="small" color="error" />;
-      case 'scheduled': return <Schedule fontSize="small" color="warning" />;
+      case '完成': return <CheckCircle fontSize="small" color="success" />;
+      case '进行中': return <CircularProgress size={16} />;
+      case '失败': return <ErrorIcon fontSize="small" color="error" />;
+      case '计划中': return <Schedule fontSize="small" color="warning" />;
       default: return null;
     }
   };
@@ -166,7 +167,7 @@ const Backup = () => {
       setTimeout(() => {
         setBackups(prev => prev.map(b => 
           b.id === newBackup.id 
-            ? {...b, status: 'completed', size: '1.3 GB'} 
+            ? {...b, status: '完成', size: '1.3 GB'} 
             : b
         ));
         setSnackbarMessage('Backup completed successfully');
@@ -246,7 +247,7 @@ const Backup = () => {
             <Typography color="inherit" gutterBottom sx={{ opacity: 0.9 }}>备份大小</Typography>
             <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
               {backups
-                .filter(b => b.status === 'completed')
+                .filter(b => b.status === '完成')
                 .reduce((acc, curr) => acc + parseFloat(curr.size.replace(' GB', '')), 0)
                 .toFixed(2)} GB
             </Typography>
@@ -265,7 +266,7 @@ const Backup = () => {
             <Typography color="inherit" gutterBottom sx={{ opacity: 0.9 }}>最近备份时间</Typography>
             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
               {backups
-                .filter(b => b.status === 'completed')
+                .filter(b => b.status === '完成')
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0]?.date || 'None'}
             </Typography>
           </CardContent>
@@ -338,9 +339,9 @@ const Backup = () => {
             }}
           >
             <option value="all">所有类型</option>
-            <option value="full">全量</option>
-            <option value="incremental">增量</option>
-            <option value="configuration">个性化</option>
+            <option value="全量">全量</option>
+            <option value="增量">增量</option>
+            <option value="配置">配置</option>
           </TextField>
         </Box>
         <Box sx={{ flex: '1 1 200px', minWidth: '200px' }}>
@@ -360,10 +361,10 @@ const Backup = () => {
             }}
           >
             <option value="all">所有状态</option>
-            <option value="completed">已完成</option>
-            <option value="in_progress">进行中</option>
-            <option value="failed">失败</option>
-            <option value="scheduled">计划中</option>
+            <option value="完成">已完成</option>
+            <option value="进行中">进行中</option>
+            <option value="失败">失败</option>
+            <option value="计划中">计划中</option>
           </TextField>
         </Box>
         <Box sx={{ flex: '0 1 auto' }}>
@@ -424,12 +425,12 @@ const Backup = () => {
                   </TableCell>
                   <TableCell>
                     <Chip 
-                      label={backup.type === 'full' ? '完整' : 
-                             backup.type === 'incremental' ? '增量' : 
-                             backup.type === 'configuration' ? '配置' : backup.type} 
+                      label={backup.type === '全量' ? '完整' : 
+                             backup.type === '增量' ? '增量' : 
+                             backup.type === '配置' ? '配置' : backup.type} 
                       size="small" 
-                      color={backup.type === 'full' ? 'primary' : 'default'}
-                      variant={backup.type === 'configuration' ? 'outlined' : 'filled'}
+                      color={backup.type === '全量' ? 'primary' : 'default'}
+                      variant={backup.type === '配置' ? 'outlined' : 'filled'}
                     />
                   </TableCell>
                   <TableCell>{backup.date}</TableCell>
@@ -437,10 +438,10 @@ const Backup = () => {
                   <TableCell>
                     <Chip 
                       icon={getStatusIcon(backup.status)}
-                      label={backup.status === 'completed' ? '已完成' : 
-                             backup.status === 'in_progress' ? '进行中' : 
-                             backup.status === 'failed' ? '失败' : 
-                             backup.status === 'scheduled' ? '已计划' : backup.status} 
+                      label={backup.status === '完成' ? '已完成' : 
+                             backup.status === '进行中' ? '进行中' : 
+                             backup.status === '失败' ? '失败' : 
+                             backup.status === '计划中' ? '已计划' : backup.status} 
                       size="small" 
                       color={getStatusColor(backup.status)}
                     />
@@ -448,7 +449,7 @@ const Backup = () => {
                   <TableCell>
                     <IconButton 
                       color="primary" 
-                      disabled={backup.status !== 'completed'}
+                      disabled={backup.status !== '完成'}
                       onClick={() => {
                         setSelectedBackup(backup);
                         setOpenRestoreDialog(true);
@@ -459,7 +460,7 @@ const Backup = () => {
                     </IconButton>
                     <IconButton 
                       color="primary" 
-                      disabled={backup.status !== 'completed'}
+                      disabled={backup.status !== '完成'}
                       title="Download backup"
                     >
                       <CloudDownload />
@@ -502,9 +503,9 @@ const Backup = () => {
             }}
             sx={{ mb: 2 }}
           >
-            <option value="full">Full System Backup</option>
-            <option value="incremental">Incremental Backup</option>
-            <option value="configuration">Configuration Only</option>
+            <option value="全量">全量系统备份 </option>
+            <option value="增量">增量备份</option>
+            <option value="配置">配置备份</option>
           </TextField>
           <TextField
             fullWidth
@@ -546,7 +547,7 @@ const Backup = () => {
               <Typography><strong>名称:</strong> {selectedBackup.name}</Typography>
               <Typography><strong>日期:</strong> {selectedBackup.date}</Typography>
               <Typography><strong>大小:</strong> {selectedBackup.size}</Typography>
-              <Typography><strong>类型：</strong> {selectedBackup.type === 'full' ? '完整' : selectedBackup.type === 'incremental' ? '增量' : selectedBackup.type === 'configuration' ? '配置' : selectedBackup.type}</Typography>
+              <Typography><strong>类型：</strong> {selectedBackup.type === '全量' ? '完整' : selectedBackup.type === '增量' ? '增量' : selectedBackup.type === '配置' ? '配置' : selectedBackup.type}</Typography>
             </Box>
           )}
         </DialogContent>
