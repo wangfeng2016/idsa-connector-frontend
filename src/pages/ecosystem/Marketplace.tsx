@@ -5,7 +5,6 @@ import {
   CardContent,
   CardMedia,
   Typography,
-  Grid,
   TextField,
   InputAdornment,
   Select,
@@ -22,7 +21,6 @@ import {
   Store as StoreIcon,
   Category as CategoryIcon,
   LocalOffer as LocalOfferIcon,
-  Star as StarIcon,
 } from '@mui/icons-material';
 
 // 市场资产类型

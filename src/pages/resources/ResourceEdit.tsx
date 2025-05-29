@@ -5,7 +5,6 @@ import {
   Typography,
   TextField,
   Button,
-  Grid,
   MenuItem,
   FormControl,
   InputLabel,
@@ -17,7 +16,6 @@ import {
   CircularProgress,
   Card,
   CardContent,
-  IconButton,
   Stack,
 } from '@mui/material';
 import { Save as SaveIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
@@ -93,7 +91,7 @@ const ResourceEdit = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isCreating = id === 'create';
-  const pageTitle = isCreating ? '编辑数据资源' : '编辑数据资源';
+  // const pageTitle = isCreating ? '编辑数据资源' : '编辑数据资源';
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

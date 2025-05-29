@@ -3,10 +3,8 @@ import {
   Box,
   Typography,
   Paper,
-  Grid,
   Card,
   CardContent,
-  Divider,
   Chip,
   LinearProgress,
   Table,
@@ -28,7 +26,6 @@ import {
   FormControl,
   InputLabel,
   Select,
-  Stack,
 } from '@mui/material';
 import { DatePicker } from '@mui/lab';
 import {
@@ -190,7 +187,7 @@ const DataExchange = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (newPage: number) => {
     setPage(newPage);
   };
 
@@ -702,34 +699,8 @@ const DataExchange = () => {
       >
         <DialogTitle>筛选数据交换记录</DialogTitle>
         <DialogContent>
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            gap: 2, 
-            mt: 1,
-            '& .MuiFormControl-root': {
-              borderRadius: 2,
-              transition: 'all 0.3s ease',
-              '&:hover': {
-                transform: 'translateY(-1px)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-              }
-            },
-            '& .MuiTextField-root': {
-              borderRadius: 2,
-              transition: 'all 0.3s ease',
-              '&:hover': {
-                transform: 'translateY(-1px)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-              }
-            }
-          }}>
-            <Box sx={{ 
-              display: 'flex', 
-              gap: 2, 
-              flexDirection: { xs: 'column', md: 'row' },
-              '& > *': { flex: 1 }
-            }}>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid item xs={12} md={6}>
               <FormControl fullWidth>
                 <InputLabel id="status-filter-label">状态</InputLabel>
                 <Select
@@ -745,6 +716,8 @@ const DataExchange = () => {
                   <MenuItem value="pending">等待中</MenuItem>
                 </Select>
               </FormControl>
+            </Grid>
+            <Grid item xs={12} md={6}>
               <FormControl fullWidth>
                 <InputLabel id="exchange-type-filter-label">交换类型</InputLabel>
                 <Select
@@ -758,35 +731,34 @@ const DataExchange = () => {
                   <MenuItem value="pull">拉取</MenuItem>
                 </Select>
               </FormControl>
-            </Box>
-            <TextField
-              fullWidth
-              label="连接器名称"
-              value={filters.connector}
-              onChange={(e) => setFilters({ ...filters, connector: e.target.value })}
-              placeholder="搜索源或目标连接器"
-              InputProps={{
-                startAdornment: <SearchIcon color="action" sx={{ mr: 1 }} />,
-              }}
-            />
-            <Box sx={{ 
-              display: 'flex', 
-              gap: 2, 
-              flexDirection: { xs: 'column', md: 'row' },
-              '& > *': { flex: 1 }
-            }}>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="连接器名称"
+                value={filters.connector}
+                onChange={(e) => setFilters({ ...filters, connector: e.target.value })}
+                placeholder="搜索源或目标连接器"
+                InputProps={{
+                  startAdornment: <SearchIcon color="action" sx={{ mr: 1 }} />,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
               <DatePicker
                 label="开始日期"
                 value={filters.startDate}
                 onChange={(newValue) => setFilters({ ...filters, startDate: newValue })}                
               />
+            </Grid>
+            <Grid item xs={12} md={6}>
               <DatePicker
                 label="结束日期"
                 value={filters.endDate}
                 onChange={(newValue) => setFilters({ ...filters, endDate: newValue })}                
               />
-            </Box>
-          </Box>
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleResetFilters}>重置</Button>

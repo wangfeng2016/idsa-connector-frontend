@@ -11,8 +11,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import useResponsive from '../hooks/useResponsive';
 
 // 图标导入
@@ -192,7 +190,6 @@ const menuGroups: MenuGroup[] = [
 ];
 
 const Sidebar = ({ open, onDrawerToggle, drawerWidth }: SidebarProps) => {
-  const theme = useTheme();
   const responsive = useResponsive();
   const navigate = useNavigate();
   const location = useLocation();

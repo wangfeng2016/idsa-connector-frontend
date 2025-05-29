@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   Box,
   Typography,
-  Grid,
   Card,
   CardContent,
   FormControl,
@@ -23,7 +22,6 @@ import {
   IconButton,
   Tooltip,
   LinearProgress,
-  Divider,
 } from '@mui/material';
 import {
   Description as DescriptionIcon,
@@ -153,19 +151,6 @@ const ComplianceReports = () => {
     }
   };
 
-  // 获取状态颜色
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'passed':
-        return 'success';
-      case 'warning':
-        return 'warning';
-      case 'failed':
-        return 'error';
-      default:
-        return 'default';
-    }
-  };
 
   // 获取状态名称
   const getStatusName = (status: string) => {

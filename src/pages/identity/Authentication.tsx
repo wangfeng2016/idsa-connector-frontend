@@ -3,7 +3,6 @@ import {
   Box,
   Typography,
   Paper,
-  Grid,
   Card,
   CardContent,
   CardActions,
@@ -22,18 +21,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Switch,
-  FormControlLabel,
-  Alert,
   LinearProgress,
   Tabs,
   Tab,
-  Divider,
   Avatar,
   List,
   ListItem,
@@ -44,12 +34,9 @@ import {
 import {
   Security as SecurityIcon,
   Person as PersonIcon,
-  Group as GroupIcon,
   Key as KeyIcon,
-  Shield as ShieldIcon,
   Visibility as VisibilityIcon,
   Edit as EditIcon,
-  Delete as DeleteIcon,
   Add as AddIcon,
   Refresh as RefreshIcon,
   VpnKey as VpnKeyIcon,
@@ -57,7 +44,6 @@ import {
   Lock as LockIcon,
   LockOpen as LockOpenIcon,
   Warning as WarningIcon,
-  CheckCircle as CheckCircleIcon,
 } from '@mui/icons-material';
 
 // 类型定义
@@ -254,11 +240,11 @@ const Authentication = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (newValue: number) => {
     setCurrentTab(newValue);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (newPage: number) => {
     setPage(newPage);
   };
 

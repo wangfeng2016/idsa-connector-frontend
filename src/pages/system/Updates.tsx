@@ -7,7 +7,6 @@ import {
   TextField,
   Button,
   Chip,
-  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -24,19 +23,12 @@ import {
   Snackbar,
   Tabs,
   Tab,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
   LinearProgress
 } from '@mui/material';
 import {
   SystemUpdate as UpdateIcon,
   History as HistoryIcon,
   CheckCircle,
-  Error as ErrorIcon,
-  Warning as WarningIcon,
   Info as InfoIcon,
   GetApp as DownloadIcon,
   Security as SecurityIcon,
@@ -44,7 +36,6 @@ import {
   BugReport as BugFixIcon,
   NewReleases as NewFeatureIcon,
   Search as SearchIcon,
-  FilterList as FilterIcon,
   Description as DescriptionIcon,
   List as ListIcon
 } from '@mui/icons-material';

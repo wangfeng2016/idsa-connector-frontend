@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   Box,
   Typography,
-  Grid,
   Card,
   CardContent,
   FormControl,
@@ -12,7 +11,6 @@ import {
   TextField,
   InputAdornment,
   Chip,
-  Divider,
   Button,
   LinearProgress,
   Table,
@@ -25,12 +23,9 @@ import {
 } from '@mui/material';
 import {
   Assessment as AssessmentIcon,
-  TrendingUp as TrendingUpIcon,
   MonetizationOn as MonetizationOnIcon,
   BarChart as BarChartIcon,
-  CalendarToday as CalendarTodayIcon,
   Search as SearchIcon,
-  Category as CategoryIcon,
   ArrowUpward as ArrowUpwardIcon,
   ArrowDownward as ArrowDownwardIcon,
 } from '@mui/icons-material';

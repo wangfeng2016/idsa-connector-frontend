@@ -2,25 +2,15 @@ import { useState } from 'react';
 import {
   Box,
   Typography,
-  Grid,
-  Card,
-  CardContent,
   Tabs,
   Tab,
   TextField,
   Button,
   Switch,
   FormControlLabel,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  IconButton,
   Tooltip,
   Alert,
   Paper,
-  InputAdornment,
 } from '@mui/material';
 import {
   Settings as SettingsIcon,
@@ -28,14 +18,11 @@ import {
   Refresh as RefreshIcon,
   Security as SecurityIcon,
   Storage as StorageIcon,
-  Language as LanguageIcon,
   Notifications as NotificationsIcon,
   CloudSync as CloudSyncIcon,
   Api as ApiIcon,
-  Speed as SpeedIcon,
   Info as InfoIcon,
   Edit as EditIcon,
-  Check as CheckIcon,
   Close as CloseIcon,
   Backup as BackupIcon,
 } from '@mui/icons-material';
@@ -118,7 +105,7 @@ const SystemConfig = () => {
   });
 
   // 处理选项卡变更
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (newValue: number) => {
     setTabValue(newValue);
   };
 

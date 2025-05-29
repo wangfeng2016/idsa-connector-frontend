@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   Box,
   Typography,
-  Grid,
   Card,
   CardContent,
   CardActions,
@@ -17,7 +16,6 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
-  Tooltip,
   LinearProgress,
   Divider,
   Alert,
@@ -26,15 +24,11 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
-  ListItemSecondaryAction,
 } from '@mui/material';
 import {
   Extension as ExtensionIcon,
   Search as SearchIcon,
-  Add as AddIcon,
   Delete as DeleteIcon,
-  Settings as SettingsIcon,
-  CloudDownload as CloudDownloadIcon,
   CloudUpload as CloudUploadIcon,
   Refresh as RefreshIcon,
   Info as InfoIcon,
@@ -44,7 +38,6 @@ import {
   Code as CodeIcon,
   Security as SecurityIcon,
   Close as CloseIcon,
-  MoreVert as MoreVertIcon,
 } from '@mui/icons-material';
 
 // 插件类型定义
