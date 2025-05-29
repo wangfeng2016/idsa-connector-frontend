@@ -474,7 +474,7 @@ const PolicyEdit = () => {
               multiple
               options={mockResources}
               value={policy.targetResources}
-              onChange={(event, newValue) => handleInputChange('targetResources', newValue)}
+              onChange={(_event, newValue) => handleInputChange('targetResources', newValue)}
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
                   <Chip variant="outlined" label={option} {...getTagProps({ index })} />
@@ -504,7 +504,7 @@ const PolicyEdit = () => {
               multiple
               options={mockUsers}
               value={policy.targetUsers}
-              onChange={(event, newValue) => handleInputChange('targetUsers', newValue)}
+              onChange={(_event, newValue) => handleInputChange('targetUsers', newValue)}
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
                   <Chip variant="outlined" label={option} {...getTagProps({ index })} />

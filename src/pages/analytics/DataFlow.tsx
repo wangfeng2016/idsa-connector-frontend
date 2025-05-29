@@ -244,9 +244,9 @@ const DataFlow = () => {
       </Box>
 
       {/* 数据流列表 */}
-      <Grid container spacing={3}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         {dataFlows.map((flow) => (
-          <Grid item xs={12} key={flow.id}>
+          <Box key={flow.id}>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
@@ -325,9 +325,9 @@ const DataFlow = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
         ))}
-      </Grid>
+      </Box>
     </Box>
   );
 };

@@ -118,7 +118,7 @@ const Compliance = () => {
   const [tabValue, setTabValue] = useState(0);
 
   // 处理标签页切换
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
@@ -150,7 +150,7 @@ const Compliance = () => {
             合规检查进度
           </Typography>
           <Stepper activeStep={activeStep}>
-            {complianceSteps.map((label, index) => (
+            {complianceSteps.map((label, _index) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
               </Step>

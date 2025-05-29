@@ -33,7 +33,6 @@ import {
   Monitor as MonitorIcon,
 } from '@mui/icons-material';
 import ResponsiveContainer from '../layouts/ResponsiveContainer';
-import useResponsive from '../hooks/useResponsive';
 
 // 模拟数据
 const mockData = {
