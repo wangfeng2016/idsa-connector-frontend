@@ -394,48 +394,56 @@ const CertificateManagement = () => {
         <DialogTitle>证书详情</DialogTitle>
         <DialogContent>
           {selectedCert && (
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">证书名称</Typography>
-                <Typography variant="body1" gutterBottom>{selectedCert.name}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">类型</Typography>
-                <Typography variant="body1" gutterBottom>{selectedCert.type.toUpperCase()}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">颁发者</Typography>
-                <Typography variant="body1" gutterBottom>{selectedCert.issuer}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">主题</Typography>
-                <Typography variant="body1" gutterBottom>{selectedCert.subject}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">生效时间</Typography>
-                <Typography variant="body1" gutterBottom>{selectedCert.validFrom}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">过期时间</Typography>
-                <Typography variant="body1" gutterBottom>{selectedCert.validTo}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2">状态</Typography>
-                <Typography variant="body1" gutterBottom>{getStatusChip(selectedCert.status)}</Typography>
-              </Grid>
-              <Grid item xs={12}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
+                  <Typography variant="subtitle2">证书名称</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedCert.name}</Typography>
+                </Box>
+                <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
+                  <Typography variant="subtitle2">类型</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedCert.type.toUpperCase()}</Typography>
+                </Box>
+              </Box>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
+                  <Typography variant="subtitle2">颁发者</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedCert.issuer}</Typography>
+                </Box>
+                <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
+                  <Typography variant="subtitle2">主题</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedCert.subject}</Typography>
+                </Box>
+              </Box>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
+                  <Typography variant="subtitle2">生效时间</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedCert.validFrom}</Typography>
+                </Box>
+                <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
+                  <Typography variant="subtitle2">过期时间</Typography>
+                  <Typography variant="body1" gutterBottom>{selectedCert.validTo}</Typography>
+                </Box>
+              </Box>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
+                  <Typography variant="subtitle2">状态</Typography>
+                  <Typography variant="body1" gutterBottom>{getStatusChip(selectedCert.status)}</Typography>
+                </Box>
+              </Box>
+              <Box>
                 <Typography variant="subtitle2">指纹</Typography>
                 <Typography variant="body2" sx={{ fontFamily: 'monospace', wordBreak: 'break-all' }}>
                   {selectedCert.fingerprint}
                 </Typography>
-              </Grid>
+              </Box>
               {selectedCert.description && (
-                <Grid item xs={12}>
+                <Box>
                   <Typography variant="subtitle2">描述</Typography>
                   <Typography variant="body1" gutterBottom>{selectedCert.description}</Typography>
-                </Grid>
+                </Box>
               )}
-            </Grid>
+            </Box>
           )}
         </DialogContent>
         <DialogActions>

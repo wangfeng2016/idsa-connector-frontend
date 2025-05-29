@@ -699,40 +699,42 @@ const DataExchange = () => {
       >
         <DialogTitle>筛选数据交换记录</DialogTitle>
         <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth>
-                <InputLabel id="status-filter-label">状态</InputLabel>
-                <Select
-                  labelId="status-filter-label"
-                  value={filters.status}
-                  label="状态"
-                  onChange={(e) => setFilters({ ...filters, status: e.target.value as string })}
-                >
-                  <MenuItem value="">全部</MenuItem>
-                  <MenuItem value="completed">已完成</MenuItem>
-                  <MenuItem value="failed">失败</MenuItem>
-                  <MenuItem value="in_progress">进行中</MenuItem>
-                  <MenuItem value="pending">等待中</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth>
-                <InputLabel id="exchange-type-filter-label">交换类型</InputLabel>
-                <Select
-                  labelId="exchange-type-filter-label"
-                  value={filters.exchangeType}
-                  label="交换类型"
-                  onChange={(e) => setFilters({ ...filters, exchangeType: e.target.value as string })}
-                >
-                  <MenuItem value="">全部</MenuItem>
-                  <MenuItem value="push">推送</MenuItem>
-                  <MenuItem value="pull">拉取</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+              <Box sx={{ flex: '1 1 200px', minWidth: '200px' }}>
+                <FormControl fullWidth>
+                  <InputLabel id="status-filter-label">状态</InputLabel>
+                  <Select
+                    labelId="status-filter-label"
+                    value={filters.status}
+                    label="状态"
+                    onChange={(e) => setFilters({ ...filters, status: e.target.value as string })}
+                  >
+                    <MenuItem value="">全部</MenuItem>
+                    <MenuItem value="completed">已完成</MenuItem>
+                    <MenuItem value="failed">失败</MenuItem>
+                    <MenuItem value="in_progress">进行中</MenuItem>
+                    <MenuItem value="pending">等待中</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+              <Box sx={{ flex: '1 1 200px', minWidth: '200px' }}>
+                <FormControl fullWidth>
+                  <InputLabel id="exchange-type-filter-label">交换类型</InputLabel>
+                  <Select
+                    labelId="exchange-type-filter-label"
+                    value={filters.exchangeType}
+                    label="交换类型"
+                    onChange={(e) => setFilters({ ...filters, exchangeType: e.target.value as string })}
+                  >
+                    <MenuItem value="">全部</MenuItem>
+                    <MenuItem value="push">推送</MenuItem>
+                    <MenuItem value="pull">拉取</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+            <Box>
               <TextField
                 fullWidth
                 label="连接器名称"
@@ -743,22 +745,24 @@ const DataExchange = () => {
                   startAdornment: <SearchIcon color="action" sx={{ mr: 1 }} />,
                 }}
               />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <DatePicker
-                label="开始日期"
-                value={filters.startDate}
-                onChange={(newValue) => setFilters({ ...filters, startDate: newValue })}                
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <DatePicker
-                label="结束日期"
-                value={filters.endDate}
-                onChange={(newValue) => setFilters({ ...filters, endDate: newValue })}                
-              />
-            </Grid>
-          </Grid>
+            </Box>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+              <Box sx={{ flex: '1 1 200px', minWidth: '200px' }}>
+                <DatePicker
+                  label="开始日期"
+                  value={filters.startDate}
+                  onChange={(newValue) => setFilters({ ...filters, startDate: newValue })}                
+                />
+              </Box>
+              <Box sx={{ flex: '1 1 200px', minWidth: '200px' }}>
+                <DatePicker
+                  label="结束日期"
+                  value={filters.endDate}
+                  onChange={(newValue) => setFilters({ ...filters, endDate: newValue })}                
+                />
+              </Box>
+            </Box>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleResetFilters}>重置</Button>

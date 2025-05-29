@@ -149,8 +149,8 @@ const DataFlow = () => {
       </Typography>
 
       {/* 统计卡片 */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 4 }}>
+        <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
           <Card>
             <CardContent>
               <Typography variant="h6" color="textSecondary" gutterBottom>
@@ -164,8 +164,22 @@ const DataFlow = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </Box>
+        <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                成功率
+              </Typography>
+              <Typography variant="h3">{flowStats.successRate}</Typography>
+              <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                <TrendingUpIcon sx={{ verticalAlign: 'middle', mr: 0.5 }} />
+                过去24小时数据
+              </Typography>
+            </CardContent>
+          </Card>
+        </Box>
+        <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
           <Card>
             <CardContent>
               <Typography variant="h6" color="textSecondary" gutterBottom>
@@ -178,8 +192,8 @@ const DataFlow = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </Box>
+        <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
           <Card>
             <CardContent>
               <Typography variant="h6" color="textSecondary" gutterBottom>
@@ -192,12 +206,12 @@ const DataFlow = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* 搜索和筛选 */}
-      <Grid container spacing={2} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={6}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 4 }}>
+        <Box sx={{ flex: '1 1 300px', minWidth: '300px' }}>
           <TextField
             fullWidth
             placeholder="搜索数据流名称、来源或目标..."
@@ -211,8 +225,8 @@ const DataFlow = () => {
               ),
             }}
           />
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </Box>
+        <Box sx={{ flex: '1 1 200px', minWidth: '200px' }}>
           <FormControl fullWidth>
             <InputLabel>状态</InputLabel>
             <Select
@@ -226,8 +240,8 @@ const DataFlow = () => {
               <MenuItem value="failed">失败</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* 数据流列表 */}
       <Grid container spacing={3}>
@@ -235,8 +249,8 @@ const DataFlow = () => {
           <Grid item xs={12} key={flow.id}>
             <Card>
               <CardContent>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={4}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                  <Box sx={{ flex: '1 1 300px', minWidth: '300px' }}>
                     <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
                       <Typography variant="h6">{flow.name}</Typography>
                       <Chip
@@ -263,9 +277,9 @@ const DataFlow = () => {
                         数据量: {flow.volume}
                       </Typography>
                     </Box>
-                  </Grid>
-                  <Grid item xs={12} md={5}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                  </Box>
+                  <Box sx={{ flex: '1 1 250px', minWidth: '250px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
                       <Box sx={{ textAlign: 'center', width: '40%' }}>
                         <Typography variant="body2" color="textSecondary" gutterBottom>
                           来源
@@ -284,8 +298,8 @@ const DataFlow = () => {
                         </Typography>
                       </Box>
                     </Box>
-                  </Grid>
-                  <Grid item xs={12} md={3}>
+                  </Box>
+                  <Box sx={{ flex: '1 1 200px', minWidth: '200px' }}>
                     <Box display="flex" alignItems="center" mb={1}>
                       <CalendarTodayIcon sx={{ mr: 1, fontSize: 20 }} />
                       <Typography variant="body2" color="textSecondary">
@@ -307,8 +321,8 @@ const DataFlow = () => {
                         查看详情
                       </Button>
                     </Box>
-                  </Grid>
-                </Grid>
+                  </Box>
+                </Box>
               </CardContent>
             </Card>
           </Grid>
