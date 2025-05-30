@@ -105,7 +105,7 @@ const SystemConfig = () => {
   });
 
   // 处理选项卡变更
-  const handleTabChange = (newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 

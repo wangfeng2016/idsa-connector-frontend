@@ -38,6 +38,7 @@ import {
   Code as CodeIcon,
   Security as SecurityIcon,
   Close as CloseIcon,
+  Storage as StorageIcon,
 } from '@mui/icons-material';
 
 // 插件类型定义
@@ -238,7 +239,7 @@ const Plugins = () => {
       case 'update-available':
         return <UpdateIcon color="primary" />;
       default:
-        return null;
+        return <InfoIcon color="disabled" />;
     }
   };
 

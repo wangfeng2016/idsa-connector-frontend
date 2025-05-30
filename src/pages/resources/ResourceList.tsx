@@ -373,7 +373,7 @@ const ResourceList = () => {
             autoPageSize
             disableRowSelectionOnClick
             columnVisibilityModel={columnVisibilityModel}
-            onColumnVisibilityModelChange={setColumnVisibilityModel}
+            onColumnVisibilityModelChange={(model) => setColumnVisibilityModel(model)}
             slots={{
               toolbar: GridToolbar,
             }}

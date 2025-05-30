@@ -65,7 +65,7 @@ const mockBackups: BackupItem[] = [
     date: '2025-05-10 14:45:00',
     size: '45 MB',
     status: '完成',
-    type: '配置信息',
+    type: '配置',
     description: '系统配置信息备份'
   },
   {
@@ -122,7 +122,7 @@ const Backup = () => {
   });
 
   // 获取状态颜色
-  const getStatusColor = (status: BackupStatus) => {
+  const getStatusColor = (status: BackupStatus): 'success' | 'info' | 'error' | 'warning' | 'default' => {
     switch (status) {
       case '完成': return 'success';
       case '进行中': return 'info';
@@ -284,7 +284,7 @@ const Backup = () => {
             <Typography color="inherit" gutterBottom sx={{ opacity: 0.9 }}>下次备份时间</Typography>
             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
               {backups
-                .filter(b => b.status === 'scheduled')
+                .filter(b => b.status === '计划中')
                 .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())[0]?.date || 'None'}
             </Typography>
           </CardContent>
@@ -434,7 +434,7 @@ const Backup = () => {
                     />
                   </TableCell>
                   <TableCell>{backup.date}</TableCell>
-                  <TableCell>{backup.status === 'scheduled' ? '-' : backup.size}</TableCell>
+                  <TableCell>{backup.status === '计划中' ? '-' : backup.size}</TableCell>
                   <TableCell>
                     <Chip 
                       icon={getStatusIcon(backup.status)}
@@ -467,7 +467,7 @@ const Backup = () => {
                     </IconButton>
                     <IconButton 
                       color="error" 
-                      disabled={backup.status === 'in_progress'}
+                      disabled={backup.status === '进行中'}
                       onClick={() => handleDeleteBackup(backup.id)}
                       title="Delete backup"
                     >

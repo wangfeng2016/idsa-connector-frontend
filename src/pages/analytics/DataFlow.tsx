@@ -99,6 +99,7 @@ const flowStats = {
   failedFlows: 1,
   totalVolume: '18 GB',
   avgTransferRate: '8.75 MB/s',
+  successRate: '75%',
 };
 
 const DataFlow = () => {

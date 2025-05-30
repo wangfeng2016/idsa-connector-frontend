@@ -292,10 +292,10 @@ const PolicyList = () => {
           loading={loading}
           autoPageSize
           disableRowSelectionOnClick
-          components={{
-            Toolbar: GridToolbar,
+          slots={{
+            toolbar: GridToolbar,
           }}
-          componentsProps={{
+          slotProps={{
             toolbar: {
               showQuickFilter: true,
               quickFilterProps: { debounceMs: 500 },

@@ -193,7 +193,7 @@ const Updates = () => {
       case 'feature': return <NewFeatureIcon fontSize="small" />;
       case 'bugfix': return <BugFixIcon fontSize="small" />;
       case 'performance': return <PerformanceIcon fontSize="small" />;
-      default: return null;
+      default: return <SecurityIcon fontSize="small" />;
     }
   };
 

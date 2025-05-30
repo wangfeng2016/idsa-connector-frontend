@@ -171,10 +171,14 @@ const AuditLogs = () => {
                 <DataGrid
                   rows={logs}
                   columns={columns}
-                  pageSize={5}
-                  rowsPerPageOptions={[5, 10, 20]}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { pageSize: 5 }
+                    }
+                  }}
+                  pageSizeOptions={[5, 10, 20]}
                   checkboxSelection
-                  disableSelectionOnClick
+                  disableRowSelectionOnClick
                 />
               </div>
             </CardContent>

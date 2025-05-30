@@ -554,7 +554,7 @@ const PolicyEdit = () => {
               <DateTimePicker
                 label="生效时间"
                 value={policy.validFrom}
-                onChange={(newValue) => handleInputChange('validFrom', newValue)}
+                onChange={(newValue: any) => handleInputChange('validFrom', newValue)}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: 2,
@@ -571,7 +571,7 @@ const PolicyEdit = () => {
               <DateTimePicker
                 label="失效时间"
                 value={policy.validTo}
-                onChange={(newValue) => handleInputChange('validTo', newValue)}
+                onChange={(newValue: any) => handleInputChange('validTo', newValue)}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: 2,
