@@ -129,12 +129,13 @@ const NotFound = () => {
                 <List dense>
                   {suggestedRoutes.map((route) => (
                     <ListItem 
-                      button 
+                      component="div"
                       key={route.path} 
                       onClick={() => navigate(route.path)}
                       sx={{ 
                         borderRadius: 2, 
                         transition: 'all 0.2s ease',
+                        cursor: 'pointer',
                         '&:hover': { 
                           bgcolor: 'action.hover',
                           transform: 'translateX(8px)'

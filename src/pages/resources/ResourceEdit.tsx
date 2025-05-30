@@ -141,7 +141,7 @@ const ResourceEdit = () => {
     return () => clearTimeout(timer);
   }, [id, isCreating]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement> | { target: { name: string; value: unknown } }) => {
     const { name, value } = e.target;
     if (name) {
       setResource((prev) => ({

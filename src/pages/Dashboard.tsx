@@ -157,7 +157,7 @@ const Dashboard = () => {
           left: 0,
           right: 0,
           height: 4,
-          background: `linear-gradient(90deg, ${theme.palette[color as keyof typeof theme.palette]?.['main'] || theme.palette.primary.main}, ${theme.palette[color as keyof typeof theme.palette]?.['light'] || theme.palette.primary.light})`,
+          background: `linear-gradient(90deg, ${(theme.palette[color] as any)?.main || theme.palette.primary.main}, ${(theme.palette[color] as any)?.light || theme.palette.primary.light})`,
         }
       }}
     >
@@ -165,8 +165,8 @@ const Dashboard = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
           <Avatar 
             sx={{ 
-              bgcolor: alpha(theme.palette[color].main, 0.1),
-              color: theme.palette[color].main,
+              bgcolor: alpha((theme.palette[color] as any).main, 0.1),
+              color: (theme.palette[color] as any).main,
               mr: 2,
               width: 48,
               height: 48

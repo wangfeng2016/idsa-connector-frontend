@@ -240,11 +240,11 @@ const Authentication = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleTabChange = (newValue: number) => {
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
 
-  const handleChangePage = (newPage: number) => {
+  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
   };
 

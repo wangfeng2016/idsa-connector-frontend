@@ -187,7 +187,7 @@ const DataExchange = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleChangePage = (newPage: number) => {
+  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
   };
 
@@ -751,14 +751,14 @@ const DataExchange = () => {
                 <DatePicker
                   label="开始日期"
                   value={filters.startDate}
-                  onChange={(newValue) => setFilters({ ...filters, startDate: newValue })}                
+                  onChange={(newValue: any) => setFilters({ ...filters, startDate: newValue })}                
                 />
               </Box>
               <Box sx={{ flex: '1 1 200px', minWidth: '200px' }}>
                 <DatePicker
                   label="结束日期"
                   value={filters.endDate}
-                  onChange={(newValue) => setFilters({ ...filters, endDate: newValue })}                
+                  onChange={(newValue: any) => setFilters({ ...filters, endDate: newValue })}                
                 />
               </Box>
             </Box>

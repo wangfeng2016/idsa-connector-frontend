@@ -31,10 +31,14 @@ const ExchangeLogs: React.FC = () => {
           <DataGrid
             rows={rows}
             columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5, 10, 20]}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10, 20]}
             checkboxSelection
-            disableSelectionOnClick
+            disableRowSelectionOnClick
           />
         </div>
       </CardContent>

@@ -55,7 +55,7 @@ const openedMixin = (theme: any, drawerWidth: number) => ({
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
-  overflowX: 'hidden',
+  overflowX: 'hidden' as const,
 });
 
 const closedMixin = (theme: any) => ({
@@ -63,7 +63,7 @@ const closedMixin = (theme: any) => ({
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  overflowX: 'hidden',
+  overflowX: 'hidden' as const,
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
@@ -83,22 +83,22 @@ interface CustomDrawerProps {
   drawerWidth?: number;
 }
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerWidth' })<CustomDrawerProps>(
-  ({ theme, open, drawerWidth }) => ({
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-    boxSizing: 'border-box',
-    ...(open && {
-      ...openedMixin(theme, drawerWidth!),
-      '& .MuiDrawer-paper': openedMixin(theme, drawerWidth!),
-    }),
-    ...(!open && {
-      ...closedMixin(theme),
-      '& .MuiDrawer-paper': closedMixin(theme),
-    }),
+const Drawer = styled(MuiDrawer, { 
+  shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerWidth' 
+})<CustomDrawerProps>(({ theme, open, drawerWidth }) => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: 'nowrap' as const,
+  boxSizing: 'border-box' as const,
+  ...(open && {
+    ...openedMixin(theme, drawerWidth!),
+    '& .MuiDrawer-paper': openedMixin(theme, drawerWidth!),
   }),
-);
+  ...(!open && {
+    ...closedMixin(theme),
+    '& .MuiDrawer-paper': closedMixin(theme),
+  }),
+}))
 
 interface MenuGroup {
   id: string;
