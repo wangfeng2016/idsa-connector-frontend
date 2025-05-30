@@ -32,6 +32,7 @@ import {
   CheckCircle,
   Error as ErrorIcon,
   Schedule,
+  Info as InfoIcon,
 } from '@mui/icons-material';
 
 // 类型定义
@@ -139,7 +140,7 @@ const Backup = () => {
       case '进行中': return <CircularProgress size={16} />;
       case '失败': return <ErrorIcon fontSize="small" color="error" />;
       case '计划中': return <Schedule fontSize="small" color="warning" />;
-      default: return null;
+      default: return <InfoIcon fontSize="small" />;
     }
   };
 
