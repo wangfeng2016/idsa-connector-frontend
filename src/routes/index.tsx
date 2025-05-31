@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createHashRouter, Navigate } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 
 // 懒加载页面组件
@@ -70,7 +70,7 @@ const Updates = lazy(() => import('../pages/system/Updates'));
 // 错误页面
 const NotFound = lazy(() => import('../pages/errors/NotFound'));
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <MainLayout />,
