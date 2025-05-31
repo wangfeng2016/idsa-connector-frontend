@@ -122,7 +122,7 @@ const AccessControl = () => {
         <Card 
           sx={{
             borderRadius: 3,
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #00458b 0%, #46cade 100%)',
             color: 'white',
             boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
             transition: 'all 0.3s ease',
