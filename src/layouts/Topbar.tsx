@@ -20,6 +20,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Box from '@mui/material/Box';
 import useResponsive from '../hooks/useResponsive';
+import logoWhite from '../assets/images/磐云logo-white.png';
 
 // 使用React.ComponentProps获取AppBar的props类型
 type MuiAppBarProps = ComponentProps<typeof MuiAppBar>;
@@ -82,6 +83,17 @@ const Topbar = ({ open, onDrawerToggle, drawerWidth }: TopbarProps) => {
   return (
     <AppBar position="fixed" open={open} drawerWidth={drawerWidth}>
       <Toolbar sx={{ pr: responsive.value({ xs: 1, sm: 2, md: 3 }, 3) }}>
+        {/* 磐云Logo */}
+        <Box
+          component="img"
+          src={logoWhite}
+          alt="磐云Logo"
+          sx={{
+            height: responsive.value({ xs: 28, sm: 32, md: 36 }, 36),
+            marginRight: responsive.value({ xs: 1, sm: 2, md: 3 }, 3),
+            objectFit: 'contain'
+          }}
+        />
         <IconButton
           color="inherit"
           aria-label="open drawer"
