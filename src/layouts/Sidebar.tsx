@@ -12,6 +12,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import useResponsive from '../hooks/useResponsive';
+import { useRole } from '../contexts/RoleContext';
 
 // 图标导入
 import StorageIcon from '@mui/icons-material/Storage';
@@ -42,6 +43,30 @@ import TuneIcon from '@mui/icons-material/Tune';
 import ExtensionIcon from '@mui/icons-material/Extension';
 import BackupIcon from '@mui/icons-material/Backup';
 import SystemUpdateIcon from '@mui/icons-material/SystemUpdate';
+// 新增角色特定图标
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import GavelIcon from '@mui/icons-material/Gavel';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import HubIcon from '@mui/icons-material/Hub';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import PublishIcon from '@mui/icons-material/Publish';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import BusinessIcon from '@mui/icons-material/Business';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import GroupIcon from '@mui/icons-material/Group';
+import MonitorIcon from '@mui/icons-material/Monitor';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import SearchIcon from '@mui/icons-material/Search';
+import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
+import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
 interface SidebarProps {
   open: boolean;
@@ -114,14 +139,15 @@ interface MenuItem {
   icon: React.ReactNode;
 }
 
-const menuGroups: MenuGroup[] = [
+// 数据空间运营方菜单配置
+const operatorMenuGroups: MenuGroup[] = [
   {
-    id: 'data-resources',
+    id: 'resources',
     title: '数据资源管理',
     icon: <StorageIcon />,
     items: [
-      { id: 'resource-list', title: '资源列表', path: '/resources', icon: <FolderIcon /> },
-      { id: 'resource-edit', title: '资源编辑', path: '/resources/edit', icon: <DescriptionIcon /> },
+      { id: 'resource-list', title: '资源列表', path: '/operator/resources', icon: <FolderIcon /> },
+      { id: 'resource-create', title: '创建资源', path: '/operator/resources/create', icon: <DescriptionIcon /> },
     ],
   },
   {
@@ -129,8 +155,8 @@ const menuGroups: MenuGroup[] = [
     title: '数据使用控制策略管理',
     icon: <PolicyIcon />,
     items: [
-      { id: 'policy-list', title: '策略列表', path: '/policies', icon: <DescriptionIcon /> },
-      { id: 'policy-editor', title: '策略编辑器', path: '/policies/editor', icon: <DescriptionIcon /> },
+      { id: 'policy-list', title: '策略列表', path: '/operator/policies', icon: <DescriptionIcon /> },
+      { id: 'policy-create', title: '创建策略', path: '/operator/policies/create', icon: <DescriptionIcon /> },
     ],
   },
   {
@@ -138,20 +164,9 @@ const menuGroups: MenuGroup[] = [
     title: '数据连接与交换管理',
     icon: <SyncAltIcon />,
     items: [
-      { id: 'connector-status', title: '连接器状态', path: '/connections/status', icon: <SwapHorizIcon /> },
-      { id: 'exchange-logs', title: '交换日志', path: '/connections/logs', icon: <ReceiptLongIcon /> },
-    ],
-  },
-  {
-    id: 'identity-security',
-    title: '身份与安全管理',
-    icon: <SecurityIcon />,
-    items: [
-      { id: 'authentication', title: '身份认证配置', path: '/security/auth', icon: <VpnKeyIcon /> },
-      { id: 'certificates', title: '证书管理', path: '/security/certificates', icon: <VpnKeyIcon /> },
-      { id: 'access-control', title: '访问控制管理', path: '/security/access', icon: <AdminPanelSettingsIcon /> },
-      { id: 'audit-logs', title: '安全审计日志', path: '/security/audit', icon: <ReceiptLongIcon /> },
-      { id: 'compliance', title: '合规性检查', path: '/security/compliance', icon: <FactCheckIcon /> },
+      { id: 'connector-status', title: '连接器状态', path: '/operator/connections', icon: <SwapHorizIcon /> },
+      { id: 'data-exchange', title: '数据交换', path: '/operator/connections/exchange', icon: <SwapHorizIcon /> },
+      { id: 'exchange-logs', title: '交换日志', path: '/operator/connections/logs', icon: <ReceiptLongIcon /> },
     ],
   },
   {
@@ -159,21 +174,10 @@ const menuGroups: MenuGroup[] = [
     title: '数据空间生态交互',
     icon: <StoreIcon />,
     items: [
-      { id: 'marketplace', title: '数据市场浏览', path: '/ecosystem/marketplace', icon: <ShoppingCartIcon /> },
-      { id: 'transactions', title: '交易管理', path: '/ecosystem/transactions', icon: <ReceiptIcon /> },
-      { id: 'service-discovery', title: '服务发现', path: '/ecosystem/services', icon: <ExploreIcon /> },
-      { id: 'participants', title: '参与方目录', path: '/ecosystem/participants', icon: <PeopleIcon /> },
-    ],
-  },
-  {
-    id: 'analytics',
-    title: '分析与报表',
-    icon: <BarChartIcon />,
-    items: [
-      { id: 'data-flow', title: '数据流通分析', path: '/analytics/flow', icon: <TimelineIcon /> },
-      { id: 'value-assessment', title: '价值评估', path: '/analytics/value', icon: <AssessmentIcon /> },
-      { id: 'compliance-reports', title: '合规报表', path: '/analytics/compliance', icon: <SummarizeIcon /> },
-      { id: 'dashboards', title: '自定义仪表盘', path: '/analytics/dashboards', icon: <DashboardIcon /> },
+      { id: 'marketplace', title: '数据市场浏览', path: '/operator/ecosystem', icon: <ShoppingCartIcon /> },
+      { id: 'participants', title: '参与方目录', path: '/operator/ecosystem/participants', icon: <PeopleIcon /> },
+      { id: 'service-discovery', title: '服务发现', path: '/operator/ecosystem/services', icon: <ExploreIcon /> },
+      { id: 'transactions', title: '交易管理', path: '/operator/ecosystem/transactions', icon: <ReceiptIcon /> },
     ],
   },
   {
@@ -181,19 +185,261 @@ const menuGroups: MenuGroup[] = [
     title: '系统配置与管理',
     icon: <SettingsIcon />,
     items: [
-      { id: 'system-params', title: '系统参数配置', path: '/system/config', icon: <TuneIcon /> },
-      { id: 'plugins', title: '插件管理', path: '/system/plugins', icon: <ExtensionIcon /> },
-      { id: 'backup', title: '备份与恢复', path: '/system/backup', icon: <BackupIcon /> },
-      { id: 'updates', title: '系统更新管理', path: '/system/updates', icon: <SystemUpdateIcon /> },
+      { id: 'system-params', title: '系统参数配置', path: '/operator/system', icon: <TuneIcon /> },
+      { id: 'backup', title: '备份与恢复', path: '/operator/system/backup', icon: <BackupIcon /> },
+      { id: 'plugins', title: '插件管理', path: '/operator/system/plugins', icon: <ExtensionIcon /> },
+      { id: 'updates', title: '系统更新管理', path: '/operator/system/updates', icon: <SystemUpdateIcon /> },
+    ],
+  },
+  {
+    id: 'identity-security',
+    title: '身份与安全管理',
+    icon: <SecurityIcon />,
+    items: [
+      { id: 'authentication', title: '身份认证配置', path: '/operator/auth', icon: <VpnKeyIcon /> },
+      { id: 'certificates', title: '证书管理', path: '/operator/auth/certificates', icon: <VpnKeyIcon /> },
+    ],
+  },
+  {
+    id: 'analytics',
+    title: '分析与报表',
+    icon: <BarChartIcon />,
+    items: [
+      { id: 'data-flow', title: '数据流通分析', path: '/operator/analytics', icon: <TimelineIcon /> },
+      { id: 'compliance-reports', title: '合规报表', path: '/operator/analytics/compliance', icon: <SummarizeIcon /> },
+      { id: 'dashboards', title: '自定义仪表盘', path: '/operator/analytics/dashboards', icon: <DashboardIcon /> },
+      { id: 'value-assessment', title: '价值评估', path: '/operator/analytics/value', icon: <AssessmentIcon /> },
+    ],
+  },
+  {
+    id: 'operator-management',
+    title: '运营方管理',
+    icon: <AdminPanelSettingsIcon />,
+    items: [
+      { id: 'participant-management', title: '参与方管理', path: '/operator/participants', icon: <PeopleIcon /> },
+      { id: 'space-governance', title: '数据空间治理', path: '/operator/governance', icon: <GavelIcon /> },
+      { id: 'global-policies', title: '全局策略管理', path: '/operator/policies', icon: <PolicyIcon /> },
+      { id: 'monitoring', title: '全局监控', path: '/operator/monitoring', icon: <MonitorIcon /> },
+    ],
+  },
+  {
+    id: 'operator-security',
+    title: '高级安全管理',
+    icon: <SecurityIcon />,
+    items: [
+      { id: 'access-control', title: '访问控制管理', path: '/operator/security/access', icon: <AdminPanelSettingsIcon /> },
+      { id: 'audit-logs', title: '安全审计日志', path: '/operator/security/audit', icon: <ReceiptLongIcon /> },
+      { id: 'compliance', title: '合规性检查', path: '/operator/security/compliance', icon: <FactCheckIcon /> },
     ],
   },
 ];
+
+// 数据提供者菜单配置
+const providerMenuGroups: MenuGroup[] = [
+  {
+    id: 'resources',
+    title: '数据资源管理',
+    icon: <StorageIcon />,
+    items: [
+      { id: 'resource-list', title: '资源列表', path: '/provider/resources', icon: <FolderIcon /> },
+      { id: 'resource-create', title: '创建资源', path: '/provider/resources/create', icon: <DescriptionIcon /> },
+      { id: 'quality-management', title: '数据质量管理', path: '/provider/quality', icon: <VerifiedIcon /> },
+      { id: 'catalog-management', title: '数据目录管理', path: '/provider/catalog', icon: <LibraryBooksIcon /> },
+      { id: 'pricing-strategy', title: '定价策略', path: '/provider/pricing', icon: <AttachMoneyIcon /> },
+      { id: 'customer-relations', title: '客户关系管理', path: '/provider/customers', icon: <GroupIcon /> },
+    ],
+  },
+  {
+    id: 'policy-management',
+    title: '数据使用控制策略管理',
+    icon: <PolicyIcon />,
+    items: [
+      { id: 'policy-list', title: '策略列表', path: '/provider/policies', icon: <DescriptionIcon /> },
+      { id: 'policy-create', title: '创建策略', path: '/provider/policies/create', icon: <DescriptionIcon /> },
+    ],
+  },
+  {
+    id: 'provider-data-publishing',
+    title: '数据发布管理',
+    icon: <PublishIcon />,
+    items: [
+      { id: 'data-publishing', title: '数据发布管理', path: '/provider/publishing', icon: <PublishIcon /> },
+    ],
+  },
+  {
+    id: 'connection-management',
+    title: '数据连接与交换管理',
+    icon: <SyncAltIcon />,
+    items: [
+      { id: 'connector-status', title: '连接器状态', path: '/provider/connections', icon: <SwapHorizIcon /> },
+      { id: 'data-exchange', title: '数据交换', path: '/provider/connections/exchange', icon: <SwapHorizIcon /> },
+      { id: 'exchange-logs', title: '交换日志', path: '/provider/connections/logs', icon: <ReceiptLongIcon /> },
+    ],
+  },
+  {
+    id: 'ecosystem',
+    title: '数据空间生态交互',
+    icon: <StoreIcon />,
+    items: [
+      { id: 'marketplace', title: '数据市场浏览', path: '/provider/ecosystem', icon: <ShoppingCartIcon /> },
+      { id: 'participants', title: '参与方目录', path: '/provider/ecosystem/participants', icon: <PeopleIcon /> },
+      { id: 'service-discovery', title: '服务发现', path: '/provider/ecosystem/services', icon: <ExploreIcon /> },
+      { id: 'transactions', title: '交易管理', path: '/provider/ecosystem/transactions', icon: <ReceiptIcon /> },
+      { id: 'usage-analytics', title: '数据使用分析', path: '/provider/analytics', icon: <AnalyticsIcon /> },
+      { id: 'revenue-tracking', title: '收益跟踪', path: '/provider/revenue', icon: <TrendingUpIcon /> },
+    ],
+  },
+  {
+    id: 'system',
+    title: '系统配置与管理',
+    icon: <SettingsIcon />,
+    items: [
+      { id: 'system-params', title: '系统参数配置', path: '/provider/system', icon: <TuneIcon /> },
+      { id: 'backup', title: '备份与恢复', path: '/provider/system/backup', icon: <BackupIcon /> },
+      { id: 'plugins', title: '插件管理', path: '/provider/system/plugins', icon: <ExtensionIcon /> },
+      { id: 'updates', title: '系统更新管理', path: '/provider/system/updates', icon: <SystemUpdateIcon /> },
+    ],
+  },
+  {
+    id: 'identity-security',
+    title: '身份与安全管理',
+    icon: <SecurityIcon />,
+    items: [
+      { id: 'authentication', title: '身份认证配置', path: '/provider/auth', icon: <VpnKeyIcon /> },
+      { id: 'certificates', title: '证书管理', path: '/provider/auth/certificates', icon: <VpnKeyIcon /> },
+    ],
+  },
+  {
+    id: 'analytics',
+    title: '分析与报表',
+    icon: <BarChartIcon />,
+    items: [
+      { id: 'data-flow', title: '数据流通分析', path: '/provider/analytics', icon: <TimelineIcon /> },
+      { id: 'compliance-reports', title: '合规报表', path: '/provider/analytics/compliance', icon: <SummarizeIcon /> },
+      { id: 'dashboards', title: '自定义仪表盘', path: '/provider/analytics/dashboards', icon: <DashboardIcon /> },
+      { id: 'value-assessment', title: '价值评估', path: '/provider/analytics/value', icon: <AssessmentIcon /> },
+    ],
+  },
+];
+
+// 数据消费者菜单配置
+const consumerMenuGroups: MenuGroup[] = [
+  {
+    id: 'resources',
+    title: '数据资源管理',
+    icon: <StorageIcon />,
+    items: [
+      { id: 'resource-list', title: '资源列表', path: '/consumer/resources', icon: <FolderIcon /> },
+      { id: 'resource-create', title: '创建资源', path: '/consumer/resources/create', icon: <DescriptionIcon /> },
+    ],
+  },
+  {
+    id: 'policy-management',
+    title: '数据使用控制策略管理',
+    icon: <PolicyIcon />,
+    items: [
+      { id: 'policy-list', title: '策略列表', path: '/consumer/policies', icon: <DescriptionIcon /> },
+      { id: 'policy-create', title: '创建策略', path: '/consumer/policies/create', icon: <DescriptionIcon /> },
+    ],
+  },
+  {
+    id: 'connection-management',
+    title: '数据连接与交换管理',
+    icon: <SyncAltIcon />,
+    items: [
+      { id: 'connector-status', title: '连接器状态', path: '/consumer/connections', icon: <SwapHorizIcon /> },
+      { id: 'data-exchange', title: '数据交换', path: '/consumer/connections/exchange', icon: <SwapHorizIcon /> },
+      { id: 'exchange-logs', title: '交换日志', path: '/consumer/connections/logs', icon: <ReceiptLongIcon /> },
+    ],
+  },
+  {
+    id: 'ecosystem',
+    title: '数据空间生态交互',
+    icon: <StoreIcon />,
+    items: [
+      { id: 'marketplace', title: '数据市场浏览', path: '/consumer/ecosystem', icon: <ShoppingCartIcon /> },
+      { id: 'participants', title: '参与方目录', path: '/consumer/ecosystem/participants', icon: <PeopleIcon /> },
+      { id: 'service-discovery', title: '服务发现', path: '/consumer/ecosystem/services', icon: <ExploreIcon /> },
+      { id: 'transactions', title: '交易管理', path: '/consumer/ecosystem/transactions', icon: <ReceiptIcon /> },
+    ],
+  },
+  {
+    id: 'system',
+    title: '系统配置与管理',
+    icon: <SettingsIcon />,
+    items: [
+      { id: 'system-params', title: '系统参数配置', path: '/consumer/system', icon: <TuneIcon /> },
+      { id: 'backup', title: '备份与恢复', path: '/consumer/system/backup', icon: <BackupIcon /> },
+      { id: 'plugins', title: '插件管理', path: '/consumer/system/plugins', icon: <ExtensionIcon /> },
+      { id: 'updates', title: '系统更新管理', path: '/consumer/system/updates', icon: <SystemUpdateIcon /> },
+    ],
+  },
+  {
+    id: 'identity-security',
+    title: '身份与安全管理',
+    icon: <SecurityIcon />,
+    items: [
+      { id: 'authentication', title: '身份认证配置', path: '/consumer/auth', icon: <VpnKeyIcon /> },
+      { id: 'certificates', title: '证书管理', path: '/consumer/auth/certificates', icon: <VpnKeyIcon /> },
+    ],
+  },
+  {
+    id: 'analytics',
+    title: '分析与报表',
+    icon: <BarChartIcon />,
+    items: [
+      { id: 'data-flow', title: '数据流通分析', path: '/consumer/analytics', icon: <TimelineIcon /> },
+      { id: 'compliance-reports', title: '合规报表', path: '/consumer/analytics/compliance', icon: <SummarizeIcon /> },
+      { id: 'dashboards', title: '自定义仪表盘', path: '/consumer/analytics/dashboards', icon: <DashboardIcon /> },
+      { id: 'value-assessment', title: '价值评估', path: '/consumer/analytics/value', icon: <AssessmentIcon /> },
+    ],
+  },
+  {
+    id: 'consumer-management',
+    title: '数据消费者管理',
+    icon: <CloudDownloadIcon />,
+    items: [
+      { id: 'data-discovery', title: '数据发现', path: '/consumer/discovery', icon: <SearchIcon /> },
+      { id: 'subscription-management', title: '订阅管理', path: '/consumer/subscriptions', icon: <SubscriptionsIcon /> },
+      { id: 'usage-monitoring', title: '使用监控', path: '/consumer/monitoring', icon: <MonitorIcon /> },
+      { id: 'data-integration', title: '数据集成', path: '/consumer/integration', icon: <IntegrationInstructionsIcon /> },
+    ],
+  },
+  {
+    id: 'consumer-operations',
+    title: '消费管理',
+    icon: <ShoppingBasketIcon />,
+    items: [
+      { id: 'procurement', title: '数据采购', path: '/consumer/procurement', icon: <ShoppingCartIcon /> },
+      { id: 'cost-management', title: '成本管理', path: '/consumer/costs', icon: <AccountBalanceWalletIcon /> },
+      { id: 'data-lineage', title: '数据血缘', path: '/consumer/lineage', icon: <AccountTreeIcon /> },
+      { id: 'quality-assessment', title: '质量评估', path: '/consumer/quality', icon: <AssessmentIcon /> },
+    ],
+  },
+];
+
+
+
+// 根据角色获取菜单组
+const getMenuGroupsByRole = (roleType: string) => {
+  const roleMenus = {
+    operator: operatorMenuGroups,
+    provider: providerMenuGroups,
+    consumer: consumerMenuGroups,
+  };
+  
+  return roleMenus[roleType as keyof typeof roleMenus] || [];
+};
 
 const Sidebar = ({ open, onDrawerToggle, drawerWidth }: SidebarProps) => {
   const responsive = useResponsive();
   const navigate = useNavigate();
   const location = useLocation();
+  const { currentRole } = useRole();
   const [openGroups, setOpenGroups] = useState<{ [key: string]: boolean }>({});
+  
+  // 根据当前角色获取菜单组
+  const menuGroups = getMenuGroupsByRole(currentRole.type);
 
   // 在小屏幕上使用临时抽屉
   const isTemporaryDrawer = responsive.isDown('md');

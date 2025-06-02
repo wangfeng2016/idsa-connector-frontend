@@ -21,6 +21,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Box from '@mui/material/Box';
 import useResponsive from '../hooks/useResponsive';
 import logoWhite from '../assets/images/磐云logo-white.png';
+import RoleSwitcher from '../components/RoleSwitcher';
 
 // 使用React.ComponentProps获取AppBar的props类型
 type MuiAppBarProps = ComponentProps<typeof MuiAppBar>;
@@ -115,33 +116,36 @@ const Topbar = ({ open, onDrawerToggle, drawerWidth }: TopbarProps) => {
           IDS Connector GUI
         </Typography>
 
-        <Box sx={{ display: 'flex' }}>
-          {/* 在小屏幕上隐藏帮助按钮 */}
-          {!responsive.isXs && (
-            <IconButton color="inherit">
-              <HelpIcon />
-            </IconButton>
-          )}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          {/* 角色选择器 */}
+          <RoleSwitcher />
+          
+          {/* 帮助按钮 */}
+          <IconButton color="inherit" size="small">
+            <HelpIcon />
+          </IconButton>
 
-          <IconButton color="inherit" onClick={handleNotificationMenuOpen}>
-            <Badge badgeContent={4} color="error">
+          {/* 通知 */}
+          <IconButton
+            color="inherit"
+            size="small"
+            onClick={handleNotificationMenuOpen}
+          >
+            <Badge badgeContent={3} color="error">
               <NotificationsIcon />
             </Badge>
           </IconButton>
 
-          {/* 在小屏幕上隐藏设置按钮 */}
-          {!responsive.isXs && (
-            <IconButton color="inherit">
-              <SettingsIcon />
-            </IconButton>
-          )}
+          {/* 设置 */}
+          <IconButton color="inherit" size="small">
+            <SettingsIcon />
+          </IconButton>
 
+          {/* 用户头像 */}
           <IconButton
-            edge="end"
-            aria-label="account of current user"
-            aria-haspopup="true"
             onClick={handleProfileMenuOpen}
-            color="inherit"
+            size="small"
+            sx={{ ml: 1 }}
           >
             <AccountCircle />
           </IconButton>

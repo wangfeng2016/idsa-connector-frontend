@@ -1,74 +1,92 @@
-import { createHashRouter, Navigate } from 'react-router-dom';
+import { createHashRouter } from 'react-router-dom';
+import { lazy } from 'react';
 import MainLayout from '../layouts/MainLayout';
+import ToBeConstructed from '../pages/ToBeConstructed';
 
-// 懒加载页面组件
-import { lazy, Suspense } from 'react';
-import { CircularProgress, Box } from '@mui/material';
+// 懒加载页面组件 - 运营方
+const OperatorDashboard = lazy(() => import('../pages/operator/Dashboard'));
+const OperatorResourceList = lazy(() => import('../pages/operator/resources/ResourceList'));
+const OperatorResourceEdit = lazy(() => import('../pages/operator/resources/ResourceEdit'));
+const OperatorPolicyList = lazy(() => import('../pages/operator/policies/PolicyList'));
+const OperatorPolicyEdit = lazy(() => import('../pages/operator/policies/PolicyEdit'));
+const OperatorConnectorStatus = lazy(() => import('../pages/operator/connections/ConnectorStatus'));
+const OperatorDataExchange = lazy(() => import('../pages/operator/connections/DataExchange'));
+const OperatorExchangeLogs = lazy(() => import('../pages/operator/connections/ExchangeLogs'));
+const OperatorMarketplace = lazy(() => import('../pages/operator/ecosystem/Marketplace'));
+const OperatorParticipants = lazy(() => import('../pages/operator/ecosystem/Participants'));
+const OperatorServiceDiscovery = lazy(() => import('../pages/operator/ecosystem/ServiceDiscovery'));
+const OperatorTransactions = lazy(() => import('../pages/operator/ecosystem/Transactions'));
+const OperatorSystemConfig = lazy(() => import('../pages/operator/system/SystemConfig'));
+const OperatorBackup = lazy(() => import('../pages/operator/system/Backup'));
+const OperatorPlugins = lazy(() => import('../pages/operator/system/Plugins'));
+const OperatorUpdates = lazy(() => import('../pages/operator/system/Updates'));
+const OperatorAuthentication = lazy(() => import('../pages/operator/identity/Authentication'));
+const OperatorCertificateManagement = lazy(() => import('../pages/operator/identity/CertificateManagement'));
+const OperatorComplianceReports = lazy(() => import('../pages/operator/analytics/ComplianceReports'));
+const OperatorDashboards = lazy(() => import('../pages/operator/analytics/Dashboards'));
+const OperatorDataFlow = lazy(() => import('../pages/operator/analytics/DataFlow'));
+const OperatorValueAssessment = lazy(() => import('../pages/operator/analytics/ValueAssessment'));
+const OperatorAccessControl = lazy(() => import('../pages/operator/security/AccessControl'));
+const OperatorAuditLogs = lazy(() => import('../pages/operator/security/AuditLogs'));
+const OperatorSecurityCompliance = lazy(() => import('../pages/operator/security/Compliance'));
 
-// 加载中组件
-const LoadingFallback = () => (
-  <Box
-    sx={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100%',
-      width: '100%',
-    }}
-  >
-    <CircularProgress />
-  </Box>
-);
+// 待构建的运营方组件
+const OperatorToBeConstructed = () => <ToBeConstructed pageName="运营方功能页面" />;
 
-// 懒加载包装器
-const lazyLoad = (Component: React.LazyExoticComponent<React.ComponentType<any>>) => (
-  <Suspense fallback={<LoadingFallback />}>
-    <Component />
-  </Suspense>
-);
+// 懒加载页面组件 - 提供者
+const ProviderDashboard = lazy(() => import('../pages/provider/Dashboard'));
+const ProviderResourceList = lazy(() => import('../pages/provider/resources/ResourceList'));
+const ProviderResourceEdit = lazy(() => import('../pages/provider/resources/ResourceEdit'));
+const ProviderPolicyList = lazy(() => import('../pages/provider/policies/PolicyList'));
+const ProviderPolicyEdit = lazy(() => import('../pages/provider/policies/PolicyEdit'));
+const ProviderConnectorStatus = lazy(() => import('../pages/provider/connections/ConnectorStatus'));
+const ProviderDataExchange = lazy(() => import('../pages/provider/connections/DataExchange'));
+const ProviderExchangeLogs = lazy(() => import('../pages/provider/connections/ExchangeLogs'));
+const ProviderMarketplace = lazy(() => import('../pages/provider/ecosystem/Marketplace'));
+const ProviderServiceDiscovery = lazy(() => import('../pages/provider/ecosystem/ServiceDiscovery'));
+const ProviderTransactions = lazy(() => import('../pages/provider/ecosystem/Transactions'));
+const ProviderSystemConfig = lazy(() => import('../pages/provider/system/SystemConfig'));
+// 提供者系统备份、插件、更新组件已映射到ToBeConstructed
+const ProviderAuthentication = lazy(() => import('../pages/provider/identity/Authentication'));
+const ProviderCertificateManagement = lazy(() => import('../pages/provider/identity/CertificateManagement'));
+const ProviderComplianceReports = lazy(() => import('../pages/provider/analytics/ComplianceReports'));
+const ProviderDashboards = lazy(() => import('../pages/provider/analytics/Dashboards'));
+const ProviderDataFlow = lazy(() => import('../pages/provider/analytics/DataFlow'));
+const ProviderValueAssessment = lazy(() => import('../pages/provider/analytics/ValueAssessment'));
+const ProviderAccessControl = lazy(() => import('../pages/provider/security/AccessControl'));
+const ProviderAuditLogs = lazy(() => import('../pages/provider/security/AuditLogs'));
+const ProviderSecurityCompliance = lazy(() => import('../pages/provider/security/Compliance'));
 
-// 页面组件
-const Dashboard = lazy(() => import('../pages/Dashboard'));
+// 待构建的提供者组件
+const ProviderToBeConstructed = () => <ToBeConstructed pageName="提供者功能页面" />;
 
-// 数据资源管理
-const ResourceList = lazy(() => import('../pages/resources/ResourceList'));
-const ResourceEdit = lazy(() => import('../pages/resources/ResourceEdit'));
+// 懒加载页面组件 - 消费者
+const ConsumerDashboard = lazy(() => import('../pages/consumer/Dashboard'));
+const ConsumerResourceList = lazy(() => import('../pages/consumer/resources/ResourceList'));
+const ConsumerResourceEdit = lazy(() => import('../pages/consumer/resources/ResourceEdit'));
+const ConsumerPolicyList = lazy(() => import('../pages/consumer/policies/PolicyList'));
+const ConsumerPolicyEdit = lazy(() => import('../pages/consumer/policies/PolicyEdit'));
+const ConsumerConnectorStatus = lazy(() => import('../pages/consumer/connections/ConnectorStatus'));
+const ConsumerDataExchange = lazy(() => import('../pages/consumer/connections/DataExchange'));
+const ConsumerExchangeLogs = lazy(() => import('../pages/consumer/connections/ExchangeLogs'));
+const ConsumerMarketplace = lazy(() => import('../pages/consumer/ecosystem/Marketplace'));
+const ConsumerServiceDiscovery = lazy(() => import('../pages/consumer/ecosystem/ServiceDiscovery'));
+const ConsumerTransactions = lazy(() => import('../pages/consumer/ecosystem/Transactions'));
+const ConsumerSystemConfig = lazy(() => import('../pages/consumer/system/SystemConfig'));
+// 消费者系统备份、插件、更新组件已映射到ToBeConstructed
+const ConsumerAuthentication = lazy(() => import('../pages/consumer/identity/Authentication'));
+const ConsumerCertificateManagement = lazy(() => import('../pages/consumer/identity/CertificateManagement'));
+const ConsumerComplianceReports = lazy(() => import('../pages/consumer/analytics/ComplianceReports'));
+const ConsumerDashboards = lazy(() => import('../pages/consumer/analytics/Dashboards'));
+const ConsumerDataFlow = lazy(() => import('../pages/consumer/analytics/DataFlow'));
+const ConsumerValueAssessment = lazy(() => import('../pages/consumer/analytics/ValueAssessment'));
+const ConsumerAccessControl = lazy(() => import('../pages/consumer/security/AccessControl'));
+const ConsumerAuditLogs = lazy(() => import('../pages/consumer/security/AuditLogs'));
+const ConsumerSecurityCompliance = lazy(() => import('../pages/consumer/security/Compliance'));
+// 消费者其他功能组件已映射到ToBeConstructed
 
-// 数据使用控制策略管理
-const PolicyList = lazy(() => import('../pages/policies/PolicyList'));
-const PolicyEditor = lazy(() => import('../pages/policies/PolicyEditor'));
-
-// 数据连接与交换管理
-const ConnectorStatus = lazy(() => import('../pages/connections/ConnectorStatus'));
-const ExchangeLogs = lazy(() => import('../pages/connections/ExchangeLogs'));
-
-// 身份与安全管理
-const Authentication = lazy(() => import('../pages/identity/Authentication'));
-const CertificateManagement = lazy(() => import('../pages/identity/CertificateManagement'));
-const AccessControl = lazy(() => import('../pages/security/AccessControl'));
-const AuditLogs = lazy(() => import('../pages/security/AuditLogs'));
-const Compliance = lazy(() => import('../pages/security/Compliance'));
-
-// 数据空间生态交互
-const Marketplace = lazy(() => import('../pages/ecosystem/Marketplace'));
-const Transactions = lazy(() => import('../pages/ecosystem/Transactions'));
-const ServiceDiscovery = lazy(() => import('../pages/ecosystem/ServiceDiscovery'));
-const Participants = lazy(() => import('../pages/ecosystem/Participants'));
-
-// 分析与报表
-const DataFlow = lazy(() => import('../pages/analytics/DataFlow'));
-const ValueAssessment = lazy(() => import('../pages/analytics/ValueAssessment'));
-const ComplianceReports = lazy(() => import('../pages/analytics/ComplianceReports'));
-const Dashboards = lazy(() => import('../pages/analytics/Dashboards'));
-
-// 系统配置与管理
-const SystemConfig = lazy(() => import('../pages/system/SystemConfig'));
-const Plugins = lazy(() => import('../pages/system/Plugins'));
-const Backup = lazy(() => import('../pages/system/Backup'));
-const Updates = lazy(() => import('../pages/system/Updates'));
-
-// 错误页面
-const NotFound = lazy(() => import('../pages/errors/NotFound'));
+// 待构建的消费者组件
+const ConsumerToBeConstructed = () => <ToBeConstructed pageName="消费者功能页面" />;
 
 const router = createHashRouter([
   {
@@ -77,123 +95,349 @@ const router = createHashRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/dashboard" replace />,
+        element: <OperatorDashboard />,
+      },
+      // 运营方路由
+      {
+        path: 'operator/resources',
+        element: <OperatorResourceList />,
       },
       {
-        path: 'dashboard',
-        element: lazyLoad(Dashboard),
-      },
-      // 数据资源管理
-      {
-        path: 'resources',
-        element: lazyLoad(ResourceList),
+        path: 'operator/resources/edit',
+        element: <OperatorResourceEdit />,
       },
       {
-        path: 'resources/edit',
-        element: lazyLoad(ResourceEdit),
+        path: 'operator/policies',
+        element: <OperatorPolicyList />,
       },
       {
-        path: 'resources/edit/:id',
-        element: lazyLoad(ResourceEdit),
-      },
-      // 数据使用控制策略管理
-      {
-        path: 'policies',
-        element: lazyLoad(PolicyList),
+        path: 'operator/policies/edit',
+        element: <OperatorPolicyEdit />,
       },
       {
-        path: 'policies/editor',
-        element: lazyLoad(PolicyEditor),
+        path: 'operator/connections',
+        element: <OperatorConnectorStatus />,
       },
       {
-        path: 'policies/editor/:id',
-        element: lazyLoad(PolicyEditor),
-      },
-      // 数据连接与交换管理
-      {
-        path: 'connections/status',
-        element: lazyLoad(ConnectorStatus),
+        path: 'operator/connections/exchange',
+        element: <OperatorDataExchange />,
       },
       {
-        path: 'connections/logs',
-        element: lazyLoad(ExchangeLogs),
-      },
-      // 身份与安全管理
-      {
-        path: 'security/auth',
-        element: lazyLoad(Authentication),
+        path: 'operator/connections/logs',
+        element: <OperatorExchangeLogs />,
       },
       {
-        path: 'security/certificates',
-        element: lazyLoad(CertificateManagement),
+        path: 'operator/ecosystem',
+        element: <OperatorMarketplace />,
       },
       {
-        path: 'security/access',
-        element: lazyLoad(AccessControl),
+        path: 'operator/ecosystem/participants',
+        element: <OperatorParticipants />,
       },
       {
-        path: 'security/audit',
-        element: lazyLoad(AuditLogs),
+        path: 'operator/ecosystem/services',
+        element: <OperatorServiceDiscovery />,
       },
       {
-        path: 'security/compliance',
-        element: lazyLoad(Compliance),
-      },
-      // 数据空间生态交互
-      {
-        path: 'ecosystem/marketplace',
-        element: lazyLoad(Marketplace),
+        path: 'operator/ecosystem/transactions',
+        element: <OperatorTransactions />,
       },
       {
-        path: 'ecosystem/transactions',
-        element: lazyLoad(Transactions),
+        path: 'operator/system',
+        element: <OperatorSystemConfig />,
       },
       {
-        path: 'ecosystem/services',
-        element: lazyLoad(ServiceDiscovery),
+        path: 'operator/system/backup',
+        element: <OperatorBackup />,
       },
       {
-        path: 'ecosystem/participants',
-        element: lazyLoad(Participants),
-      },
-      // 分析与报表
-      {
-        path: 'analytics/flow',
-        element: lazyLoad(DataFlow),
+        path: 'operator/system/plugins',
+        element: <OperatorPlugins />,
       },
       {
-        path: 'analytics/value',
-        element: lazyLoad(ValueAssessment),
+        path: 'operator/system/updates',
+        element: <OperatorUpdates />,
       },
       {
-        path: 'analytics/compliance',
-        element: lazyLoad(ComplianceReports),
+        path: 'operator/auth',
+        element: <OperatorAuthentication />,
       },
       {
-        path: 'analytics/dashboards',
-        element: lazyLoad(Dashboards),
-      },
-      // 系统配置与管理
-      {
-        path: 'system/config',
-        element: lazyLoad(SystemConfig),
+        path: 'operator/auth/certificates',
+        element: <OperatorCertificateManagement />,
       },
       {
-        path: 'system/plugins',
-        element: lazyLoad(Plugins),
+        path: 'operator/analytics',
+        element: <OperatorComplianceReports />,
       },
       {
-        path: 'system/backup',
-        element: lazyLoad(Backup),
+        path: 'operator/analytics/compliance',
+        element: <OperatorComplianceReports />,
       },
       {
-        path: 'system/updates',
-        element: lazyLoad(Updates),
+        path: 'operator/analytics/dashboards',
+        element: <OperatorDashboards />,
+      },
+      {
+        path: 'operator/analytics/value',
+        element: <OperatorValueAssessment />,
+      },
+      {
+        path: 'operator/participants',
+        element: <OperatorToBeConstructed />,
+      },
+      {
+        path: 'operator/governance',
+        element: <OperatorToBeConstructed />,
+      },
+      {
+        path: 'operator/monitoring',
+        element: <OperatorToBeConstructed />,
+      },
+      {
+        path: 'operator/security/access',
+        element: <OperatorAccessControl />,
+      },
+      {
+        path: 'operator/security/audit',
+        element: <OperatorAuditLogs />,
+      },
+      {
+        path: 'operator/security/compliance',
+        element: <OperatorSecurityCompliance />,
+      },
+      
+      // 提供者路由
+      {
+        path: 'provider/resources',
+        element: <ProviderResourceList />,
+      },
+      {
+        path: 'provider/resources/edit',
+        element: <ProviderResourceEdit />,
+      },
+      {
+        path: 'provider/quality',
+        element: <ProviderToBeConstructed />,
+      },
+      {
+        path: 'provider/catalog',
+        element: <ProviderToBeConstructed />,
+      },
+      {
+        path: 'provider/pricing',
+        element: <ProviderToBeConstructed />,
+      },
+      {
+        path: 'provider/customers',
+        element: <ProviderToBeConstructed />,
+      },
+      {
+        path: 'provider/policies',
+        element: <ProviderPolicyList />,
+      },
+      {
+        path: 'provider/policies/edit',
+        element: <ProviderPolicyEdit />,
+      },
+      {
+        path: 'provider/publishing',
+        element: <ProviderToBeConstructed />,
+      },
+      {
+        path: 'provider/connections',
+        element: <ProviderConnectorStatus />,
+      },
+      {
+        path: 'provider/connections/exchange',
+        element: <ProviderDataExchange />,
+      },
+      {
+        path: 'provider/connections/logs',
+        element: <ProviderExchangeLogs />,
+      },
+      {
+        path: 'provider/ecosystem',
+        element: <ProviderMarketplace />,
+      },
+      {
+        path: 'provider/ecosystem/participants',
+        element: <ProviderToBeConstructed />,
+      },
+      {
+        path: 'provider/ecosystem/services',
+        element: <ProviderServiceDiscovery />,
+      },
+      {
+        path: 'provider/ecosystem/transactions',
+        element: <ProviderTransactions />,
+      },
+      {
+        path: 'provider/analytics',
+        element: <ProviderComplianceReports />,
+      },
+      {
+        path: 'provider/revenue',
+        element: <ProviderToBeConstructed />,
+      },
+      {
+        path: 'provider/system',
+        element: <ProviderSystemConfig />,
+      },
+      {
+        path: 'provider/system/backup',
+        element: <ProviderToBeConstructed />,
+      },
+      {
+        path: 'provider/system/plugins',
+        element: <ProviderToBeConstructed />,
+      },
+      {
+        path: 'provider/system/updates',
+        element: <ProviderToBeConstructed />,
+      },
+      {
+        path: 'provider/auth',
+        element: <ProviderAuthentication />,
+      },
+      {
+        path: 'provider/auth/certificates',
+        element: <ProviderCertificateManagement />,
+      },
+      {
+        path: 'provider/analytics/compliance',
+        element: <ProviderComplianceReports />,
+      },
+      {
+        path: 'provider/analytics/dashboards',
+        element: <ProviderDashboards />,
+      },
+      {
+        path: 'provider/analytics/value',
+        element: <ProviderValueAssessment />,
+      },
+      
+      // 消费者路由
+      {
+        path: 'consumer/resources',
+        element: <ConsumerResourceList />,
+      },
+      {
+        path: 'consumer/resources/edit',
+        element: <ConsumerResourceEdit />,
+      },
+      {
+        path: 'consumer/policies',
+        element: <ConsumerPolicyList />,
+      },
+      {
+        path: 'consumer/policies/edit',
+        element: <ConsumerPolicyEdit />,
+      },
+      {
+        path: 'consumer/connections',
+        element: <ConsumerConnectorStatus />,
+      },
+      {
+        path: 'consumer/connections/exchange',
+        element: <ConsumerDataExchange />,
+      },
+      {
+        path: 'consumer/connections/logs',
+        element: <ConsumerExchangeLogs />,
+      },
+      {
+        path: 'consumer/ecosystem',
+        element: <ConsumerMarketplace />,
+      },
+      {
+        path: 'consumer/ecosystem/participants',
+        element: <ConsumerToBeConstructed />,
+      },
+      {
+        path: 'consumer/ecosystem/services',
+        element: <ConsumerServiceDiscovery />,
+      },
+      {
+        path: 'consumer/ecosystem/transactions',
+        element: <ConsumerTransactions />,
+      },
+      {
+        path: 'consumer/system',
+        element: <ConsumerSystemConfig />,
+      },
+      {
+        path: 'consumer/system/backup',
+        element: <ConsumerToBeConstructed />,
+      },
+      {
+        path: 'consumer/system/plugins',
+        element: <ConsumerToBeConstructed />,
+      },
+      {
+        path: 'consumer/system/updates',
+        element: <ConsumerToBeConstructed />,
+      },
+      {
+        path: 'consumer/auth',
+        element: <ConsumerAuthentication />,
+      },
+      {
+        path: 'consumer/auth/certificates',
+        element: <ConsumerCertificateManagement />,
+      },
+      {
+        path: 'consumer/analytics',
+        element: <ConsumerComplianceReports />,
+      },
+      {
+        path: 'consumer/analytics/compliance',
+        element: <ConsumerComplianceReports />,
+      },
+      {
+        path: 'consumer/analytics/dashboards',
+        element: <ConsumerDashboards />,
+      },
+      {
+        path: 'consumer/analytics/value',
+        element: <ConsumerValueAssessment />,
+      },
+      {
+        path: 'consumer/discovery',
+        element: <ConsumerToBeConstructed />,
+      },
+      {
+        path: 'consumer/subscriptions',
+        element: <ConsumerToBeConstructed />,
+      },
+      {
+        path: 'consumer/monitoring',
+        element: <ConsumerToBeConstructed />,
+      },
+      {
+        path: 'consumer/integration',
+        element: <ConsumerToBeConstructed />,
+      },
+      {
+        path: 'consumer/procurement',
+        element: <ConsumerToBeConstructed />,
+      },
+      {
+        path: 'consumer/costs',
+        element: <ConsumerToBeConstructed />,
+      },
+      {
+        path: 'consumer/lineage',
+        element: <ConsumerToBeConstructed />,
+      },
+      {
+        path: 'consumer/quality',
+        element: <ConsumerToBeConstructed />,
       },
       // 404页面
       {
         path: '*',
-        element: lazyLoad(NotFound),
+        element: <div>404 Not Found</div>,
       },
     ],
   },

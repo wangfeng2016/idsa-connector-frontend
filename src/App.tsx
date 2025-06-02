@@ -1,15 +1,18 @@
+import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import router from './routes';
 import theme from './theme/theme';
-import './App.css';
+import router from './routes';
+import { RoleProvider } from './contexts/RoleContext';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <RouterProvider router={router} />
+      <RoleProvider>
+        <RouterProvider router={router} />
+      </RoleProvider>
     </ThemeProvider>
   );
 }
