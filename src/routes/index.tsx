@@ -22,6 +22,7 @@ const OperatorPlugins = lazy(() => import('../pages/operator/system/Plugins'));
 const OperatorUpdates = lazy(() => import('../pages/operator/system/Updates'));
 const OperatorAuthentication = lazy(() => import('../pages/operator/operation/Authentication'));
 const OperatorCertificateManagement = lazy(() => import('../pages/operator/operation/CertificateManagement'));
+const OperatorRegistrationApproval = lazy(() => import('../pages/operator/operation/RegistrationApproval'));
 const OperatorComplianceReports = lazy(() => import('../pages/operator/analytics/ComplianceReports'));
 const OperatorDashboards = lazy(() => import('../pages/operator/analytics/Dashboards'));
 const OperatorDataFlow = lazy(() => import('../pages/operator/analytics/DataFlow'));
@@ -34,7 +35,7 @@ const OperatorSecurityCompliance = lazy(() => import('../pages/operator/security
 const OperatorToBeConstructed = () => <ToBeConstructed pageName="运营方功能页面" />;
 
 // 懒加载页面组件 - 提供者
-const ProviderDashboard = lazy(() => import('../pages/provider/Dashboard'));
+const ProviderDashboard = lazy(() => import('../pages/provider/Dashboard'));top
 const ProviderResourceList = lazy(() => import('../pages/provider/resources/ResourceList'));
 const ProviderResourceEdit = lazy(() => import('../pages/provider/resources/ResourceEdit'));
 const ProviderPolicyList = lazy(() => import('../pages/provider/policies/PolicyList'));
@@ -168,6 +169,10 @@ const router = createHashRouter([
         element: <OperatorCertificateManagement />,
       },
       {
+        path: 'operator/operation/registration-approval',
+        element: <OperatorRegistrationApproval />,
+      },
+      {
         path: 'operator/analytics',
         element: <OperatorComplianceReports />,
       },
@@ -182,10 +187,6 @@ const router = createHashRouter([
       {
         path: 'operator/analytics/value',
         element: <OperatorValueAssessment />,
-      },
-      {
-        path: 'operator/participants',
-        element: <OperatorToBeConstructed />,
       },
       {
         path: 'operator/governance',

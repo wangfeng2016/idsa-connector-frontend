@@ -208,7 +208,7 @@ const operatorMenuGroups: MenuGroup[] = [
     title: '运营方管理',
     icon: <AdminPanelSettingsIcon />,
     items: [
-      { id: 'participant-management', title: '参与方管理', path: '/operator/participants', icon: <PeopleIcon /> },
+      { id: 'registration-approval', title: '机构注册审核', path: '/operator/operation/registration-approval', icon: <VerifiedUserIcon /> },
       { id: 'space-governance', title: '数据空间治理', path: '/operator/governance', icon: <GavelIcon /> },
       { id: 'global-policies', title: '全局策略管理', path: '/operator/policies', icon: <PolicyIcon /> },
       { id: 'monitoring', title: '全局监控', path: '/operator/monitoring', icon: <MonitorIcon /> },
