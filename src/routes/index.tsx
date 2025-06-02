@@ -20,8 +20,8 @@ const OperatorSystemConfig = lazy(() => import('../pages/operator/system/SystemC
 const OperatorBackup = lazy(() => import('../pages/operator/system/Backup'));
 const OperatorPlugins = lazy(() => import('../pages/operator/system/Plugins'));
 const OperatorUpdates = lazy(() => import('../pages/operator/system/Updates'));
-const OperatorAuthentication = lazy(() => import('../pages/operator/identity/Authentication'));
-const OperatorCertificateManagement = lazy(() => import('../pages/operator/identity/CertificateManagement'));
+const OperatorAuthentication = lazy(() => import('../pages/operator/operation/Authentication'));
+const OperatorCertificateManagement = lazy(() => import('../pages/operator/operation/CertificateManagement'));
 const OperatorComplianceReports = lazy(() => import('../pages/operator/analytics/ComplianceReports'));
 const OperatorDashboards = lazy(() => import('../pages/operator/analytics/Dashboards'));
 const OperatorDataFlow = lazy(() => import('../pages/operator/analytics/DataFlow'));
@@ -49,6 +49,7 @@ const ProviderSystemConfig = lazy(() => import('../pages/provider/system/SystemC
 // 提供者系统备份、插件、更新组件已映射到ToBeConstructed
 const ProviderAuthentication = lazy(() => import('../pages/provider/identity/Authentication'));
 const ProviderCertificateManagement = lazy(() => import('../pages/provider/identity/CertificateManagement'));
+const ProviderRegisterDataSpace = lazy(() => import('../pages/provider/identity/RegisterDataSpace'));
 const ProviderComplianceReports = lazy(() => import('../pages/provider/analytics/ComplianceReports'));
 const ProviderDashboards = lazy(() => import('../pages/provider/analytics/Dashboards'));
 const ProviderDataFlow = lazy(() => import('../pages/provider/analytics/DataFlow'));
@@ -159,11 +160,11 @@ const router = createHashRouter([
         element: <OperatorUpdates />,
       },
       {
-        path: 'operator/auth',
+        path: 'operator/operation/auth',
         element: <OperatorAuthentication />,
       },
       {
-        path: 'operator/auth/certificates',
+        path: 'operator/operation/certificates',
         element: <OperatorCertificateManagement />,
       },
       {
@@ -295,6 +296,10 @@ const router = createHashRouter([
       {
         path: 'provider/system/updates',
         element: <ProviderToBeConstructed />,
+      },
+      {
+        path: 'provider/identity/register-dataspace',
+        element: <ProviderRegisterDataSpace />,
       },
       {
         path: 'provider/auth',

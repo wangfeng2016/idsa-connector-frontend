@@ -43,6 +43,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import ExtensionIcon from '@mui/icons-material/Extension';
 import BackupIcon from '@mui/icons-material/Backup';
 import SystemUpdateIcon from '@mui/icons-material/SystemUpdate';
+import BusinessIcon from '@mui/icons-material/Business';
 // 新增角色特定图标
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import GavelIcon from '@mui/icons-material/Gavel';
@@ -54,7 +55,6 @@ import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import PublishIcon from '@mui/icons-material/Publish';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import BusinessIcon from '@mui/icons-material/Business';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import GroupIcon from '@mui/icons-material/Group';
@@ -191,15 +191,7 @@ const operatorMenuGroups: MenuGroup[] = [
       { id: 'updates', title: '系统更新管理', path: '/operator/system/updates', icon: <SystemUpdateIcon /> },
     ],
   },
-  {
-    id: 'identity-security',
-    title: '身份与安全管理',
-    icon: <SecurityIcon />,
-    items: [
-      { id: 'authentication', title: '身份认证配置', path: '/operator/auth', icon: <VpnKeyIcon /> },
-      { id: 'certificates', title: '证书管理', path: '/operator/auth/certificates', icon: <VpnKeyIcon /> },
-    ],
-  },
+
   {
     id: 'analytics',
     title: '分析与报表',
@@ -220,6 +212,8 @@ const operatorMenuGroups: MenuGroup[] = [
       { id: 'space-governance', title: '数据空间治理', path: '/operator/governance', icon: <GavelIcon /> },
       { id: 'global-policies', title: '全局策略管理', path: '/operator/policies', icon: <PolicyIcon /> },
       { id: 'monitoring', title: '全局监控', path: '/operator/monitoring', icon: <MonitorIcon /> },
+      { id: 'authentication', title: '身份认证配置', path: '/operator/operation/auth', icon: <VpnKeyIcon /> },
+      { id: 'certificates', title: '证书管理', path: '/operator/operation/certificates', icon: <VpnKeyIcon /> },
     ],
   },
   {
@@ -305,6 +299,7 @@ const providerMenuGroups: MenuGroup[] = [
     title: '身份与安全管理',
     icon: <SecurityIcon />,
     items: [
+      { id: 'register-dataspace', title: '数据空间机构注册', path: '/provider/identity/register-dataspace', icon: <BusinessIcon /> },
       { id: 'authentication', title: '身份认证配置', path: '/provider/auth', icon: <VpnKeyIcon /> },
       { id: 'certificates', title: '证书管理', path: '/provider/auth/certificates', icon: <VpnKeyIcon /> },
     ],
