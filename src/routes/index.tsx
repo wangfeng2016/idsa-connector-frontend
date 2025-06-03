@@ -44,6 +44,7 @@ const ProviderConnectorStatus = lazy(() => import('../pages/provider/connections
 const ProviderDataExchange = lazy(() => import('../pages/provider/connections/DataExchange'));
 const ProviderExchangeLogs = lazy(() => import('../pages/provider/connections/ExchangeLogs'));
 const ProviderMarketplace = lazy(() => import('../pages/provider/ecosystem/Marketplace'));
+const ProviderOnShelf = lazy(() => import('../pages/provider/ecosystem/onshelf'));
 const ProviderServiceDiscovery = lazy(() => import('../pages/provider/ecosystem/ServiceDiscovery'));
 const ProviderTransactions = lazy(() => import('../pages/provider/ecosystem/Transactions'));
 const ProviderSystemConfig = lazy(() => import('../pages/provider/system/SystemConfig'));
@@ -263,8 +264,8 @@ const router = createHashRouter([
         element: <ProviderMarketplace />,
       },
       {
-        path: 'provider/ecosystem/participants',
-        element: <ProviderToBeConstructed />,
+        path: 'provider/ecosystem/onshelf',
+        element: <ProviderOnShelf />,
       },
       {
         path: 'provider/ecosystem/services',

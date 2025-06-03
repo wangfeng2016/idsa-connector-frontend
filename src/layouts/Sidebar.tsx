@@ -275,8 +275,11 @@ const providerMenuGroups: MenuGroup[] = [
     title: '数据空间生态交互',
     icon: <StoreIcon />,
     items: [
+      { id: 'register-dataspace', title: '数据空间机构注册', path: '/provider/identity/register-dataspace', icon: <BusinessIcon /> },
+      { id: 'onshelf', title: '上架产品', path: '/provider/ecosystem/onshelf', icon: <PublishIcon /> },
       { id: 'marketplace', title: '数据市场浏览', path: '/provider/ecosystem', icon: <ShoppingCartIcon /> },
-      { id: 'participants', title: '参与方目录', path: '/provider/ecosystem/participants', icon: <PeopleIcon /> },
+      { id: 'authentication', title: '身份认证配置', path: '/provider/auth', icon: <VpnKeyIcon /> },
+      { id: 'certificates', title: '证书管理', path: '/provider/auth/certificates', icon: <VpnKeyIcon /> },
       { id: 'service-discovery', title: '服务发现', path: '/provider/ecosystem/services', icon: <ExploreIcon /> },
       { id: 'transactions', title: '交易管理', path: '/provider/ecosystem/transactions', icon: <ReceiptIcon /> },
       { id: 'usage-analytics', title: '数据使用分析', path: '/provider/analytics', icon: <AnalyticsIcon /> },
@@ -294,16 +297,7 @@ const providerMenuGroups: MenuGroup[] = [
       { id: 'updates', title: '系统更新管理', path: '/provider/system/updates', icon: <SystemUpdateIcon /> },
     ],
   },
-  {
-    id: 'identity-security',
-    title: '身份与安全管理',
-    icon: <SecurityIcon />,
-    items: [
-      { id: 'register-dataspace', title: '数据空间机构注册', path: '/provider/identity/register-dataspace', icon: <BusinessIcon /> },
-      { id: 'authentication', title: '身份认证配置', path: '/provider/auth', icon: <VpnKeyIcon /> },
-      { id: 'certificates', title: '证书管理', path: '/provider/auth/certificates', icon: <VpnKeyIcon /> },
-    ],
-  },
+
   {
     id: 'analytics',
     title: '分析与报表',
