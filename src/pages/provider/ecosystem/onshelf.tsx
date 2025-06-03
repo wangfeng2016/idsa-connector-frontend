@@ -120,6 +120,7 @@ const OnShelf: React.FC = () => {
   const [policyMode, setPolicyMode] = useState('');
   const [contractTerms, setContractTerms] = useState('');
   const [licenseTerms, setLicenseTerms] = useState('');
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   
   const policyOptions = [
     '用途限制',
@@ -160,6 +161,14 @@ const OnShelf: React.FC = () => {
   
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+  
+  const handleOpenSaveDialog = () => {
+    setSaveDialogOpen(true);
+  };
+  
+  const handleCloseSaveDialog = () => {
+    setSaveDialogOpen(false);
   };
   
   const handleAddTag = () => {
@@ -1055,6 +1064,19 @@ const OnShelf: React.FC = () => {
                 上一步
               </Button>
             )}
+            {activeStep === 5 && (
+              <Button
+                onClick={handleOpenSaveDialog}
+                variant="outlined"
+                sx={{
+                  textTransform: 'none',
+                  fontWeight: 500,
+                  px: 4
+                }}
+              >
+                保存
+              </Button>
+            )}
             {activeStep < steps.length - 1 && (
               <Button
                 onClick={handleNext}
@@ -1075,6 +1097,76 @@ const OnShelf: React.FC = () => {
           </Box>
         </Paper>
       </Box>
+      {/* 保存对话框 */}
+      <Dialog
+        open={saveDialogOpen}
+        onClose={handleCloseSaveDialog}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle sx={{ borderBottom: '1px solid #e0e0e0', pb: 2 }}>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            产品测试需要经过审核认证和审批
+          </Typography>
+        </DialogTitle>
+        <DialogContent sx={{ mt: 2 }}>
+          <Box sx={{ p: 1 }}>
+            <Typography variant="body1" sx={{ mb: 3 }}>
+              不需要经过审批流程订阅我的产品
+            </Typography>
+            
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                条款及点击确认
+              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <Box
+                  component="span"
+                  sx={{
+                    display: 'inline-block',
+                    width: 16,
+                    height: 16,
+                    borderRadius: '50%',
+                    backgroundColor: '#29b6f6',
+                    mr: 1
+                  }}
+                />
+                <Typography variant="body2">
+                  我接受并同意系统提供的有效服务条款，以及系统的使用限制
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+        </DialogContent>
+        <DialogActions sx={{ p: 2, borderTop: '1px solid #e0e0e0' }}>
+          <Button
+            onClick={handleCloseSaveDialog}
+            variant="outlined"
+            sx={{
+              textTransform: 'none',
+              fontWeight: 500,
+              px: 3
+            }}
+          >
+            返回
+          </Button>
+          <Button
+            onClick={handleCloseSaveDialog}
+            variant="contained"
+            sx={{
+              backgroundColor: '#4fc3f7',
+              textTransform: 'none',
+              fontWeight: 500,
+              px: 3,
+              '&:hover': {
+                backgroundColor: '#29b6f6'
+              }
+            }}
+          >
+            发布
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

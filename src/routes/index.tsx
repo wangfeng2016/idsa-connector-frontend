@@ -35,9 +35,10 @@ const OperatorSecurityCompliance = lazy(() => import('../pages/operator/security
 const OperatorToBeConstructed = () => <ToBeConstructed pageName="运营方功能页面" />;
 
 // 懒加载页面组件 - 提供者
-const ProviderDashboard = lazy(() => import('../pages/provider/Dashboard'));top
+const ProviderDashboard = lazy(() => import('../pages/provider/Dashboard'));
 const ProviderResourceList = lazy(() => import('../pages/provider/resources/ResourceList'));
 const ProviderResourceEdit = lazy(() => import('../pages/provider/resources/ResourceEdit'));
+const ProviderDataDiscovery = lazy(() => import('../pages/provider/resources/DataDiscovery'));
 const ProviderPolicyList = lazy(() => import('../pages/provider/policies/PolicyList'));
 const ProviderPolicyEdit = lazy(() => import('../pages/provider/policies/PolicyEdit'));
 const ProviderConnectorStatus = lazy(() => import('../pages/provider/connections/ConnectorStatus'));
@@ -227,14 +228,7 @@ const router = createHashRouter([
         path: 'provider/catalog',
         element: <ProviderToBeConstructed />,
       },
-      {
-        path: 'provider/pricing',
-        element: <ProviderToBeConstructed />,
-      },
-      {
-        path: 'provider/customers',
-        element: <ProviderToBeConstructed />,
-      },
+
       {
         path: 'provider/policies',
         element: <ProviderPolicyList />,
@@ -270,6 +264,10 @@ const router = createHashRouter([
       {
         path: 'provider/ecosystem/services',
         element: <ProviderServiceDiscovery />,
+      },
+      {
+        path: 'provider/resources/data-discovery',
+        element: <ProviderDataDiscovery />,
       },
       {
         path: 'provider/ecosystem/transactions',

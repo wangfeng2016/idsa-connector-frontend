@@ -15,8 +15,8 @@ import {
   DialogTitle,
   Stack,
 } from '@mui/material';
-import useResponsive from '../../hooks/useResponsive';
-import ResponsiveContainer from '../../layouts/ResponsiveContainer';
+import useResponsive from '../../../hooks/useResponsive';
+import ResponsiveContainer from '../../../layouts/ResponsiveContainer';
 import {
   DataGrid,
   type GridColDef,
