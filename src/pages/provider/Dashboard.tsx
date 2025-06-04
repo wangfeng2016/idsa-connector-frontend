@@ -32,7 +32,7 @@ import {
   History as HistoryIcon,
   Monitor as MonitorIcon,
 } from '@mui/icons-material';
-import ResponsiveContainer from '../layouts/ResponsiveContainer';
+import ResponsiveContainer from '../../layouts/ResponsiveContainer';
 
 // 模拟数据
 const mockData = {

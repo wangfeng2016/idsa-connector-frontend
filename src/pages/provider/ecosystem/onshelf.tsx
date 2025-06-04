@@ -9,13 +9,11 @@ import {
   Button,
   TextField,
   FormControl,
-  InputLabel,
+
   Select,
   MenuItem,
   Chip,
-  Card,
-  CardContent,
-  Divider,
+
   Switch,
   FormControlLabel,
   Dialog,
@@ -25,7 +23,7 @@ import {
   IconButton,
   RadioGroup,
   Radio,
-  InputAdornment
+
 } from '@mui/material';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import AddIcon from '@mui/icons-material/Add';
@@ -118,7 +116,7 @@ const OnShelf: React.FC = () => {
   const [newValue, setNewValue] = useState('');
   
   const [policyMode, setPolicyMode] = useState('');
-  const [contractTerms, setContractTerms] = useState('');
+
   const [licenseTerms, setLicenseTerms] = useState('');
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   

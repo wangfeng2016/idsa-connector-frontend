@@ -13,7 +13,7 @@ import {
   Checkbox,
   Chip,
   Avatar,
-  IconButton,
+
   Dialog,
   DialogTitle,
   DialogContent,
@@ -26,10 +26,7 @@ import {
 } from '@mui/material';
 import {
   Business as BusinessIcon,
-  CheckCircle as CheckCircleIcon,
-  Cancel as CancelIcon,
-  Visibility as VisibilityIcon,
-  FilterList as FilterListIcon,
+
 } from '@mui/icons-material';
 
 interface RegistrationData {

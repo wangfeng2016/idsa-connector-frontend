@@ -25,7 +25,7 @@ const OperatorCertificateManagement = lazy(() => import('../pages/operator/opera
 const OperatorRegistrationApproval = lazy(() => import('../pages/operator/operation/RegistrationApproval'));
 const OperatorComplianceReports = lazy(() => import('../pages/operator/analytics/ComplianceReports'));
 const OperatorDashboards = lazy(() => import('../pages/operator/analytics/Dashboards'));
-const OperatorDataFlow = lazy(() => import('../pages/operator/analytics/DataFlow'));
+
 const OperatorValueAssessment = lazy(() => import('../pages/operator/analytics/ValueAssessment'));
 const OperatorAccessControl = lazy(() => import('../pages/operator/security/AccessControl'));
 const OperatorAuditLogs = lazy(() => import('../pages/operator/security/AuditLogs'));
@@ -35,7 +35,7 @@ const OperatorSecurityCompliance = lazy(() => import('../pages/operator/security
 const OperatorToBeConstructed = () => <ToBeConstructed pageName="运营方功能页面" />;
 
 // 懒加载页面组件 - 提供者
-const ProviderDashboard = lazy(() => import('../pages/provider/Dashboard'));
+
 const ProviderResourceList = lazy(() => import('../pages/provider/resources/ResourceList'));
 const ProviderResourceEdit = lazy(() => import('../pages/provider/resources/ResourceEdit'));
 const ProviderDataDiscovery = lazy(() => import('../pages/provider/resources/DataDiscovery'));
@@ -55,17 +55,15 @@ const ProviderCertificateManagement = lazy(() => import('../pages/provider/ident
 const ProviderRegisterDataSpace = lazy(() => import('../pages/provider/identity/RegisterDataSpace'));
 const ProviderComplianceReports = lazy(() => import('../pages/provider/analytics/ComplianceReports'));
 const ProviderDashboards = lazy(() => import('../pages/provider/analytics/Dashboards'));
-const ProviderDataFlow = lazy(() => import('../pages/provider/analytics/DataFlow'));
+
 const ProviderValueAssessment = lazy(() => import('../pages/provider/analytics/ValueAssessment'));
-const ProviderAccessControl = lazy(() => import('../pages/provider/security/AccessControl'));
-const ProviderAuditLogs = lazy(() => import('../pages/provider/security/AuditLogs'));
-const ProviderSecurityCompliance = lazy(() => import('../pages/provider/security/Compliance'));
+
 
 // 待构建的提供者组件
 const ProviderToBeConstructed = () => <ToBeConstructed pageName="提供者功能页面" />;
 
 // 懒加载页面组件 - 消费者
-const ConsumerDashboard = lazy(() => import('../pages/consumer/Dashboard'));
+
 const ConsumerResourceList = lazy(() => import('../pages/consumer/resources/ResourceList'));
 const ConsumerResourceEdit = lazy(() => import('../pages/consumer/resources/ResourceEdit'));
 const ConsumerPolicyList = lazy(() => import('../pages/consumer/policies/PolicyList'));
@@ -82,11 +80,9 @@ const ConsumerAuthentication = lazy(() => import('../pages/consumer/identity/Aut
 const ConsumerCertificateManagement = lazy(() => import('../pages/consumer/identity/CertificateManagement'));
 const ConsumerComplianceReports = lazy(() => import('../pages/consumer/analytics/ComplianceReports'));
 const ConsumerDashboards = lazy(() => import('../pages/consumer/analytics/Dashboards'));
-const ConsumerDataFlow = lazy(() => import('../pages/consumer/analytics/DataFlow'));
+
 const ConsumerValueAssessment = lazy(() => import('../pages/consumer/analytics/ValueAssessment'));
-const ConsumerAccessControl = lazy(() => import('../pages/consumer/security/AccessControl'));
-const ConsumerAuditLogs = lazy(() => import('../pages/consumer/security/AuditLogs'));
-const ConsumerSecurityCompliance = lazy(() => import('../pages/consumer/security/Compliance'));
+
 // 消费者其他功能组件已映射到ToBeConstructed
 
 // 待构建的消费者组件

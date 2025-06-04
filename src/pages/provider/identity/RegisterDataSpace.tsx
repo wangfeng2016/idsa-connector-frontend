@@ -7,26 +7,23 @@ import {
   TextField,
   Button,
   FormControl,
-  InputLabel,
+
   Select,
   MenuItem,
   RadioGroup,
   FormControlLabel,
   Radio,
-  FormLabel,
+
   Switch,
   Checkbox,
-  Grid,
-  Divider,
-  IconButton,
+
   Card,
-  CardContent,
+
   Snackbar,
-  Alert,
+
 } from '@mui/material';
 import {
-  Add as AddIcon,
-  Remove as RemoveIcon,
+
   CloudUpload as CloudUploadIcon,
 } from '@mui/icons-material';
 import ResponsiveContainer from '../../../layouts/ResponsiveContainer';
@@ -71,19 +68,7 @@ const RegisterDataSpace: React.FC = () => {
     });
   };
 
-  const addContact = () => {
-    setContacts([...contacts, { name: '', phone: '' }]);
-  };
 
-  const removeContact = (index: number) => {
-    setContacts(contacts.filter((_, i) => i !== index));
-  };
-
-  const handleContactChange = (index: number, field: string, value: string) => {
-    const newContacts = [...contacts];
-    newContacts[index] = { ...newContacts[index], [field]: value };
-    setContacts(newContacts);
-  };
 
   const handleSubmit = () => {
     console.log('提交表单数据:', formData, contacts);
