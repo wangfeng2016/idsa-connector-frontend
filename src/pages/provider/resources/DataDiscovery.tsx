@@ -249,7 +249,7 @@ const DataDiscovery: React.FC = () => {
             <Typography variant="subtitle1" sx={{ mb: 2 }}>现有数据源</Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
               {dataSources.map((source) => (
-                <Box key={source.id} sx={{ flex: '1 1 calc(50% - 8px)', minWidth: '300px' }}>
+                <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }} key={source.id}>
                   <Card variant="outlined">
                     <CardContent>
                       <Box display="flex" alignItems="center" gap={1} mb={1}>
@@ -277,72 +277,72 @@ const DataDiscovery: React.FC = () => {
             <Typography variant="subtitle1" sx={{ mb: 2 }}>添加新数据源</Typography>
             <Card variant="outlined">
               <CardContent>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                    <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: '200px' }}>
-                      <TextField
-                        fullWidth
-                        label="数据源名称"
-                        value={newDataSource.name}
-                        onChange={(e) => setNewDataSource({...newDataSource, name: e.target.value})}
-                      />
-                    </Box>
-                    <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: '200px' }}>
-                      <FormControl fullWidth>
-                        <InputLabel>数据源类型</InputLabel>
-                        <Select
-                          value={newDataSource.type}
-                          label="数据源类型"
-                          onChange={(e) => setNewDataSource({...newDataSource, type: e.target.value as any})}
-                        >
-                          <MenuItem value="database">数据库</MenuItem>
-                          <MenuItem value="filesystem">文件系统</MenuItem>
-                          <MenuItem value="cloud">云存储</MenuItem>
-                          <MenuItem value="api">API接口</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                  <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                    <TextField
+                      fullWidth
+                      label="数据源名称"
+                      value={newDataSource.name}
+                      onChange={(e) => setNewDataSource({...newDataSource, name: e.target.value})}
+                    />
                   </Box>
-                  <TextField
-                    fullWidth
-                    label="连接字符串"
-                    value={newDataSource.connectionString}
-                    onChange={(e) => setNewDataSource({...newDataSource, connectionString: e.target.value})}
-                    placeholder="例如: postgresql://user:password@host:port/database"
-                  />
-                  <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                    <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: '200px' }}>
-                      <FormControl fullWidth>
-                        <InputLabel>优先级</InputLabel>
-                        <Select
-                          value={newDataSource.priority}
-                          label="优先级"
-                          onChange={(e) => setNewDataSource({...newDataSource, priority: e.target.value as any})}
-                        >
-                          <MenuItem value="high">高</MenuItem>
-                          <MenuItem value="medium">中</MenuItem>
-                          <MenuItem value="low">低</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                    <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: '200px' }}>
-                      <FormControl fullWidth>
-                        <InputLabel>安全级别</InputLabel>
-                        <Select
-                          value={newDataSource.securityLevel}
-                          label="安全级别"
-                          onChange={(e) => setNewDataSource({...newDataSource, securityLevel: e.target.value as any})}
-                        >
-                          <MenuItem value="public">公开</MenuItem>
-                          <MenuItem value="internal">内部</MenuItem>
-                          <MenuItem value="confidential">机密</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
+                  <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                    <FormControl fullWidth>
+                      <InputLabel>数据源类型</InputLabel>
+                      <Select
+                        value={newDataSource.type}
+                        label="数据源类型"
+                        onChange={(e) => setNewDataSource({...newDataSource, type: e.target.value as any})}
+                      >
+                        <MenuItem value="database">数据库</MenuItem>
+                        <MenuItem value="filesystem">文件系统</MenuItem>
+                        <MenuItem value="cloud">云存储</MenuItem>
+                        <MenuItem value="api">API接口</MenuItem>
+                      </Select>
+                    </FormControl>
                   </Box>
-                  <Button variant="outlined" onClick={addDataSource} sx={{ alignSelf: 'flex-start' }}>
-                    添加数据源
-                  </Button>
+                  <Box sx={{ flex: '1 1 100%', width: '100%' }}>
+                    <TextField
+                      fullWidth
+                      label="连接字符串"
+                      value={newDataSource.connectionString}
+                      onChange={(e) => setNewDataSource({...newDataSource, connectionString: e.target.value})}
+                      placeholder="例如: postgresql://user:password@host:port/database"
+                    />
+                  </Box>
+                  <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                    <FormControl fullWidth>
+                      <InputLabel>优先级</InputLabel>
+                      <Select
+                        value={newDataSource.priority}
+                        label="优先级"
+                        onChange={(e) => setNewDataSource({...newDataSource, priority: e.target.value as any})}
+                      >
+                        <MenuItem value="high">高</MenuItem>
+                        <MenuItem value="medium">中</MenuItem>
+                        <MenuItem value="low">低</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                    <FormControl fullWidth>
+                      <InputLabel>安全级别</InputLabel>
+                      <Select
+                        value={newDataSource.securityLevel}
+                        label="安全级别"
+                        onChange={(e) => setNewDataSource({...newDataSource, securityLevel: e.target.value as any})}
+                      >
+                        <MenuItem value="public">公开</MenuItem>
+                        <MenuItem value="internal">内部</MenuItem>
+                        <MenuItem value="confidential">机密</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <Box sx={{ flex: '1 1 100%', width: '100%' }}>
+                    <Button variant="outlined" onClick={addDataSource}>
+                      添加数据源
+                    </Button>
+                  </Box>
                 </Box>
               </CardContent>
             </Card>
@@ -394,19 +394,19 @@ const DataDiscovery: React.FC = () => {
                 <CardContent>
                   <Typography variant="subtitle2" gutterBottom>扫描详情</Typography>
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-                    <Box sx={{ flex: '1 1 calc(25% - 12px)', minWidth: '120px' }}>
+                    <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: 'calc(50% - 8px)', md: 'calc(25% - 6px)' } }}>
                       <Typography variant="caption" display="block">数据源连接</Typography>
                       <Typography variant="body2">{dataSources.length} 个</Typography>
                     </Box>
-                    <Box sx={{ flex: '1 1 calc(25% - 12px)', minWidth: '120px' }}>
+                    <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: 'calc(50% - 8px)', md: 'calc(25% - 6px)' } }}>
                       <Typography variant="caption" display="block">已扫描表/文件</Typography>
                       <Typography variant="body2">{Math.round(scanProgress * 0.23)} 个</Typography>
                     </Box>
-                    <Box sx={{ flex: '1 1 calc(25% - 12px)', minWidth: '120px' }}>
+                    <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: 'calc(50% - 8px)', md: 'calc(25% - 6px)' } }}>
                       <Typography variant="caption" display="block">提取元数据</Typography>
                       <Typography variant="body2">{Math.round(scanProgress * 0.15)} 项</Typography>
                     </Box>
-                    <Box sx={{ flex: '1 1 calc(25% - 12px)', minWidth: '120px' }}>
+                    <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: 'calc(50% - 8px)', md: 'calc(25% - 6px)' } }}>
                       <Typography variant="caption" display="block">敏感数据识别</Typography>
                       <Typography variant="body2">{Math.round(scanProgress * 0.08)} 项</Typography>
                     </Box>
@@ -429,7 +429,7 @@ const DataDiscovery: React.FC = () => {
             
             {/* 统计概览 */}
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
-              <Box sx={{ flex: '1 1 calc(25% - 12px)', minWidth: '150px' }}>
+              <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: 'calc(50% - 8px)', md: 'calc(25% - 6px)' } }}>
                 <Card>
                   <CardContent sx={{ textAlign: 'center' }}>
                     <Typography variant="h4" color="primary">{discoveryResults.length}</Typography>
@@ -437,7 +437,7 @@ const DataDiscovery: React.FC = () => {
                   </CardContent>
                 </Card>
               </Box>
-              <Box sx={{ flex: '1 1 calc(25% - 12px)', minWidth: '150px' }}>
+              <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: 'calc(50% - 8px)', md: 'calc(25% - 6px)' } }}>
                 <Card>
                   <CardContent sx={{ textAlign: 'center' }}>
                     <Typography variant="h4" color="success.main">
@@ -447,7 +447,7 @@ const DataDiscovery: React.FC = () => {
                   </CardContent>
                 </Card>
               </Box>
-              <Box sx={{ flex: '1 1 calc(25% - 12px)', minWidth: '150px' }}>
+              <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: 'calc(50% - 8px)', md: 'calc(25% - 6px)' } }}>
                 <Card>
                   <CardContent sx={{ textAlign: 'center' }}>
                     <Typography variant="h4" color="warning.main">
@@ -457,7 +457,7 @@ const DataDiscovery: React.FC = () => {
                   </CardContent>
                 </Card>
               </Box>
-              <Box sx={{ flex: '1 1 calc(25% - 12px)', minWidth: '150px' }}>
+              <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: 'calc(50% - 8px)', md: 'calc(25% - 6px)' } }}>
                 <Card>
                   <CardContent sx={{ textAlign: 'center' }}>
                     <Typography variant="h4" color="info.main">
@@ -567,7 +567,7 @@ const DataDiscovery: React.FC = () => {
         <Button
           variant="contained"
           onClick={handleNext}
-          disabled={activeStep === 1 && !scanComplete}
+          disabled={activeStep === 1 && scanning}
         >
           {activeStep === 1 && !scanning && !scanComplete ? '开始扫描' : 
            activeStep === steps.length - 1 ? '完成' : '下一步'}

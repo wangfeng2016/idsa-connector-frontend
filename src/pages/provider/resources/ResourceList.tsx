@@ -16,7 +16,7 @@ import {
   Stack,
 } from '@mui/material';
 import useResponsive from '../../../hooks/useResponsive';
-import ResponsiveContainer from '../../../layouts/ResponsiveContainer';
+
 import {
   DataGrid,
   type GridColDef,
@@ -234,7 +234,7 @@ const ResourceList = () => {
       },
       { 
         field: 'name', 
-        headerName: '资源名称', 
+        headerName: '数据集', 
         width: responsive.value({ xs: 150, sm: 180, md: 200 }, 200),
         flex: responsive.isDown('sm') ? undefined : 1,
       },
@@ -328,44 +328,43 @@ const ResourceList = () => {
 
   return (
     <Box sx={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column' }}>
-      <ResponsiveContainer>
-        <Box 
+      <Box 
+        sx={{ 
+          display: 'flex', 
+          flexDirection: { xs: 'column', sm: 'row' },
+          justifyContent: 'space-between', 
+          alignItems: { xs: 'flex-start', sm: 'center' }, 
+          gap: { xs: 2, sm: 0 },
+          mb: { xs: 3, sm: 2 } 
+        }}
+      >
+        <Typography 
+          variant="h4" 
           sx={{ 
-            display: 'flex', 
-            flexDirection: { xs: 'column', sm: 'row' },
-            justifyContent: 'space-between', 
-            alignItems: { xs: 'flex-start', sm: 'center' }, 
-            gap: { xs: 2, sm: 0 },
-            mb: { xs: 3, sm: 2 } 
+            fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' }
           }}
         >
-          <Typography 
-            variant="h4" 
-            sx={{ 
-              fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' }
-            }}
-          >
-            数据资源管理
-          </Typography>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => navigate('/resources/create')}
-            size={responsive.isDown('sm') ? 'medium' : 'large'}
-            fullWidth={responsive.isDown('xs')}
-          >
-            添加资源
-          </Button>
-        </Box>
+          数据资源管理
+        </Typography>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => navigate('/resources/create')}
+          size={responsive.isDown('sm') ? 'medium' : 'large'}
+          fullWidth={responsive.isDown('xs')}
+        >
+          添加资源
+        </Button>
+      </Box>
 
-        <Paper 
-          sx={{ 
-            flexGrow: 1, 
-            width: '100%', 
-            overflow: 'hidden',
-            boxShadow: { xs: 1, sm: 2, md: 3 }
-          }}
-        >
+      <Paper 
+        sx={{ 
+          flexGrow: 1, 
+          width: '100%', 
+          overflow: 'hidden',
+          boxShadow: { xs: 1, sm: 2, md: 3 }
+        }}
+      >
           <DataGrid
             rows={resources}
             columns={columns}
@@ -406,7 +405,6 @@ const ResourceList = () => {
             }}
           />
         </Paper>
-      </ResponsiveContainer>
 
       {/* 删除确认对话框 */}
       <Dialog
