@@ -36,9 +36,10 @@ const OperatorToBeConstructed = () => <ToBeConstructed pageName="运营方功能
 
 // 懒加载页面组件 - 提供者
 
-const ProviderResourceList = lazy(() => import('../pages/provider/resources/ResourceList'));
-const ProviderResourceEdit = lazy(() => import('../pages/provider/resources/ResourceEdit'));
 const ProviderDataDiscovery = lazy(() => import('../pages/provider/resources/DataDiscovery'));
+const ProviderResourceList = lazy(() => import('../pages/provider/resources/ResourceList'));
+const ProviderDataCatalogManagement = lazy(() => import('../pages/provider/resources/DataCatalogManagement'));
+const ProviderResourceEdit = lazy(() => import('../pages/provider/resources/ResourceEdit'));
 const ProviderPolicyList = lazy(() => import('../pages/provider/policies/PolicyList'));
 const ProviderPolicyEdit = lazy(() => import('../pages/provider/policies/PolicyEdit'));
 const ProviderConnectorStatus = lazy(() => import('../pages/provider/connections/ConnectorStatus'));
@@ -222,7 +223,7 @@ const router = createHashRouter([
       },
       {
         path: 'provider/catalog',
-        element: <ProviderToBeConstructed />,
+        element: <ProviderDataCatalogManagement />,
       },
 
       {

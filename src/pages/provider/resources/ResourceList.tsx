@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Paper } from '@mui/material';
 
@@ -50,7 +49,6 @@ const ResourceList = () => {
     selectedResources, 
     setSelectedResources, 
     detailPanelResource, 
-    setDetailPanelResource, 
     deleteDialogOpen, 
     resourcesForDeletion,
     toggleFavorite, 
@@ -77,17 +75,17 @@ const ResourceList = () => {
   } = useResourceView();
 
   // 本地状态
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  //const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   // 处理菜单打开
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  //const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  //  setAnchorEl(event.currentTarget);
+  //};
 
   // 处理菜单关闭
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  //const handleMenuClose = () => {
+  //  setAnchorEl(null);
+  //};
 
   // 处理资源编辑
   const handleEditResource = (id: number) => {

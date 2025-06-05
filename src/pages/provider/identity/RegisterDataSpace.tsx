@@ -50,7 +50,7 @@ const RegisterDataSpace: React.FC = () => {
     agreeTerms: false,
   });
 
-  const [contacts, setContacts] = useState([{ name: '', phone: '' }]);
+  const contacts = [{ name: '', phone: '' }];
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [submitTime, setSubmitTime] = useState('');
 
