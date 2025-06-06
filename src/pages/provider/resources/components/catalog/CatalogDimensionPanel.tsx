@@ -15,7 +15,6 @@ import {
   Menu,
   MenuItem,
   Divider,
-  Tooltip
 } from '@mui/material';
 import {
   ExpandLess,
@@ -33,7 +32,7 @@ import {
 } from '@mui/icons-material';
 
 import { useDataCatalog } from '../../../../../contexts/DataCatalogContext';
-import type { ClassificationDimension, CategoryNode } from '../../../../../contexts/DataCatalogContext';
+import type { CategoryNode } from '../../../../../contexts/DataCatalogContext';
 
 interface CatalogDimensionPanelProps {
   onDimensionSelect?: (dimensionId: string | null) => void;
@@ -62,7 +61,7 @@ const CatalogDimensionPanel: React.FC<CatalogDimensionPanelProps> = ({
   const [expandedDimensions, setExpandedDimensions] = useState<Set<string>>(new Set());
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedDimensionForMenu, setSelectedDimensionForMenu] = useState<string | null>(null);
+  // 移除未使用的变量 selectedDimensionForMenu
 
   // 维度图标映射
   const getDimensionIcon = (type: string) => {
@@ -122,25 +121,23 @@ const CatalogDimensionPanel: React.FC<CatalogDimensionPanelProps> = ({
     } else {
       newSelected.add(categoryId);
     }
-    setSelectedCategoryIds(newSelected);
+    setSelectedCategoryIds(Array.from(newSelected));
   };
 
   // 处理维度菜单
-  const handleDimensionMenu = (event: React.MouseEvent<HTMLElement>, dimensionId: string) => {
+  const handleDimensionMenu = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
-    setSelectedDimensionForMenu(dimensionId);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setSelectedDimensionForMenu(null);
   };
 
   // 渲染类别节点
   const renderCategoryNode = (category: CategoryNode, level: number = 0) => {
     const isExpanded = expandedCategories.has(category.id);
-    const isSelected = selectedCategoryIds.has(category.id);
+    const isSelected = selectedCategoryIds.includes(category.id);
     const resourceCount = getResourceCountByCategory(category.id);
     const hasChildren = category.children && category.children.length > 0;
 
@@ -259,7 +256,7 @@ const CatalogDimensionPanel: React.FC<CatalogDimensionPanelProps> = ({
                     }}
                   >
                     <ListItemIcon sx={{ minWidth: 36 }}>
-                      {getDimensionIcon(dimension.type)}
+                      {getDimensionIcon(dimension.type || 'default')}
                     </ListItemIcon>
                     
                     <ListItemText 
@@ -294,7 +291,7 @@ const CatalogDimensionPanel: React.FC<CatalogDimensionPanelProps> = ({
                       
                       <IconButton
                         size="small"
-                        onClick={(e) => handleDimensionMenu(e, dimension.id)}
+                        onClick={(e) => handleDimensionMenu(e)}
                       >
                         <MoreVertIcon />
                       </IconButton>

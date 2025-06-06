@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useMemo } from 'react';
+import type { ReactNode } from 'react';
 import { type DataResource } from './ResourceContext';
 
 // 分类维度类型
@@ -28,6 +29,7 @@ export interface ClassificationDimension {
   isExpanded: boolean;
   isEnabled: boolean;
   color?: string;
+  type?: string; // 添加type属性
 }
 
 // 标签接口
@@ -50,6 +52,7 @@ export interface ResourceRelation {
   description?: string;
   strength: number; // 关联强度 0-1
   direction: 'bidirectional' | 'source-to-target' | 'target-to-source';
+  type: string; // 添加type属性，用于存储关系类型
 }
 
 // 数据目录视图类型
@@ -68,6 +71,16 @@ export interface CatalogFilterState {
     start?: string;
     end?: string;
   };
+  resourceTypes: string[];
+  searchQuery?: string;
+  accessLevels?: string[];
+  qualityRange?: [number, number];
+  usageRange?: [number, number];
+  dateRange?: { start: Date | null; end: Date | null };
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  showFavorites?: boolean;
+  showRecent?: boolean;
 }
 
 // 扩展的数据资源接口（包含目录信息）
@@ -75,6 +88,7 @@ export interface CatalogDataResource extends DataResource {
   categories: { [dimension: string]: string[] }; // 每个维度下的分类路径
   customTags: Tag[];
   relations: ResourceRelation[];
+  viewCount?: number; // 添加viewCount属性，用于记录资源被查看的次数
   metadata: {
     createdAt: string;
     updatedAt: string;
@@ -112,6 +126,7 @@ interface DataCatalogContextType {
   updateTag: (tagId: string, updates: Partial<Tag>) => void;
   deleteTag: (tagId: string) => void;
   getTagsByCategory: (category?: string) => Tag[];
+  getAllTags: () => Tag[];
   
   // 资源分类
   catalogResources: CatalogDataResource[];
@@ -124,7 +139,7 @@ interface DataCatalogContextType {
   addResourceRelation: (relation: Omit<ResourceRelation, 'id'>) => void;
   updateResourceRelation: (relationId: string, updates: Partial<ResourceRelation>) => void;
   deleteResourceRelation: (relationId: string) => void;
-  getResourceRelations: (resourceId: number, relationType?: string) => ResourceRelation[];
+  getResourceRelations: (resourceId?: number, relationType?: string) => ResourceRelation[];
   
   // 视图和过滤
   viewType: CatalogViewType;
@@ -132,9 +147,18 @@ interface DataCatalogContextType {
   filterState: CatalogFilterState;
   updateFilterState: (updates: Partial<CatalogFilterState>) => void;
   resetFilters: () => void;
+  filters: any;
+  setFilters: (filters: any) => void;
+  filteredResources: CatalogDataResource[];
+  
+  // 选择状态
+  selectedDimensionId: string | null;
+  setSelectedDimensionId: (dimensionId: string | null) => void;
+  selectedCategoryIds: string[];
+  setSelectedCategoryIds: (categoryIds: string[]) => void;
   
   // 搜索和发现
-  searchResources: (query: string, options?: any) => CatalogDataResource[];
+  searchResources: (query: string) => CatalogDataResource[];
   getResourcesByCategory: (dimensionId: DimensionType, categoryPath: string) => CatalogDataResource[];
   getResourcesByTag: (tagIds: string[]) => CatalogDataResource[];
   getSimilarResources: (resourceId: number, limit?: number) => CatalogDataResource[];
@@ -145,6 +169,9 @@ interface DataCatalogContextType {
   getCategoryStats: () => any;
   getTagStats: () => any;
   getResourceQualityColor: (quality: number) => string;
+  toggleResourceFavorite: (resourceId: number) => void;
+  getResourceCountByCategory: (categoryId: string) => number;
+  getResourceCategories: (resourceId: number, dimensionId?: DimensionType) => { [dimension: string]: string[] } | CategoryNode[];
   
   // 统计信息
   getCatalogStats: () => {
@@ -365,7 +392,8 @@ const defaultFilterState: CatalogFilterState = {
   showRelations: false,
   relationTypes: [],
   qualityThreshold: 0,
-  timeRange: {}
+  timeRange: {},
+  resourceTypes: []
 };
 
 // 创建上下文
@@ -379,6 +407,43 @@ export const DataCatalogProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [catalogResources, setCatalogResources] = useState<CatalogDataResource[]>([]);
   const [viewType, setViewType] = useState<CatalogViewType>('hierarchy');
   const [filterState, setFilterState] = useState<CatalogFilterState>(defaultFilterState);
+  const [filters, setFilters] = useState<any>({});
+  const [selectedDimensionId, setSelectedDimensionId] = useState<string | null>(null);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
+  
+  // 计算过滤后的资源
+  const filteredResources = useMemo(() => {
+    let filtered = catalogResources;
+    
+    // 根据搜索词过滤
+    if (filterState.searchTerm) {
+      const searchLower = filterState.searchTerm.toLowerCase();
+      filtered = filtered.filter(resource => 
+        resource.name.toLowerCase().includes(searchLower) ||
+        resource.description.toLowerCase().includes(searchLower)
+      );
+    }
+    
+    // 根据选中的维度过滤
+    if (filterState.selectedDimensions.length > 0) {
+      filtered = filtered.filter(resource => 
+        filterState.selectedDimensions.some(dimId => 
+          resource.categories[dimId]?.length > 0
+        )
+      );
+    }
+    
+    // 根据选中的标签过滤
+    if (filterState.selectedTags.length > 0) {
+      filtered = filtered.filter(resource => 
+        filterState.selectedTags.some(tagId => 
+          resource.customTags.some(tag => tag.id === tagId)
+        )
+      );
+    }
+    
+    return filtered;
+  }, [catalogResources, filterState]);
 
   // 分类维度管理
   const updateDimension = (dimensionId: DimensionType, updates: Partial<ClassificationDimension>) => {
@@ -482,6 +547,10 @@ export const DataCatalogProvider: React.FC<{ children: ReactNode }> = ({ childre
     return category ? tags.filter(tag => tag.category === category) : tags;
   };
 
+  const getAllTags = () => {
+    return tags;
+  };
+
   // 资源分类
   const assignResourceToCategory = (resourceId: number, dimensionId: DimensionType, categoryPath: string) => {
     setCatalogResources(prev => prev.map(resource => {
@@ -580,7 +649,24 @@ export const DataCatalogProvider: React.FC<{ children: ReactNode }> = ({ childre
     })));
   };
 
-  const getResourceRelations = (resourceId: number, relationType?: string) => {
+  const getResourceRelations = (resourceId?: number, relationType?: string) => {
+    // 如果没有提供resourceId，返回所有资源的关系
+    if (resourceId === undefined) {
+      const allRelations: ResourceRelation[] = [];
+      catalogResources.forEach(resource => {
+        resource.relations.forEach(relation => {
+          // 避免重复添加关系
+          if (!allRelations.some(r => r.id === relation.id)) {
+            allRelations.push(relation);
+          }
+        });
+      });
+      return relationType 
+        ? allRelations.filter(rel => rel.relationType === relationType)
+        : allRelations;
+    }
+    
+    // 如果提供了resourceId，返回特定资源的关系
     const resource = catalogResources.find(r => r.id === resourceId);
     if (!resource) return [];
     
@@ -599,7 +685,7 @@ export const DataCatalogProvider: React.FC<{ children: ReactNode }> = ({ childre
   };
 
   // 搜索和发现
-  const searchResources = (query: string, options?: any) => {
+  const searchResources = (query: string) => {
     const searchLower = query.toLowerCase();
     return catalogResources.filter(resource => 
       resource.name.toLowerCase().includes(searchLower) ||
@@ -747,6 +833,91 @@ export const DataCatalogProvider: React.FC<{ children: ReactNode }> = ({ childre
     if (quality >= 50) return '#f44336'; // 红色
     return '#9e9e9e'; // 灰色
   };
+  
+  const getResourceCategories = (resourceId: number, dimensionId?: DimensionType) => {
+    const resource = catalogResources.find(r => r.id === resourceId);
+    if (!resource) return dimensionId ? [] : {};
+    
+    // 如果提供了dimensionId，返回该维度下的分类节点数组
+    if (dimensionId) {
+      const dimension = dimensions.find(d => d.id === dimensionId);
+      if (!dimension) return [];
+      
+      const categoryPaths = resource.categories[dimensionId] || [];
+      const result: CategoryNode[] = [];
+      
+      // 根据路径查找分类节点
+      const findCategoryByPath = (categories: CategoryNode[], path: string): CategoryNode | null => {
+        for (const category of categories) {
+          if (category.path === path) return category;
+          
+          const found = findCategoryByPath(category.children, path);
+          if (found) return found;
+        }
+        return null;
+      };
+      
+      // 收集所有匹配的分类节点
+      categoryPaths.forEach(path => {
+        const category = findCategoryByPath(dimension.categories, path);
+        if (category) result.push(category);
+      });
+      
+      return result;
+    }
+    
+    // 否则返回所有维度的分类路径
+    return resource ? resource.categories : {};
+  };
+
+  // 切换资源收藏状态
+  const toggleResourceFavorite = (resourceId: number) => {
+    setCatalogResources(prevResources =>
+      prevResources.map(resource =>
+        resource.id === resourceId
+          ? { ...resource, isFavorite: !resource.isFavorite }
+          : resource
+      )
+    );
+  };
+
+  // 获取分类下的资源数量
+  const getResourceCountByCategory = (categoryId: string) => {
+    // 查找分类所在的维度和完整路径
+    let categoryPath = '';
+    let dimensionId: DimensionType | null = null;
+    
+    // 递归查找分类
+    const findCategory = (categories: CategoryNode[], dimId: DimensionType): boolean => {
+      for (const category of categories) {
+        if (category.id === categoryId) {
+          categoryPath = category.path;
+          dimensionId = dimId;
+          return true;
+        }
+        if (findCategory(category.children, dimId)) {
+          return true;
+        }
+      }
+      return false;
+    };
+    
+    // 在所有维度中查找分类
+    for (const dimension of dimensions) {
+      if (findCategory(dimension.categories, dimension.id)) {
+        break;
+      }
+    }
+    
+    // 如果找到分类，计算该分类下的资源数量
+    if (dimensionId && categoryPath) {
+      return catalogResources.filter(resource => 
+        resource.categories[dimensionId!]?.includes(categoryPath)
+      ).length;
+    }
+    
+    return 0;
+  };
 
   // 统计信息
   const getCatalogStats = () => {
@@ -814,6 +985,7 @@ export const DataCatalogProvider: React.FC<{ children: ReactNode }> = ({ childre
     updateTag,
     deleteTag,
     getTagsByCategory,
+    getAllTags,
     
     // 资源分类
     catalogResources,
@@ -834,6 +1006,15 @@ export const DataCatalogProvider: React.FC<{ children: ReactNode }> = ({ childre
     filterState,
     updateFilterState,
     resetFilters,
+    filters,
+    setFilters,
+    filteredResources,
+    
+    // 选择状态
+    selectedDimensionId,
+    setSelectedDimensionId,
+    selectedCategoryIds,
+    setSelectedCategoryIds,
     
     // 搜索和发现
     searchResources,
@@ -847,6 +1028,9 @@ export const DataCatalogProvider: React.FC<{ children: ReactNode }> = ({ childre
     getCategoryStats,
     getTagStats,
     getResourceQualityColor,
+    getResourceCategories,
+    toggleResourceFavorite,
+    getResourceCountByCategory,
     
     // 统计信息
     getCatalogStats,

@@ -370,7 +370,7 @@ const CatalogResourceGrid: React.FC<CatalogResourceGridProps> = ({
         if (!acc.find(t => t.id === tag.id)) {
           acc.push({
             ...tag,
-            resourceCount: getResourcesByTag(tag.id).length
+            resourceCount: getResourcesByTag([tag.id]).length
           });
         }
       });
@@ -443,20 +443,24 @@ const CatalogResourceGrid: React.FC<CatalogResourceGridProps> = ({
           {sortedAndPagedResources.resources.map(renderResourceListItem)}
         </List>
       ) : (
-        <Grid container spacing={responsive.isXs ? 1 : 2}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: responsive.isXs ? 1 : 2 }}>
           {sortedAndPagedResources.resources.map((resource) => (
-            <Grid
+            <Box
               key={resource.id}
-              item
-              xs={12}
-              sm={viewMode === 'compact' ? 4 : 6}
-              md={viewMode === 'compact' ? 3 : 4}
-              lg={viewMode === 'compact' ? 2 : 3}
+              sx={{
+                width: {
+                  xs: '100%',
+                  sm: viewMode === 'compact' ? 'calc(33.333% - 16px)' : 'calc(50% - 16px)',
+                  md: viewMode === 'compact' ? 'calc(25% - 16px)' : 'calc(33.333% - 16px)',
+                  lg: viewMode === 'compact' ? 'calc(16.666% - 16px)' : 'calc(25% - 16px)'
+                },
+                mb: responsive.isXs ? 1 : 2
+              }}
             >
               {renderResourceCard(resource)}
-            </Grid>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       )}
 
       {/* 分页 */}

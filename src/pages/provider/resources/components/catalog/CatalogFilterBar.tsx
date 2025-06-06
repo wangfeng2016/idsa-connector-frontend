@@ -23,7 +23,7 @@ import {
   Search as SearchIcon,
   FilterList as FilterListIcon,
   Clear as ClearIcon,
-  TuneIcon,
+  Tune as TuneIcon,
   BookmarkBorder as BookmarkIcon,
   Star as StarIcon,
   Schedule as ScheduleIcon
@@ -100,7 +100,7 @@ const CatalogFilterBar: React.FC<CatalogFilterBarProps> = ({ onFiltersChange }) 
   const handleTagSelect = (tagId: string) => {
     const currentTags = filters.selectedTags || [];
     const newTags = currentTags.includes(tagId)
-      ? currentTags.filter(id => id !== tagId)
+      ? currentTags.filter((id: string) => id !== tagId)
       : [...currentTags, tagId];
     handleFilterChange('selectedTags', newTags);
   };
@@ -109,7 +109,7 @@ const CatalogFilterBar: React.FC<CatalogFilterBarProps> = ({ onFiltersChange }) 
   const handleResourceTypeSelect = (type: string) => {
     const currentTypes = filters.resourceTypes || [];
     const newTypes = currentTypes.includes(type)
-      ? currentTypes.filter(t => t !== type)
+      ? currentTypes.filter((t: string) => t !== type)
       : [...currentTypes, type];
     handleFilterChange('resourceTypes', newTypes);
   };
@@ -161,14 +161,14 @@ const CatalogFilterBar: React.FC<CatalogFilterBarProps> = ({ onFiltersChange }) 
     <Paper sx={{ p: 2 }}>
       <Box sx={{ 
         display: 'flex', 
-        flexDirection: responsive.isMobile ? 'column' : 'row',
+        flexDirection: responsive.isXs ? 'column' : 'row',
         gap: 2, 
-        alignItems: responsive.isMobile ? 'stretch' : 'center'
+        alignItems: responsive.isXs ? 'stretch' : 'center'
       }}>
         {/* 搜索框 */}
         <Box sx={{ 
           flex: 1, 
-          minWidth: responsive.isMobile ? '100%' : 300
+          minWidth: responsive.isXs ? '100%' : 300
         }}>
           <TextField
             fullWidth
@@ -285,7 +285,7 @@ const CatalogFilterBar: React.FC<CatalogFilterBarProps> = ({ onFiltersChange }) 
       {/* 活跃过滤器标签 */}
       {activeFiltersCount > 0 && (
         <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-          {filters.selectedTags?.map(tagId => {
+          {filters.selectedTags?.map((tagId: string) => {
             const tag = allTags.find(t => t.id === tagId);
             return tag ? (
               <Chip
@@ -299,7 +299,7 @@ const CatalogFilterBar: React.FC<CatalogFilterBarProps> = ({ onFiltersChange }) 
             ) : null;
           })}
           
-          {filters.resourceTypes?.map(type => {
+          {filters.resourceTypes?.map((type: string) => {
             const typeOption = resourceTypeOptions.find(opt => opt.value === type);
             return typeOption ? (
               <Chip

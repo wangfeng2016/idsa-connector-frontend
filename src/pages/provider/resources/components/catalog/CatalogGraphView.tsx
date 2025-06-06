@@ -1,43 +1,39 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import type { JSX } from 'react';
 import {
   Box,
-  Typography,
   Paper,
-  IconButton,
   Tooltip,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Chip,
-  Button,
+  IconButton,
+  Divider,
   FormControl,
   InputLabel,
   Select,
-  Slider,
-  Switch,
-  FormControlLabel,
-  Divider,
+  MenuItem,
+  Chip,
   Card,
-  CardContent
+  CardContent,
+  Typography,
+  Menu,
+  FormControlLabel,
+  Switch,
+  Slider,
+  ListItemIcon,
+  ListItemText
 } from '@mui/material';
 import {
   ZoomIn as ZoomInIcon,
   ZoomOut as ZoomOutIcon,
   CenterFocusStrong as CenterIcon,
-  Fullscreen as FullscreenIcon,
   Settings as SettingsIcon,
-  FilterList as FilterIcon,
   Refresh as RefreshIcon,
-  GetApp as ExportIcon,
   Visibility as ViewIcon,
   Edit as EditIcon,
   Delete as DeleteIcon
 } from '@mui/icons-material';
 
 import { useDataCatalog } from '../../../../../contexts/DataCatalogContext';
-import type { CatalogDataResource, ResourceRelation } from '../../../../../contexts/DataCatalogContext';
-import useResponsive from '../../../../../hooks/useResponsive';
+import type { CatalogDataResource,  CategoryNode } from '../../../../../contexts/DataCatalogContext';
 
 interface CatalogGraphViewProps {
   showRelationsOnly?: boolean;
@@ -68,11 +64,10 @@ interface GraphEdge {
  * 数据目录关系图视图组件
  * 使用力导向图展示资源间的关联关系
  */
-const CatalogGraphView: React.FC<CatalogGraphViewProps> = ({
+const CatalogGraphView = ({
   showRelationsOnly = false,
   onResourceSelect
-}) => {
-  const responsive = useResponsive();
+}: CatalogGraphViewProps): JSX.Element => {
   const {
     getFilteredResources,
     getResourceRelations,
@@ -125,7 +120,7 @@ const CatalogGraphView: React.FC<CatalogGraphViewProps> = ({
       const radius = Math.min(300, resources.length * 10);
       
       return {
-        id: resource.id,
+        id: String(resource.id),
         label: resource.name,
         type: 'resource',
         data: resource,
@@ -167,8 +162,8 @@ const CatalogGraphView: React.FC<CatalogGraphViewProps> = ({
         const relationConfig = relationTypes.find(rt => rt.value === relation.type);
         graphEdges.push({
           id: `${relation.sourceId}-${relation.targetId}`,
-          source: relation.sourceId,
-          target: relation.targetId,
+          source: String(relation.sourceId),
+          target: String(relation.targetId),
           type: relation.type,
           weight: relation.strength || 1,
           color: relationConfig?.color || '#666'
@@ -180,17 +175,19 @@ const CatalogGraphView: React.FC<CatalogGraphViewProps> = ({
     if (showCategories && !showRelationsOnly) {
       resources.forEach(resource => {
         dimensions.forEach(dimension => {
-          const categories = getResourceCategories(resource.id, dimension.id);
-          categories.forEach(category => {
-            graphEdges.push({
-              id: `${resource.id}-category-${category.id}`,
-              source: resource.id,
-              target: `category-${category.id}`,
-              type: 'classification',
-              weight: 0.5,
-              color: '#e0e0e0'
+          const categories = getResourceCategories(resource.id, dimension.id) as CategoryNode[];
+          if (Array.isArray(categories)) {
+            categories.forEach((category: CategoryNode) => {
+              graphEdges.push({
+                id: `${resource.id}-category-${category.id}`,
+                source: String(resource.id),
+                target: `category-${category.id}`,
+                type: 'classification',
+                weight: 0.5,
+                color: '#e0e0e0'
+              });
             });
-          });
+          }
         });
       });
     }
@@ -201,7 +198,7 @@ const CatalogGraphView: React.FC<CatalogGraphViewProps> = ({
 
   // 力导向布局算法
   useEffect(() => {
-    if (nodes.length === 0) return;
+    if (nodes.length === 0) return undefined;
     
     const animate = () => {
       const newNodes = [...nodes];
@@ -274,10 +271,10 @@ const CatalogGraphView: React.FC<CatalogGraphViewProps> = ({
   // 绘制图形
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return undefined;
     
     const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    if (!ctx) return undefined;
     
     const rect = canvas.getBoundingClientRect();
     canvas.width = rect.width;
@@ -342,7 +339,7 @@ const CatalogGraphView: React.FC<CatalogGraphViewProps> = ({
   // 处理鼠标事件
   const handleMouseDown = (event: React.MouseEvent) => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return undefined;
     
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -373,7 +370,7 @@ const CatalogGraphView: React.FC<CatalogGraphViewProps> = ({
 
   const handleMouseMove = (event: React.MouseEvent) => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return undefined;
     
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;

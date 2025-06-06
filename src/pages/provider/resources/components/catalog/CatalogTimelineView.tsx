@@ -18,7 +18,9 @@ import {
   Button,
   Divider,
   Avatar,
-  LinearProgress,
+  LinearProgress
+} from '@mui/material';
+import {
   Timeline,
   TimelineItem,
   TimelineSeparator,
@@ -26,7 +28,7 @@ import {
   TimelineContent,
   TimelineDot,
   TimelineOppositeContent
-} from '@mui/material';
+} from '@mui/lab';
 import {
   Event as EventIcon,
   Create as CreateIcon,
@@ -101,8 +103,8 @@ const CatalogTimelineView: React.FC<CatalogTimelineViewProps> = ({ onResourceSel
 
     resources.forEach(resource => {
       // 创建事件
-      if (resource.createdAt) {
-        const createdDate = new Date(resource.createdAt);
+      if (resource.metadata?.createdAt) {
+        const createdDate = new Date(resource.metadata.createdAt);
         if (now.getTime() - createdDate.getTime() <= timeRangeMs) {
           events.push({
             id: `${resource.id}-created`,
@@ -115,8 +117,8 @@ const CatalogTimelineView: React.FC<CatalogTimelineViewProps> = ({ onResourceSel
       }
 
       // 更新事件
-      if (resource.updatedAt) {
-        const updatedDate = new Date(resource.updatedAt);
+      if (resource.metadata?.updatedAt) {
+        const updatedDate = new Date(resource.metadata.updatedAt);
         if (now.getTime() - updatedDate.getTime() <= timeRangeMs) {
           events.push({
             id: `${resource.id}-updated`,
@@ -322,13 +324,13 @@ const CatalogTimelineView: React.FC<CatalogTimelineViewProps> = ({ onResourceSel
               </Typography>
               
               {/* 事件时间线 */}
-              <Timeline position={responsive.isMobile ? 'right' : 'alternate'}>
+              <Timeline position={responsive.isXs ? 'right' : 'alternate'}>
                 {events.map((event, index) => (
                   <TimelineItem key={event.id}>
                     <TimelineOppositeContent
                       sx={{ 
                         m: 'auto 0',
-                        display: responsive.isMobile ? 'none' : 'block'
+                        display: responsive.isXs ? 'none' : 'block'
                       }}
                       align={index % 2 === 0 ? 'right' : 'left'}
                       variant="body2"
@@ -370,7 +372,7 @@ const CatalogTimelineView: React.FC<CatalogTimelineViewProps> = ({ onResourceSel
                               <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
                                 {event.description}
                               </Typography>
-                              {responsive.isMobile && (
+                              {responsive.isXs && (
                                 <Typography variant="caption" color="text.secondary">
                                   {formatTime(event.timestamp)}
                                 </Typography>

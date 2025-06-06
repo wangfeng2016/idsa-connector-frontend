@@ -596,7 +596,7 @@ const CatalogStatsPanel: React.FC<CatalogStatsPanelProps> = ({ onRefresh }) => {
               
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                 {popularTags.map((tag) => (
-                  <Tooltip key={tag.id} title={tag.description}>
+                  <Tooltip key={tag.id} title={tag.description || ''}>
                     <Badge badgeContent={tag.usageCount} color="primary">
                       <Chip
                         label={tag.name}

@@ -47,7 +47,6 @@ const DataCatalogManagement: React.FC = () => {
   const {
     viewType,
     setViewType,
-    dimensions,
     getCatalogStats,
     exportCatalog,
     importCatalog
@@ -55,11 +54,11 @@ const DataCatalogManagement: React.FC = () => {
 
   // 本地状态
   const [selectedTab, setSelectedTab] = useState(0);
-  const [showDimensionPanel, setShowDimensionPanel] = useState(true);
+  const [showDimensionPanel] = useState(true);
   const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
   const [tagDialogOpen, setTagDialogOpen] = useState(false);
   const [selectedDimensionId, setSelectedDimensionId] = useState<string | null>(null);
-  const [selectedResources, setSelectedResources] = useState<CatalogDataResource[]>([]); // 用于存储选中的资源数
+  const [selectedResources] = useState<CatalogDataResource[]>([]); // 用于存储选中的资源数
 
   // 视图类型配置
   const viewTypeConfig = [
@@ -354,6 +353,8 @@ const DataCatalogManagement: React.FC = () => {
       />
       
       <CatalogTagManager
+        open={tagDialogOpen}
+        onClose={() => setTagDialogOpen(false)}
         selectedResources={selectedResources}
       />
     </Box>

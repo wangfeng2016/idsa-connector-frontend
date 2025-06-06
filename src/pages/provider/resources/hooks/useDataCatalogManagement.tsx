@@ -1,13 +1,9 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback} from 'react';
 import { useDataCatalog } from '../../../../contexts/DataCatalogContext';
 import type {
   CatalogViewType,
   CatalogFilterState,
-  ClassificationDimension,
-  CategoryNode,
-  Tag,
-  CatalogDataResource,
-  ResourceRelation
+  CategoryNode
 } from '../../../../contexts/DataCatalogContext';
 
 interface UseDataCatalogManagementOptions {
@@ -128,21 +124,21 @@ export const useDataCatalogManagement = (
     filterState,
     updateFilterState: setFilterState,
      searchResources: getFilteredResources,
-    updateDimension,
-    addCategory,
-    updateCategory,
-    deleteCategory,
-    moveCategory,
-    addTag,
-    updateTag,
-    deleteTag,
+    // updateDimension,
+    // addCategory,
+    // updateCategory,
+    // deleteCategory,
+    // moveCategory,
+    // addTag,
+    // updateTag,
+    // deleteTag,
     assignResourceToCategory,
-    removeResourceFromCategory,
+    // removeResourceFromCategory,
     addTagToResource,
-    removeTagFromResource,
-    addResourceRelation: addRelation,
-    updateResourceRelation,
-    deleteResourceRelation: removeRelation
+    // removeTagFromResource,
+    // updateResourceRelation,
+    // addResourceRelation: addRelation,
+    // deleteResourceRelation: removeRelation
   } = useDataCatalog();
 
   // 视图状态
@@ -283,7 +279,7 @@ export const useDataCatalogManagement = (
 
   // 全选
   const selectAll = useCallback(() => {
-    const filteredResources = getFilteredResources('', {});
+    const filteredResources = getFilteredResources('');
     setSelectionState(prev => ({
       ...prev,
       selectedResources: filteredResources.map(r => r.id.toString())

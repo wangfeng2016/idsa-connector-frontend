@@ -2,6 +2,7 @@ import { createHashRouter } from 'react-router-dom';
 import { lazy } from 'react';
 import MainLayout from '../layouts/MainLayout';
 import ToBeConstructed from '../pages/ToBeConstructed';
+import { DataCatalogProvider } from '../contexts/DataCatalogContext';
 
 // 懒加载页面组件 - 运营方
 const OperatorDashboard = lazy(() => import('../pages/operator/Dashboard'));
@@ -223,7 +224,11 @@ const router = createHashRouter([
       },
       {
         path: 'provider/catalog',
-        element: <ProviderDataCatalogManagement />,
+        element: (
+          <DataCatalogProvider>
+            <ProviderDataCatalogManagement />
+          </DataCatalogProvider>
+        ),
       },
 
       {

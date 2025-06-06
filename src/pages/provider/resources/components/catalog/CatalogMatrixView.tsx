@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import type { JSX } from 'react';
 import {
   Box,
   Typography,
@@ -39,7 +40,7 @@ import {
 } from '@mui/icons-material';
 
 import { useDataCatalog } from '../../../../../contexts/DataCatalogContext';
-import type { CatalogDataResource, ClassificationDimension } from '../../../../../contexts/DataCatalogContext';
+import type { CatalogDataResource, ClassificationDimension, CategoryNode, DimensionType } from '../../../../../contexts/DataCatalogContext';
 import useResponsive from '../../../../../hooks/useResponsive';
 
 interface CatalogMatrixViewProps {
@@ -190,10 +191,10 @@ const CatalogMatrixView: React.FC<CatalogMatrixViewProps> = ({ onResourceSelect 
       label: dimension.name,
       minWidth: 150,
       render: (resource: CatalogDataResource) => {
-        const categories = getResourceCategories(resource.id, dimensionId);
+        const categories = getResourceCategories(resource.id, dimensionId as DimensionType) as CategoryNode[];
         return (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-            {categories.map(category => (
+            {Array.isArray(categories) && categories.map((category: CategoryNode) => (
               <Chip
                 key={category.id}
                 label={category.name}
@@ -202,7 +203,7 @@ const CatalogMatrixView: React.FC<CatalogMatrixViewProps> = ({ onResourceSelect 
                 sx={{ fontSize: '0.7rem', height: 20 }}
               />
             ))}
-            {categories.length === 0 && (
+            {Array.isArray(categories) && categories.length === 0 && (
               <Typography variant="caption" color="text.secondary">
                 未分类
               </Typography>
@@ -216,10 +217,15 @@ const CatalogMatrixView: React.FC<CatalogMatrixViewProps> = ({ onResourceSelect 
   // 所有列
   const allColumns = [...baseColumns, ...dimensionColumns];
   
-  // 可见列
+    // 可见列
   const visibleColumnsData = allColumns.filter(col => 
-    visibleColumns.has(col.id) || col.id.startsWith('dimension-')
-  );
+    col !== null && (visibleColumns.has(col.id) || col.id.startsWith('dimension-'))
+  ) as Array<{
+    id: string;
+    label: string;
+    minWidth: number;
+    render: (resource: CatalogDataResource) => JSX.Element;
+  }>;
 
   // 处理资源菜单
   const handleResourceMenu = (event: React.MouseEvent, resource: CatalogDataResource) => {
@@ -254,10 +260,11 @@ const CatalogMatrixView: React.FC<CatalogMatrixViewProps> = ({ onResourceSelect 
   const handleExport = () => {
     const csvContent = [
       // 表头
-      visibleColumnsData.map(col => col.label).join(','),
+      visibleColumnsData.map(col => col && col.label).join(','),
       // 数据行
       ...resources.map(resource => 
         visibleColumnsData.map(col => {
+          if (!col) return '';
           if (col.id === 'name') return `"${resource.name}"`;
           if (col.id === 'type') return resource.type;
           if (col.id === 'quality') return resource.qualityScore || 0;
@@ -266,8 +273,8 @@ const CatalogMatrixView: React.FC<CatalogMatrixViewProps> = ({ onResourceSelect 
           if (col.id === 'favorite') return resource.isFavorite ? '是' : '否';
           if (col.id.startsWith('dimension-')) {
             const dimensionId = col.id.replace('dimension-', '');
-            const categories = getResourceCategories(resource.id, dimensionId);
-            return `"${categories.map(c => c.name).join('; ')}"`;
+            const categories = getResourceCategories(resource.id, dimensionId as DimensionType) as CategoryNode[];
+            return Array.isArray(categories) ? `"${categories.map((c: CategoryNode) => c.name).join('; ')}"` : '""';
           }
           return '';
         }).join(',')

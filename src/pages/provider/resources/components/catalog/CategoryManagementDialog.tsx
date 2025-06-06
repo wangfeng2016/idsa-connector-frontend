@@ -18,8 +18,6 @@ import {
   Divider,
   Alert,
   Collapse,
-  TreeView,
-  TreeItem,
   FormControl,
   InputLabel,
   Select,
@@ -29,6 +27,7 @@ import {
   Breadcrumbs,
   Link
 } from '@mui/material';
+import { SimpleTreeView as TreeView, TreeItem } from '@mui/x-tree-view';
 import {
   Add as AddIcon,
   Edit as EditIcon,
@@ -95,7 +94,7 @@ const CategoryManagementDialog: React.FC<CategoryManagementDialogProps> = ({
 
   // 获取当前维度信息
   const currentDimension = dimensions.find(d => d.id === dimensionId);
-  const categories = dimensionId ? getCategoriesByDimension(dimensionId) : [];
+  const categories = dimensionId ? getCategoriesByDimension(dimensionId as DimensionType) : [];
 
   // 重置表单
   const resetForm = () => {
@@ -120,11 +119,13 @@ const CategoryManagementDialog: React.FC<CategoryManagementDialogProps> = ({
         description: formData.description.trim(),
         parentId: formData.parentId || undefined,
         icon: formData.icon,
-        color: formData.color
+        color: formData.color,
+        path: '', // 将由后端计算
+        level: 0  // 将由后端计算
       };
 
       if (editingCategory) {
-        await updateCategory(editingCategory.id, categoryData);
+        await updateCategory(dimensionId as DimensionType, editingCategory.id, categoryData);
       } else {
         await addCategory(dimensionId as DimensionType, categoryData);
       }
@@ -159,7 +160,7 @@ const CategoryManagementDialog: React.FC<CategoryManagementDialogProps> = ({
     if (!categoryToDelete) return;
 
     try {
-      await deleteCategory(categoryToDelete.id);
+      await deleteCategory(dimensionId as DimensionType, categoryToDelete.id);
       setDeleteConfirmOpen(false);
       setCategoryToDelete(null);
     } catch (error) {
@@ -168,8 +169,8 @@ const CategoryManagementDialog: React.FC<CategoryManagementDialogProps> = ({
   };
 
   // 处理节点展开/收起
-  const handleNodeToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
-    setExpandedNodes(nodeIds);
+  const handleNodeToggle = (event: React.SyntheticEvent, itemIds: string[]) => {
+    setExpandedNodes(itemIds);
   };
 
   // 获取可选父分类（排除自身和子分类）
@@ -204,7 +205,7 @@ const CategoryManagementDialog: React.FC<CategoryManagementDialogProps> = ({
     return (
       <TreeItem
         key={category.id}
-        nodeId={category.id}
+        itemId={category.id}
         label={
           <Box sx={{ display: 'flex', alignItems: 'center', py: 0.5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
@@ -350,10 +351,12 @@ const CategoryManagementDialog: React.FC<CategoryManagementDialogProps> = ({
               </Typography>
               {categories.length > 0 ? (
                 <TreeView
-                  defaultCollapseIcon={<ExpandMoreIcon />}
-                  defaultExpandIcon={<ChevronRightIcon />}
-                  expanded={expandedNodes}
-                  onNodeToggle={handleNodeToggle}
+                  slots={{
+                    collapseIcon: ExpandMoreIcon,
+                    expandIcon: ChevronRightIcon
+                  }}
+                  expandedItems={expandedNodes}
+                  onExpandedItemsChange={handleNodeToggle}
                   sx={{ flexGrow: 1, overflowY: 'auto' }}
                 >
                   {categories.map(category => renderTreeNode(category))}

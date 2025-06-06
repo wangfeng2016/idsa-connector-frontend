@@ -2,20 +2,17 @@ import React, { useState, useMemo } from 'react';
 import {
   Box,
   Typography,
-  Paper,
-  TreeView,
-  TreeItem,
   Chip,
   IconButton,
   Menu,
   MenuItem,
   ListItemIcon,
   ListItemText,
-  Tooltip,
   Avatar,
   Divider,
   LinearProgress
 } from '@mui/material';
+import { SimpleTreeView as TreeView, TreeItem } from '@mui/x-tree-view';
 import {
   ExpandMore,
   ChevronRight,
@@ -35,8 +32,7 @@ import {
 } from '@mui/icons-material';
 
 import { useDataCatalog } from '../../../../../contexts/DataCatalogContext';
-import type { CategoryNode, CatalogDataResource } from '../../../../../contexts/DataCatalogContext';
-import useResponsive from '../../../../../hooks/useResponsive';
+import type { CategoryNode, CatalogDataResource, DimensionType } from '../../../../../contexts/DataCatalogContext';
 
 interface CatalogHierarchyViewProps {
   onResourceSelect?: (resource: CatalogDataResource) => void;
@@ -51,20 +47,18 @@ const CatalogHierarchyView: React.FC<CatalogHierarchyViewProps> = ({
   onResourceSelect,
   onCategorySelect
 }) => {
-  const responsive = useResponsive();
   const {
     dimensions,
     selectedDimensionId,
     getCategoriesByDimension,
     getResourcesByCategory,
-    getFilteredResources,
     toggleResourceFavorite,
     getResourceQualityColor
   } = useDataCatalog();
 
   // 本地状态
   const [expanded, setExpanded] = useState<string[]>([]);
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string>('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [contextMenuTarget, setContextMenuTarget] = useState<{
     type: 'category' | 'resource';
@@ -75,7 +69,7 @@ const CatalogHierarchyView: React.FC<CatalogHierarchyViewProps> = ({
   const hierarchyData = useMemo(() => {
     if (selectedDimensionId) {
       // 显示选中维度的类别和资源
-      const categories = getCategoriesByDimension(selectedDimensionId);
+      const categories = getCategoriesByDimension(selectedDimensionId as DimensionType);
       return categories;
     } else {
       // 显示所有维度
@@ -84,19 +78,19 @@ const CatalogHierarchyView: React.FC<CatalogHierarchyViewProps> = ({
         name: dimension.name,
         description: dimension.description,
         type: 'dimension' as const,
-        children: getCategoriesByDimension(dimension.id)
+        children: getCategoriesByDimension(dimension.id as DimensionType)
       }));
     }
   }, [selectedDimensionId, dimensions, getCategoriesByDimension]);
 
   // 处理节点展开/收起
-  const handleToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
-    setExpanded(nodeIds);
+  const handleToggle = (event: React.SyntheticEvent, itemIds: string[]) => {
+    setExpanded(itemIds);
   };
 
   // 处理节点选择
-  const handleSelect = (event: React.SyntheticEvent, nodeIds: string[]) => {
-    setSelected(nodeIds);
+  const handleSelect = (event: React.SyntheticEvent, itemId: string | null) => {
+    setSelected(itemId || '');
   };
 
   // 处理右键菜单
@@ -159,7 +153,7 @@ const CatalogHierarchyView: React.FC<CatalogHierarchyViewProps> = ({
     return (
       <TreeItem
         key={`resource-${resource.id}`}
-        nodeId={`resource-${resource.id}`}
+        itemId={`resource-${resource.id}`}
         label={
           <Box
             sx={{
@@ -279,13 +273,15 @@ const CatalogHierarchyView: React.FC<CatalogHierarchyViewProps> = ({
 
   // 渲染类别节点
   const renderCategoryNode = (category: CategoryNode): React.ReactNode => {
-    const resources = getResourcesByCategory(category.id);
+    // 获取当前选中的维度ID
+    const dimensionId = selectedDimensionId as DimensionType;
+    const resources = getResourcesByCategory(dimensionId, category.path);
     const hasChildren = (category.children && category.children.length > 0) || resources.length > 0;
     
     return (
       <TreeItem
         key={`category-${category.id}`}
-        nodeId={`category-${category.id}`}
+        itemId={`category-${category.id}`}
         label={
           <Box
             sx={{
@@ -348,12 +344,14 @@ const CatalogHierarchyView: React.FC<CatalogHierarchyViewProps> = ({
   return (
     <Box sx={{ height: '100%', overflow: 'auto' }}>
       <TreeView
-        defaultCollapseIcon={<ExpandMore />}
-        defaultExpandIcon={<ChevronRight />}
-        expanded={expanded}
-        selected={selected}
-        onNodeToggle={handleToggle}
-        onNodeSelect={handleSelect}
+        slots={{
+          collapseIcon: ExpandMore,
+          expandIcon: ChevronRight
+        }}
+        expandedItems={expanded}
+        selectedItems={selected}
+        onExpandedItemsChange={handleToggle}
+        onSelectedItemsChange={handleSelect}
         sx={{
           flexGrow: 1,
           maxWidth: '100%',
@@ -381,7 +379,7 @@ const CatalogHierarchyView: React.FC<CatalogHierarchyViewProps> = ({
             return (
               <TreeItem
                 key={`dimension-${item.id}`}
-                nodeId={`dimension-${item.id}`}
+                itemId={`dimension-${item.id}`}
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, py: 1 }}>
                     <Avatar sx={{ width: 24, height: 24, bgcolor: 'primary.main' }}>

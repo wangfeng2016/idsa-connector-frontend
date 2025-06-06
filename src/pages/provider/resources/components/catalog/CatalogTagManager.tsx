@@ -21,7 +21,6 @@ import {
   InputLabel,
   Select,
   Autocomplete,
-  Grid,
   Divider,
   Tooltip,
   Badge,
@@ -30,7 +29,6 @@ import {
   ListItem,
   ListItemAvatar,
   Collapse,
-  Alert
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -38,7 +36,6 @@ import {
   Delete as DeleteIcon,
   MoreVert as MoreVertIcon,
   Label as LabelIcon,
-  ColorLens as ColorIcon,
   Category as CategoryIcon,
   Search as SearchIcon,
   ExpandMore as ExpandMoreIcon,
@@ -46,21 +43,21 @@ import {
   Close as CloseIcon,
   Save as SaveIcon,
   Cancel as CancelIcon,
-  Palette as PaletteIcon
 } from '@mui/icons-material';
 
 import { useDataCatalog } from '../../../../../contexts/DataCatalogContext';
 import type { Tag, CatalogDataResource } from '../../../../../contexts/DataCatalogContext';
-import useResponsive from '../../../../../hooks/useResponsive';
 
 interface CatalogTagManagerProps {
   onTagSelect?: (tag: Tag) => void;
   selectedResources?: CatalogDataResource[];
+  open?: boolean;
+  onClose?: () => void;
 }
 
 interface TagFormData {
   name: string;
-  description: string;
+  description: string | undefined;
   color: string;
   category: string;
 }
@@ -71,18 +68,17 @@ interface TagFormData {
  */
 const CatalogTagManager: React.FC<CatalogTagManagerProps> = ({ 
   onTagSelect,
-  selectedResources = []
+  selectedResources = [],
+  open = false,
+  onClose
 }) => {
-  const responsive = useResponsive();
   const {
     tags,
     updateTag,
     deleteTag,
     addTag: createTag,
-    addTagToResource: assignTagToResource,
-    removeTagFromResource: removeTagFromResource,
-    getResourcesByTag,
-    getFilteredResources
+    addTagToResource,
+    getResourcesByTag
   } = useDataCatalog();
 
   // 本地状态
@@ -189,8 +185,10 @@ const CatalogTagManager: React.FC<CatalogTagManagerProps> = ({
         await updateTag(editingTag.id, formData);
       } else {
         await createTag({
-          id: `tag-${Date.now()}`,
-          ...formData
+          name: formData.name,
+          description: formData.description,
+          color: formData.color,
+          category: formData.category
         });
       }
       closeDialog();
@@ -260,78 +258,101 @@ const CatalogTagManager: React.FC<CatalogTagManagerProps> = ({
   };
 
   return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      {/* 工具栏 */}
-      <Paper sx={{ p: 2, mb: 2 }}>
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: 2
-        }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1 }}>
-            {/* 搜索框 */}
-            <TextField
-              size="small"
-              placeholder="搜索标签..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />
-              }}
-              sx={{ minWidth: 200 }}
-            />
-            
-            {/* 分类过滤 */}
-            <FormControl size="small" sx={{ minWidth: 120 }}>
-              <InputLabel>分类</InputLabel>
-              <Select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                label="分类"
-              >
-                <MenuItem value="all">全部</MenuItem>
-                {Object.entries(tagCategories).map(([key, label]) => (
-                  <MenuItem key={key} value={key}>{label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            
-            {/* 统计信息 */}
-            <Typography variant="body2" color="text.secondary">
-              共 {filteredTags.length} 个标签
-            </Typography>
-          </Box>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="lg"
+      fullWidth
+    >
+      <DialogTitle>
+        标签管理
+        {onClose && (
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        )}
+      </DialogTitle>
+      <DialogContent>
+        <Box sx={{ height: '600px', display: 'flex', flexDirection: 'column' }}>
+          {/* 工具栏 */}
+          <Paper sx={{ p: 2, mb: 2 }}>
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: 2
+            }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                {/* 搜索框 */}
+                <TextField
+                  size="small"
+                  placeholder="搜索标签..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  InputProps={{
+                    startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />
+                  }}
+                  sx={{ minWidth: 200 }}
+                />
+                
+                {/* 分类过滤 */}
+                <FormControl size="small" sx={{ minWidth: 120 }}>
+                  <InputLabel>分类</InputLabel>
+                  <Select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    label="分类"
+                  >
+                    <MenuItem value="all">全部</MenuItem>
+                    {Object.entries(tagCategories).map(([key, label]) => (
+                      <MenuItem key={key} value={key}>{label}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                
+                {/* 统计信息 */}
+                <Typography variant="body2" color="text.secondary">
+                  共 {filteredTags.length} 个标签
+                </Typography>
+              </Box>
+              
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {/* 批量分配按钮 */}
+                {selectedResources.length > 0 && (
+                  <Button
+                    variant="outlined"
+                    startIcon={<LabelIcon />}
+                    onClick={openAssignDialog}
+                    size="small"
+                  >
+                    分配标签 ({selectedResources.length})
+                  </Button>
+                )}
+                
+                {/* 创建标签按钮 */}
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  onClick={() => openDialog()}
+                  size="small"
+                >
+                  创建标签
+                </Button>
+              </Box>
+            </Box>
+          </Paper>
           
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            {/* 批量分配按钮 */}
-            {selectedResources.length > 0 && (
-              <Button
-                variant="outlined"
-                startIcon={<LabelIcon />}
-                onClick={openAssignDialog}
-                size="small"
-              >
-                分配标签 ({selectedResources.length})
-              </Button>
-            )}
-            
-            {/* 创建标签按钮 */}
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => openDialog()}
-              size="small"
-            >
-              创建标签
-            </Button>
-          </Box>
-        </Box>
-      </Paper>
-      
-      {/* 标签列表 */}
-      <Box sx={{ flex: 1, overflow: 'auto' }}>
+          {/* 标签列表 */}
+          <Box sx={{ flex: 1, overflow: 'auto' }}>
         {Object.keys(groupedTags).length === 0 ? (
           <Paper sx={{ p: 4, textAlign: 'center' }}>
             <LabelIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
@@ -504,7 +525,6 @@ const CatalogTagManager: React.FC<CatalogTagManagerProps> = ({
         </DialogTitle>
         <DialogContent>
           <Box sx={{ pt: 1 }}>
-            {/* 标签名称 */}
             <TextField
               fullWidth
               label="标签名称"
@@ -514,7 +534,6 @@ const CatalogTagManager: React.FC<CatalogTagManagerProps> = ({
               required
             />
             
-            {/* 描述 */}
             <TextField
               fullWidth
               label="描述"
@@ -525,7 +544,6 @@ const CatalogTagManager: React.FC<CatalogTagManagerProps> = ({
               rows={2}
             />
             
-            {/* 分类 */}
             <FormControl fullWidth margin="normal">
               <InputLabel>分类</InputLabel>
               <Select
@@ -539,56 +557,30 @@ const CatalogTagManager: React.FC<CatalogTagManagerProps> = ({
               </Select>
             </FormControl>
             
-            {/* 颜色选择 */}
             <Box sx={{ mt: 2 }}>
               <Typography variant="subtitle2" gutterBottom>
-                颜色
+                标签颜色
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                 {predefinedColors.map((color) => (
-                  <Box
-                    key={color}
-                    sx={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: '50%',
-                      bgcolor: color,
-                      cursor: 'pointer',
-                      border: formData.color === color ? '3px solid #000' : '2px solid transparent',
-                      '&:hover': {
-                        transform: 'scale(1.1)'
-                      }
-                    }}
-                    onClick={() => setFormData({ ...formData, color })}
-                  />
+                  <Tooltip key={color} title={color}>
+                    <Box
+                      sx={{
+                        width: 24,
+                        height: 24,
+                        bgcolor: color,
+                        borderRadius: '50%',
+                        cursor: 'pointer',
+                        border: formData.color === color ? '2px solid black' : 'none',
+                        '&:hover': {
+                          opacity: 0.8
+                        }
+                      }}
+                      onClick={() => setFormData({ ...formData, color })}
+                    />
+                  </Tooltip>
                 ))}
               </Box>
-              
-              {/* 自定义颜色 */}
-              <TextField
-                label="自定义颜色"
-                type="color"
-                value={formData.color}
-                onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                sx={{ mt: 2, width: 120 }}
-                InputProps={{
-                  startAdornment: <PaletteIcon sx={{ mr: 1 }} />
-                }}
-              />
-            </Box>
-            
-            {/* 预览 */}
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="subtitle2" gutterBottom>
-                预览
-              </Typography>
-              <Chip
-                label={formData.name || '标签名称'}
-                sx={{
-                  bgcolor: formData.color,
-                  color: 'white'
-                }}
-              />
             </Box>
           </Box>
         </DialogContent>
@@ -604,6 +596,9 @@ const CatalogTagManager: React.FC<CatalogTagManagerProps> = ({
           >
             {editingTag ? '更新' : '创建'}
           </Button>
+          {onClose && (
+            <Button onClick={onClose}>关闭</Button>
+          )}
         </DialogActions>
       </Dialog>
       
@@ -749,6 +744,8 @@ const CatalogTagManager: React.FC<CatalogTagManagerProps> = ({
         </MenuItem>
       </Menu>
     </Box>
+    </DialogContent>
+    </Dialog>
   );
 };
 
