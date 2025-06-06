@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -9,23 +9,14 @@ import {
   Typography,
   TextField,
   IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  ListItemSecondaryAction,
   Chip,
-  Divider,
   Alert,
-  Collapse,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
   Paper,
-  Tooltip,
-  Breadcrumbs,
-  Link
+  Tooltip
 } from '@mui/material';
 import { SimpleTreeView as TreeView, TreeItem } from '@mui/x-tree-view';
 import {
@@ -35,12 +26,9 @@ import {
   ExpandMore as ExpandMoreIcon,
   ChevronRight as ChevronRightIcon,
   Category as CategoryIcon,
-  FolderOpen as FolderOpenIcon,
-  Folder as FolderIcon,
   Save as SaveIcon,
   Cancel as CancelIcon,
   Warning as WarningIcon,
-  DragIndicator as DragIcon
 } from '@mui/icons-material';
 
 import { useDataCatalog } from '../../../../../contexts/DataCatalogContext';
@@ -78,7 +66,6 @@ const CategoryManagementDialog: React.FC<CategoryManagementDialogProps> = ({
     getResourceCountByCategory
   } = useDataCatalog();
 
-  const [selectedCategory, setSelectedCategory] = useState<CategoryNode | null>(null);
   const [editingCategory, setEditingCategory] = useState<CategoryNode | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [formData, setFormData] = useState<CategoryFormData>({
@@ -169,7 +156,7 @@ const CategoryManagementDialog: React.FC<CategoryManagementDialogProps> = ({
   };
 
   // 处理节点展开/收起
-  const handleNodeToggle = (event: React.SyntheticEvent, itemIds: string[]) => {
+  const handleNodeToggle = (_event: React.SyntheticEvent, itemIds: string[]) => {
     setExpandedNodes(itemIds);
   };
 

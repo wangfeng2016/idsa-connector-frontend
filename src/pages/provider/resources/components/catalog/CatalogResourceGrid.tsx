@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import {
   Box,
-  Grid,
   Card,
   CardContent,
   CardActions,
@@ -10,7 +9,6 @@ import {
   IconButton,
   Avatar,
   Tooltip,
-  Button,
   Menu,
   MenuItem,
   ListItemIcon,
@@ -29,9 +27,6 @@ import {
   Badge
 } from '@mui/material';
 import {
-  ViewModule as GridViewIcon,
-  ViewList as ListViewIcon,
-  Label as TagIcon,
   Star as StarIcon,
   StarBorder as StarBorderIcon,
   Share as ShareIcon,
@@ -42,7 +37,6 @@ import {
   Delete as DeleteIcon,
   Storage as StorageIcon,
   Schedule as ScheduleIcon,
-  Security as SecurityIcon,
   Assessment as QualityIcon,
   Link as RelationIcon
 } from '@mui/icons-material';
@@ -75,7 +69,6 @@ const CatalogResourceGrid: React.FC<CatalogResourceGridProps> = ({
   const responsive = useResponsive();
   const {
     filteredResources,
-    filters,
     toggleResourceFavorite,
     getResourcesByTag
   } = useDataCatalog();

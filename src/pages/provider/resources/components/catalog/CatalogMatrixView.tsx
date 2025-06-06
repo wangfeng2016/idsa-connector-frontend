@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import type { JSX } from 'react';
 import {
   Box,
@@ -22,8 +22,6 @@ import {
   Select,
   Checkbox,
   FormControlLabel,
-  Button,
-  Divider,
   Avatar,
   LinearProgress
 } from '@mui/material';
@@ -34,14 +32,12 @@ import {
   Share as ShareIcon,
   Star as StarIcon,
   StarBorder as StarBorderIcon,
-  FilterList as FilterIcon,
   ViewColumn as ViewColumnIcon,
   GetApp as ExportIcon
 } from '@mui/icons-material';
 
 import { useDataCatalog } from '../../../../../contexts/DataCatalogContext';
-import type { CatalogDataResource, ClassificationDimension, CategoryNode, DimensionType } from '../../../../../contexts/DataCatalogContext';
-import useResponsive from '../../../../../hooks/useResponsive';
+import type { CatalogDataResource, CategoryNode, DimensionType } from '../../../../../contexts/DataCatalogContext';
 
 interface CatalogMatrixViewProps {
   onResourceSelect?: (resource: CatalogDataResource) => void;
@@ -52,7 +48,6 @@ interface CatalogMatrixViewProps {
  * 以表格形式展示资源的多维度分类信息
  */
 const CatalogMatrixView: React.FC<CatalogMatrixViewProps> = ({ onResourceSelect }) => {
-  const responsive = useResponsive();
   const {
     dimensions,
     getFilteredResources,
@@ -69,7 +64,7 @@ const CatalogMatrixView: React.FC<CatalogMatrixViewProps> = ({ onResourceSelect 
     'name', 'type', 'quality', 'usage', 'lastAccessed', 'favorite'
   ]));
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedResource, setSelectedResource] = useState<CatalogDataResource | null>(null);
+  const [_selectedResource, setSelectedResource] = useState<CatalogDataResource | null>(null);
   const [columnMenuAnchor, setColumnMenuAnchor] = useState<null | HTMLElement>(null);
 
   // 获取过滤后的资源

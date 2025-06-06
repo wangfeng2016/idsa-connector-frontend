@@ -84,12 +84,12 @@ const CatalogHierarchyView: React.FC<CatalogHierarchyViewProps> = ({
   }, [selectedDimensionId, dimensions, getCategoriesByDimension]);
 
   // 处理节点展开/收起
-  const handleToggle = (event: React.SyntheticEvent, itemIds: string[]) => {
+  const handleToggle = (_event: React.SyntheticEvent, itemIds: string[]) => {
     setExpanded(itemIds);
   };
 
   // 处理节点选择
-  const handleSelect = (event: React.SyntheticEvent, itemId: string | null) => {
+  const handleSelect = (_event: React.SyntheticEvent, itemId: string | null) => {
     setSelected(itemId || '');
   };
 
@@ -276,7 +276,6 @@ const CatalogHierarchyView: React.FC<CatalogHierarchyViewProps> = ({
     // 获取当前选中的维度ID
     const dimensionId = selectedDimensionId as DimensionType;
     const resources = getResourcesByCategory(dimensionId, category.path);
-    const hasChildren = (category.children && category.children.length > 0) || resources.length > 0;
     
     return (
       <TreeItem

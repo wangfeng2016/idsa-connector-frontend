@@ -15,7 +15,6 @@ import {
   FormControl,
   InputLabel,
   Select,
-  Button,
   Divider,
   Avatar,
   LinearProgress
@@ -40,7 +39,6 @@ import {
   MoreVert as MoreVertIcon,
   FilterList as FilterIcon,
   DateRange as DateRangeIcon,
-  TrendingUp as TrendingUpIcon,
   Assessment as AssessmentIcon
 } from '@mui/icons-material';
 
@@ -76,7 +74,7 @@ const CatalogTimelineView: React.FC<CatalogTimelineViewProps> = ({ onResourceSel
   // 本地状态
   const [timeRange, setTimeRange] = useState<'day' | 'week' | 'month' | 'year'>('month');
   const [eventTypes, setEventTypes] = useState<string[]>(['all']);
-  const [selectedResource, setSelectedResource] = useState<CatalogDataResource | null>(null);
+  const [_selectedResource, setSelectedResource] = useState<CatalogDataResource | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [filterAnchor, setFilterAnchor] = useState<null | HTMLElement>(null);
 

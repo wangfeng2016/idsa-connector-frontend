@@ -20,7 +20,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Box from '@mui/material/Box';
 import useResponsive from '../hooks/useResponsive';
-import logoWhite from '../assets/images/磐云logo-white.png';
+import logoWhite from '../assets/images/navicloud_logo-white.png';
 import RoleSwitcher from '../components/RoleSwitcher';
 
 // 使用React.ComponentProps获取AppBar的props类型

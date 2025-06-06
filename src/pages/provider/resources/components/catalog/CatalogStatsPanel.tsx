@@ -5,7 +5,6 @@ import {
   Paper,
   Card,
   CardContent,
-  Grid,
   LinearProgress,
   Chip,
   Avatar,
@@ -13,7 +12,6 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Divider,
   IconButton,
   Tooltip,
   Badge
@@ -27,19 +25,14 @@ import {
   TrendingDown as TrendingDownIcon,
   Star as StarIcon,
   Visibility as ViewIcon,
-  Share as ShareIcon,
-  Security as SecurityIcon,
   Speed as SpeedIcon,
-  Timeline as TimelineIcon,
-  PieChart as PieChartIcon,
   BarChart as BarChartIcon,
   ShowChart as ShowChartIcon,
-  Refresh as RefreshIcon
+  Refresh as RefreshIcon,
+  PieChart as PieChartIcon
 } from '@mui/icons-material';
 
 import { useDataCatalog } from '../../../../../contexts/DataCatalogContext';
-import type { DimensionType } from '../../../../../contexts/DataCatalogContext';
-import useResponsive from '../../../../../hooks/useResponsive';
 
 interface CatalogStatsPanelProps {
   onRefresh?: () => void;
@@ -67,23 +60,23 @@ interface TypeDistribution {
   [type: string]: number;
 }
 
+/*
 interface DomainDistribution {
   [domain: string]: number;
 }
+*/
 
 /**
  * 数据目录统计面板组件
  * 展示各种统计信息和指标
  */
 const CatalogStatsPanel: React.FC<CatalogStatsPanelProps> = ({ onRefresh }) => {
-  const responsive = useResponsive();
   const {
     dimensions,
     getCategoriesByDimension,
     getFilteredResources,
     getFavoriteResources,
     getDimensionStats,
-    getCategoryStats,
     getTagStats,
     getResourceQualityColor,
     tags
@@ -160,6 +153,7 @@ const CatalogStatsPanel: React.FC<CatalogStatsPanelProps> = ({ onRefresh }) => {
   }, [resources]);
 
   // 领域分布
+  /* 
   const domainDistribution = useMemo((): DomainDistribution => {
     const distribution: DomainDistribution = {};
     
@@ -169,6 +163,7 @@ const CatalogStatsPanel: React.FC<CatalogStatsPanelProps> = ({ onRefresh }) => {
     
     return distribution;
   }, [resources]);
+ */
 
   // 热门标签（使用最多的标签）
   const popularTags = useMemo(() => {
@@ -183,6 +178,7 @@ const CatalogStatsPanel: React.FC<CatalogStatsPanelProps> = ({ onRefresh }) => {
   }, [tags, getTagStats]);
 
   // 热门分类（资源最多的分类）
+  /* 
   const popularCategories = useMemo(() => {
     const allCategoryStats = getCategoryStats();
     return allCategoryStats
@@ -190,6 +186,7 @@ const CatalogStatsPanel: React.FC<CatalogStatsPanelProps> = ({ onRefresh }) => {
       .sort((a: any, b: any) => b.resourceCount - a.resourceCount)
       .slice(0, 10);
   }, [getCategoryStats]);
+ */
 
   // 维度统计
   const dimensionStats = useMemo(() => {
@@ -459,7 +456,7 @@ const CatalogStatsPanel: React.FC<CatalogStatsPanelProps> = ({ onRefresh }) => {
             </Box>
             
             <List dense>
-              {dimensionStats.map((dimension, index) => (
+              {dimensionStats.map((dimension, _index) => (
                 <ListItem key={dimension.id} sx={{ px: 0 }}>
                   <ListItemAvatar>
                     <Avatar 

@@ -14,8 +14,6 @@ import {
   Paper,
   Typography,
   Slider,
-  Switch,
-  FormControlLabel,
   Divider,
   Tooltip
 } from '@mui/material';
@@ -23,8 +21,6 @@ import {
   Search as SearchIcon,
   FilterList as FilterListIcon,
   Clear as ClearIcon,
-  Tune as TuneIcon,
-  BookmarkBorder as BookmarkIcon,
   Star as StarIcon,
   Schedule as ScheduleIcon
 } from '@mui/icons-material';
@@ -46,16 +42,13 @@ const CatalogFilterBar: React.FC<CatalogFilterBarProps> = ({ onFiltersChange }) 
   const {
     filters,
     setFilters,
-    dimensions,
     getAllTags,
-    searchResources,
     resetFilters
   } = useDataCatalog();
 
   // 本地状态
   const [searchValue, setSearchValue] = useState(filters.searchQuery || '');
   const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
-  const [advancedFiltersOpen, setAdvancedFiltersOpen] = useState(false);
 
   // 获取所有标签
   const allTags = getAllTags();
@@ -82,7 +75,7 @@ const CatalogFilterBar: React.FC<CatalogFilterBarProps> = ({ onFiltersChange }) 
     onFiltersChange?.({
       searchQuery: '',
       selectedDimensions: [],
-      selectedCategories: [],
+      selectedCategories: {},
       selectedTags: [],
       resourceTypes: [],
       accessLevels: [],
@@ -92,7 +85,12 @@ const CatalogFilterBar: React.FC<CatalogFilterBarProps> = ({ onFiltersChange }) 
       sortBy: 'name',
       sortOrder: 'asc',
       showFavorites: false,
-      showRecent: false
+      showRecent: false,
+      searchTerm: '',
+      showRelations: false,
+      relationTypes: [],
+      qualityThreshold: 0,
+      timeRange: {}
     });
   };
 
