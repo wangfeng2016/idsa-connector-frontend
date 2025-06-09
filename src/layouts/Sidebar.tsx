@@ -26,6 +26,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FolderIcon from '@mui/icons-material/Folder';
 import DescriptionIcon from '@mui/icons-material/Description';
+import ListIcon from '@mui/icons-material/List';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
@@ -239,8 +240,8 @@ const providerMenuGroups: MenuGroup[] = [
     title: '数据使用策略管理',
     icon: <PolicyIcon />,
     items: [
-      { id: 'policy-list', title: '策略列表', path: '/provider/policies', icon: <DescriptionIcon /> },
-      { id: 'policy-create', title: '创建策略', path: '/provider/policies/create', icon: <DescriptionIcon /> },
+      { id: 'dataset-policy-edit', title: '数据集策略管理', path: '/provider/policies/dataset-policy-edit', icon: <DescriptionIcon /> },
+      { id: 'dataset-policy-list', title: '数据集策略列表', path: '/provider/policies/dataset-policy-list', icon: <ListIcon /> },
     ],
   },
   {
@@ -251,12 +252,7 @@ const providerMenuGroups: MenuGroup[] = [
       { id: 'register-dataspace', title: '数据空间机构注册', path: '/provider/identity/register-dataspace', icon: <BusinessIcon /> },
       { id: 'onshelf', title: '数据发布', path: '/provider/ecosystem/onshelf', icon: <PublishIcon /> },
       { id: 'marketplace', title: '数据市场浏览', path: '/provider/ecosystem', icon: <ShoppingCartIcon /> },
-      { id: 'authentication', title: '身份认证配置', path: '/provider/auth', icon: <VpnKeyIcon /> },
-      { id: 'certificates', title: '证书管理', path: '/provider/auth/certificates', icon: <VpnKeyIcon /> },
-      { id: 'service-discovery', title: '服务发现', path: '/provider/ecosystem/services', icon: <ExploreIcon /> },
-      { id: 'transactions', title: '交易管理', path: '/provider/ecosystem/transactions', icon: <ReceiptIcon /> },
       { id: 'usage-analytics', title: '数据使用分析', path: '/provider/analytics', icon: <AnalyticsIcon /> },
-      { id: 'revenue-tracking', title: '收益跟踪', path: '/provider/revenue', icon: <TrendingUpIcon /> },
     ],
   },
   {
@@ -266,7 +262,6 @@ const providerMenuGroups: MenuGroup[] = [
     items: [
       { id: 'connector-status', title: '连接器状态', path: '/provider/connections', icon: <SwapHorizIcon /> },
       { id: 'data-exchange', title: '数据交换', path: '/provider/connections/exchange', icon: <SwapHorizIcon /> },
-      { id: 'exchange-logs', title: '交换日志', path: '/provider/connections/logs', icon: <ReceiptLongIcon /> },
     ],
   },
   {
@@ -281,17 +276,7 @@ const providerMenuGroups: MenuGroup[] = [
     ],
   },
 
-  {
-    id: 'analytics',
-    title: '分析与报表',
-    icon: <BarChartIcon />,
-    items: [
-      { id: 'data-flow', title: '数据流通分析', path: '/provider/analytics', icon: <TimelineIcon /> },
-      { id: 'compliance-reports', title: '合规报表', path: '/provider/analytics/compliance', icon: <SummarizeIcon /> },
-      { id: 'dashboards', title: '自定义仪表盘', path: '/provider/analytics/dashboards', icon: <DashboardIcon /> },
-      { id: 'value-assessment', title: '价值评估', path: '/provider/analytics/value', icon: <AssessmentIcon /> },
-    ],
-  },
+
 ];
 
 // 数据消费者菜单配置

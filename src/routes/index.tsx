@@ -43,6 +43,8 @@ const ProviderDataCatalogManagement = lazy(() => import('../pages/provider/resou
 const ProviderResourceEdit = lazy(() => import('../pages/provider/resources/ResourceEdit'));
 const ProviderPolicyList = lazy(() => import('../pages/provider/policies/PolicyList'));
 const ProviderPolicyEdit = lazy(() => import('../pages/provider/policies/PolicyEdit'));
+const ProviderDatasetPolicyEdit = lazy(() => import('../pages/provider/policies/DatasetPolicyEdit'));
+const ProviderDatasetPolicyList = lazy(() => import('../pages/provider/policies/DatasetPolicyList'));
 const ProviderConnectorStatus = lazy(() => import('../pages/provider/connections/ConnectorStatus'));
 const ProviderDataExchange = lazy(() => import('../pages/provider/connections/DataExchange'));
 const ProviderExchangeLogs = lazy(() => import('../pages/provider/connections/ExchangeLogs'));
@@ -238,6 +240,14 @@ const router = createHashRouter([
       {
         path: 'provider/policies/edit',
         element: <ProviderPolicyEdit />,
+      },
+      {
+        path: 'provider/policies/dataset-policy-edit',
+        element: <ProviderDatasetPolicyEdit />,
+      },
+      {
+        path: 'provider/policies/dataset-policy-list',
+        element: <ProviderDatasetPolicyList />,
       },
       {
         path: 'provider/publishing',
