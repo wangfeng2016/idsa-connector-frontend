@@ -47,11 +47,9 @@ import SystemUpdateIcon from '@mui/icons-material/SystemUpdate';
 import BusinessIcon from '@mui/icons-material/Business';
 // 新增角色特定图标
 import GavelIcon from '@mui/icons-material/Gavel';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import PublishIcon from '@mui/icons-material/Publish';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
-import VerifiedIcon from '@mui/icons-material/Verified';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import MonitorIcon from '@mui/icons-material/Monitor';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
@@ -232,7 +230,6 @@ const providerMenuGroups: MenuGroup[] = [
       { id: 'data-discovery', title: '数据发现', path: '/provider/resources/data-discovery', icon: <ExploreIcon /> },
       { id: 'resource-list', title: '资源列表', path: '/provider/resources', icon: <FolderIcon /> },
       { id: 'catalog-management', title: '数据目录管理', path: '/provider/catalog', icon: <LibraryBooksIcon /> },
-      { id: 'quality-management', title: '数据质量管理', path: '/provider/quality', icon: <VerifiedIcon /> },
     ],
   },
   {
@@ -270,8 +267,6 @@ const providerMenuGroups: MenuGroup[] = [
     icon: <SettingsIcon />,
     items: [
       { id: 'system-params', title: '系统参数配置', path: '/provider/system', icon: <TuneIcon /> },
-      { id: 'backup', title: '备份与恢复', path: '/provider/system/backup', icon: <BackupIcon /> },
-      { id: 'plugins', title: '插件管理', path: '/provider/system/plugins', icon: <ExtensionIcon /> },
       { id: 'updates', title: '系统更新管理', path: '/provider/system/updates', icon: <SystemUpdateIcon /> },
     ],
   },
@@ -281,24 +276,6 @@ const providerMenuGroups: MenuGroup[] = [
 
 // 数据消费者菜单配置
 const consumerMenuGroups: MenuGroup[] = [
-  {
-    id: 'resources',
-    title: '数据资源管理',
-    icon: <StorageIcon />,
-    items: [
-      { id: 'resource-list', title: '资源列表', path: '/consumer/resources', icon: <FolderIcon /> },
-      { id: 'resource-create', title: '创建资源', path: '/consumer/resources/create', icon: <DescriptionIcon /> },
-    ],
-  },
-  {
-    id: 'policy-management',
-    title: '数据使用控制策略管理',
-    icon: <PolicyIcon />,
-    items: [
-      { id: 'policy-list', title: '策略列表', path: '/consumer/policies', icon: <DescriptionIcon /> },
-      { id: 'policy-create', title: '创建策略', path: '/consumer/policies/create', icon: <DescriptionIcon /> },
-    ],
-  },
   {
     id: 'connection-management',
     title: '数据连接与交换管理',
@@ -329,26 +306,6 @@ const consumerMenuGroups: MenuGroup[] = [
       { id: 'backup', title: '备份与恢复', path: '/consumer/system/backup', icon: <BackupIcon /> },
       { id: 'plugins', title: '插件管理', path: '/consumer/system/plugins', icon: <ExtensionIcon /> },
       { id: 'updates', title: '系统更新管理', path: '/consumer/system/updates', icon: <SystemUpdateIcon /> },
-    ],
-  },
-  {
-    id: 'identity-security',
-    title: '身份与安全管理',
-    icon: <SecurityIcon />,
-    items: [
-      { id: 'authentication', title: '身份认证配置', path: '/consumer/auth', icon: <VpnKeyIcon /> },
-      { id: 'certificates', title: '证书管理', path: '/consumer/auth/certificates', icon: <VpnKeyIcon /> },
-    ],
-  },
-  {
-    id: 'analytics',
-    title: '分析与报表',
-    icon: <BarChartIcon />,
-    items: [
-      { id: 'data-flow', title: '数据流通分析', path: '/consumer/analytics', icon: <TimelineIcon /> },
-      { id: 'compliance-reports', title: '合规报表', path: '/consumer/analytics/compliance', icon: <SummarizeIcon /> },
-      { id: 'dashboards', title: '自定义仪表盘', path: '/consumer/analytics/dashboards', icon: <DashboardIcon /> },
-      { id: 'value-assessment', title: '价值评估', path: '/consumer/analytics/value', icon: <AssessmentIcon /> },
     ],
   },
   {

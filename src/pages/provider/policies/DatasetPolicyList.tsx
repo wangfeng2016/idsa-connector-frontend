@@ -60,7 +60,7 @@ const mockDatasetPolicies: DatasetPolicy[] = [
     domain: 'finance',
     owner: '数据管理部',
     policyType: 'specific_consumer',
-    policyClass: 'Consumer Restriction',
+    policyClass: '限制使用者',
     policyDetails: {
       consumer: 'ABC银行数据分析部门'
     },
@@ -76,7 +76,7 @@ const mockDatasetPolicies: DatasetPolicy[] = [
     domain: 'retail',
     owner: '销售部',
     policyType: 'time_limit',
-    policyClass: 'Time Constraint',
+    policyClass: '限制使用时间',
     policyDetails: {
       startTime: '2024-01-01T00:00',
       endTime: '2024-12-31T23:59'
@@ -93,7 +93,7 @@ const mockDatasetPolicies: DatasetPolicy[] = [
     domain: 'internet',
     owner: '产品部',
     policyType: 'usage_count',
-    policyClass: 'Usage Limitation',
+    policyClass: '使用次数限制',
     policyDetails: {
       maxUsageCount: 1000
     },
@@ -109,7 +109,7 @@ const mockDatasetPolicies: DatasetPolicy[] = [
     domain: 'manufacturing',
     owner: '采购部',
     policyType: 'specific_connector',
-    policyClass: 'Connector Restriction',
+    policyClass: '指定连接器',
     policyDetails: {
       connector: 'SAP连接器'
     },
@@ -125,7 +125,7 @@ const mockDatasetPolicies: DatasetPolicy[] = [
     domain: 'healthcare',
     owner: '医疗信息部',
     policyType: 'specific_consumer',
-    policyClass: 'Consumer Restriction',
+    policyClass: '限制使用者',
     policyDetails: {
       consumer: '合作医院研究中心'
     },
@@ -141,7 +141,7 @@ const mockDatasetPolicies: DatasetPolicy[] = [
     domain: 'logistics',
     owner: '运营部',
     policyType: 'time_limit',
-    policyClass: 'Time Constraint',
+    policyClass: '限制使用时间',
     policyDetails: {
       startTime: '2024-03-01T00:00',
       endTime: '2024-06-30T23:59'

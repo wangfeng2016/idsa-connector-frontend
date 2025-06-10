@@ -248,7 +248,7 @@ const DataDiscovery: React.FC = () => {
             <Typography variant="subtitle1" sx={{ mb: 2 }}>现有数据源</Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
               {dataSources.map((source) => (
-                <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }} key={source.id}>
+                <Box sx={{ flex: '1 1 calc(25% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }} key={source.id}>
                   <Card variant="outlined">
                     <CardContent>
                       <Box display="flex" alignItems="center" gap={1} mb={1}>

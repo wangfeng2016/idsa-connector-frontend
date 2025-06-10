@@ -57,6 +57,7 @@ const ProviderSystemConfig = lazy(() => import('../pages/provider/system/SystemC
 const ProviderAuthentication = lazy(() => import('../pages/provider/identity/Authentication'));
 const ProviderCertificateManagement = lazy(() => import('../pages/provider/identity/CertificateManagement'));
 const ProviderRegisterDataSpace = lazy(() => import('../pages/provider/identity/RegisterDataSpace'));
+const DatasetUsageAnalysis = lazy(() => import('../pages/provider/analytics/DatasetUsageAnalysis'));
 const ProviderComplianceReports = lazy(() => import('../pages/provider/analytics/ComplianceReports'));
 const ProviderDashboards = lazy(() => import('../pages/provider/analytics/Dashboards'));
 
@@ -287,7 +288,7 @@ const router = createHashRouter([
       },
       {
         path: 'provider/analytics',
-        element: <ProviderComplianceReports />,
+        element: <DatasetUsageAnalysis />,
       },
       {
         path: 'provider/revenue',

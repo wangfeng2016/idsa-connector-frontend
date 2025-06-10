@@ -26,6 +26,7 @@ import {
   FormControl,
   InputLabel,
   Select,
+  Avatar,
 } from '@mui/material';
 import { DatePicker } from '@mui/lab';
 import {
@@ -417,64 +418,61 @@ const DataExchange = () => {
       </Box>
 
       {/* 统计卡片 - Flex布局 */}
-      <Box 
-        sx={{ 
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 3,
-          mb: 4,
-          '& > *': {
-            flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 calc(25% - 18px)' },
-            minWidth: { xs: '100%', sm: '280px', md: '220px' }
-          }
-        }}
-      >
-        <Card 
-          sx={{ 
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            color: 'white',
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            '&:hover': {
-              transform: 'translateY(-4px)',
-              boxShadow: '0 12px 20px rgba(102, 126, 234, 0.4)'
-            }
-          }}
-        >
+      <Box sx={{ 
+        display: 'flex', 
+        flexWrap: 'wrap', 
+        gap: 2, 
+        mb: 4,
+        '& > *': {
+          flex: '1 1 300px',
+          minWidth: '250px'
+        }
+      }}>
+        <Card sx={{ bgcolor: 'primary.light' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
-              交换总数
-            </Typography>
-            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>{mockStats.totalExchanges}</Typography>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <Chip label={`成功: ${mockStats.completedExchanges}`} size="small" sx={{ backgroundColor: 'rgba(76, 175, 80, 0.2)', color: 'rgba(76, 175, 80, 1)' }} />
-              <Chip label={`失败: ${mockStats.failedExchanges}`} size="small" sx={{ backgroundColor: 'rgba(244, 67, 54, 0.2)', color: 'rgba(244, 67, 54, 1)' }} />
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar sx={{ bgcolor: 'primary.main' }}>
+                <ArrowUpwardIcon />
+              </Avatar>
+              <Box>
+                <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'primary.dark' }}>
+                  {mockStats.totalExchanges}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  交换总数
+                </Typography>
+              </Box>
+            </Box>
+            <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+              <Chip label={`成功: ${mockStats.completedExchanges}`} size="small" color="success" variant="outlined" />
+              <Chip label={`失败: ${mockStats.failedExchanges}`} size="small" color="error" variant="outlined" />
             </Box>
           </CardContent>
         </Card>
 
-        <Card 
-          sx={{ 
-            background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-            color: 'white',
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            '&:hover': {
-              transform: 'translateY(-4px)',
-              boxShadow: '0 12px 20px rgba(240, 147, 251, 0.4)'
-            }
-          }}
-        >
+        <Card sx={{ bgcolor: 'primary.light' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
-              成功率
-            </Typography>
-            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>{mockStats.successRate}%</Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar sx={{ bgcolor: 'primary.main' }}>
+                <ArrowUpwardIcon />
+              </Avatar>
+              <Box>
+                <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'primary.dark' }}>
+                  {mockStats.successRate}%
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  成功率
+                </Typography>
+              </Box>
+            </Box>
             <LinearProgress
               variant="determinate"
               value={mockStats.successRate}
               sx={{ 
                 height: 8, 
                 borderRadius: 5, 
-                backgroundColor: 'rgba(255,255,255,0.3)',
+                mt: 1,
+                backgroundColor: 'rgba(0,0,0,0.1)',
                 '& .MuiLinearProgress-bar': {
                   backgroundColor: mockStats.successRate > 90 ? '#4caf50' : mockStats.successRate > 70 ? '#ff9800' : '#f44336'
                 }
@@ -483,46 +481,45 @@ const DataExchange = () => {
           </CardContent>
         </Card>
 
-        <Card 
-          sx={{ 
-            background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-            color: 'white',
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            '&:hover': {
-              transform: 'translateY(-4px)',
-              boxShadow: '0 12px 20px rgba(79, 172, 254, 0.4)'
-            }
-          }}
-        >
+        <Card sx={{ bgcolor: 'primary.light' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
-              数据传输量
-            </Typography>
-            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>{mockStats.totalDataTransferred}</Typography>
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar sx={{ bgcolor: 'primary.main' }}>
+                <FileDownloadIcon />
+              </Avatar>
+              <Box>
+                <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'primary.dark' }}>
+                  {mockStats.totalDataTransferred}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  数据传输量
+                </Typography>
+              </Box>
+            </Box>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
               平均传输速率: {mockStats.averageTransferRate}
             </Typography>
           </CardContent>
         </Card>
 
-        <Card 
-          sx={{ 
-            background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-            color: 'white',
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            '&:hover': {
-              transform: 'translateY(-4px)',
-              boxShadow: '0 12px 20px rgba(250, 112, 154, 0.4)'
-            }
-          }}
-        >
+        <Card sx={{ bgcolor: 'primary.light' }}>
           <CardContent>
-            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1 }}>
-              当前状态
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar sx={{ bgcolor: 'primary.main' }}>
+                <RefreshIcon />
+              </Avatar>
+              <Box>
+                <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'primary.dark' }}>
+                  {mockStats.inProgressExchanges + mockStats.pendingExchanges}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  当前状态
+                </Typography>
+              </Box>
+            </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 1 }}>
-              <Chip label={`进行中: ${mockStats.inProgressExchanges}`} sx={{ backgroundColor: 'rgba(33, 150, 243, 0.2)', color: 'rgba(33, 150, 243, 1)' }} />
-              <Chip label={`等待中: ${mockStats.pendingExchanges}`} sx={{ backgroundColor: 'rgba(158, 158, 158, 0.2)', color: 'rgba(158, 158, 158, 1)' }} />
+              <Chip label={`进行中: ${mockStats.inProgressExchanges}`} size="small" color="primary" variant="outlined" />
+              <Chip label={`等待中: ${mockStats.pendingExchanges}`} size="small" color="default" variant="outlined" />
             </Box>
           </CardContent>
         </Card>

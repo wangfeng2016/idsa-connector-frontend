@@ -272,7 +272,7 @@ const DatasetPolicyEdit: React.FC = () => {
   };
 
   // 处理消费者选择变化
-  const handleConsumersChange = (event: any, newValue: string[]) => {
+  const handleConsumersChange = (_event: any, newValue: string[]) => {
     setPolicyConfig({
       ...policyConfig,
       consumers: newValue,
@@ -280,7 +280,7 @@ const DatasetPolicyEdit: React.FC = () => {
   };
 
   // 处理连接器选择变化
-  const handleConnectorsChange = (event: any, newValue: string[]) => {
+  const handleConnectorsChange = (_event: any, newValue: string[]) => {
     setPolicyConfig({
       ...policyConfig,
       connectors: newValue,
@@ -463,7 +463,7 @@ const DatasetPolicyEdit: React.FC = () => {
               options={datasets}
               getOptionLabel={(option) => `${option.name} (${option.description})`}
               value={selectedDataset}
-              onChange={(event, newValue) => setSelectedDataset(newValue)}
+              onChange={(_event, newValue) => setSelectedDataset(newValue)}
               renderInput={(params) => (
                 <TextField
                   {...params}
