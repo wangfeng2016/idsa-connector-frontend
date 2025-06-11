@@ -22,6 +22,8 @@ import Box from '@mui/material/Box';
 import useResponsive from '../hooks/useResponsive';
 import logoWhite from '../assets/images/navicloud_logo-white.png';
 import RoleSwitcher from '../components/RoleSwitcher';
+import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 // 使用React.ComponentProps获取AppBar的props类型
 type MuiAppBarProps = ComponentProps<typeof MuiAppBar>;
@@ -60,8 +62,10 @@ const AppBar = styled(MuiAppBar, {
   }),
 );
 
-const Topbar = ({ open, onDrawerToggle, drawerWidth }: TopbarProps) => {
+const Topbar: React.FC<TopbarProps> = ({ open, onDrawerToggle, drawerWidth }) => {
   const responsive = useResponsive();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [notificationAnchorEl, setNotificationAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -74,6 +78,12 @@ const Topbar = ({ open, onDrawerToggle, drawerWidth }: TopbarProps) => {
   };
 
   const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
     setAnchorEl(null);
   };
 
@@ -170,7 +180,10 @@ const Topbar = ({ open, onDrawerToggle, drawerWidth }: TopbarProps) => {
             <ListItemIcon>
               <PersonIcon fontSize="small" />
             </ListItemIcon>
-            <ListItemText primary="个人资料" />
+            <ListItemText 
+              primary="个人资料" 
+              secondary={user?.username || ''}
+            />
           </MenuItem>
           {/* 在小屏幕上显示设置选项 */}
           {responsive.isXs && (
@@ -182,7 +195,7 @@ const Topbar = ({ open, onDrawerToggle, drawerWidth }: TopbarProps) => {
             </MenuItem>
           )}
           <Divider />
-          <MenuItem onClick={handleMenuClose}>
+          <MenuItem onClick={handleLogout}>
             <ListItemIcon>
               <ExitToAppIcon fontSize="small" />
             </ListItemIcon>

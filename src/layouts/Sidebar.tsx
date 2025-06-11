@@ -18,7 +18,6 @@ import { useRole } from '../contexts/RoleContext';
 import StorageIcon from '@mui/icons-material/Storage';
 import PolicyIcon from '@mui/icons-material/Policy';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
-import SecurityIcon from '@mui/icons-material/Security';
 import StoreIcon from '@mui/icons-material/Store';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -29,9 +28,6 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import ListIcon from '@mui/icons-material/List';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import ExploreIcon from '@mui/icons-material/Explore';
@@ -41,16 +37,12 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import TuneIcon from '@mui/icons-material/Tune';
-import ExtensionIcon from '@mui/icons-material/Extension';
-import BackupIcon from '@mui/icons-material/Backup';
 import SystemUpdateIcon from '@mui/icons-material/SystemUpdate';
 import BusinessIcon from '@mui/icons-material/Business';
 // 新增角色特定图标
-import GavelIcon from '@mui/icons-material/Gavel';
 import PublishIcon from '@mui/icons-material/Publish';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import MonitorIcon from '@mui/icons-material/Monitor';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 
@@ -128,42 +120,15 @@ interface MenuItem {
 // 数据空间运营方菜单配置
 const operatorMenuGroups: MenuGroup[] = [
   {
-    id: 'resources',
-    title: '数据资源管理',
-    icon: <StorageIcon />,
-    items: [
-      { id: 'resource-list', title: '资源列表', path: '/operator/resources', icon: <FolderIcon /> },
-      { id: 'resource-create', title: '创建资源', path: '/operator/resources/create', icon: <DescriptionIcon /> },
-    ],
-  },
-  {
-    id: 'policy-management',
-    title: '数据使用控制策略管理',
-    icon: <PolicyIcon />,
-    items: [
-      { id: 'policy-list', title: '策略列表', path: '/operator/policies', icon: <DescriptionIcon /> },
-      { id: 'policy-create', title: '创建策略', path: '/operator/policies/create', icon: <DescriptionIcon /> },
-    ],
-  },
-  {
-    id: 'connection-management',
-    title: '数据连接与交换管理',
-    icon: <SyncAltIcon />,
-    items: [
-      { id: 'connector-status', title: '连接器状态', path: '/operator/connections', icon: <SwapHorizIcon /> },
-      { id: 'data-exchange', title: '数据交换', path: '/operator/connections/exchange', icon: <SwapHorizIcon /> },
-      { id: 'exchange-logs', title: '交换日志', path: '/operator/connections/logs', icon: <ReceiptLongIcon /> },
-    ],
-  },
-  {
     id: 'ecosystem',
     title: '数据空间生态交互',
     icon: <StoreIcon />,
     items: [
       { id: 'marketplace', title: '数据市场浏览', path: '/operator/ecosystem', icon: <ShoppingCartIcon /> },
       { id: 'participants', title: '参与方目录', path: '/operator/ecosystem/participants', icon: <PeopleIcon /> },
-      { id: 'service-discovery', title: '服务发现', path: '/operator/ecosystem/services', icon: <ExploreIcon /> },
-      { id: 'transactions', title: '交易管理', path: '/operator/ecosystem/transactions', icon: <ReceiptIcon /> },
+      { id: 'settlement', title: '清算管理', path: '/operator/ecosystem/settlement', icon: <ReceiptIcon /> },
+      { id: 'registration-approval', title: '机构注册审核', path: '/operator/operation/registration-approval', icon: <VerifiedUserIcon /> },
+      { id: 'certificates', title: '证书管理', path: '/operator/operation/certificates', icon: <VpnKeyIcon /> },
     ],
   },
   {
@@ -172,12 +137,9 @@ const operatorMenuGroups: MenuGroup[] = [
     icon: <SettingsIcon />,
     items: [
       { id: 'system-params', title: '系统参数配置', path: '/operator/system', icon: <TuneIcon /> },
-      { id: 'backup', title: '备份与恢复', path: '/operator/system/backup', icon: <BackupIcon /> },
-      { id: 'plugins', title: '插件管理', path: '/operator/system/plugins', icon: <ExtensionIcon /> },
       { id: 'updates', title: '系统更新管理', path: '/operator/system/updates', icon: <SystemUpdateIcon /> },
     ],
   },
-
   {
     id: 'analytics',
     title: '分析与报表',
@@ -187,29 +149,6 @@ const operatorMenuGroups: MenuGroup[] = [
       { id: 'compliance-reports', title: '合规报表', path: '/operator/analytics/compliance', icon: <SummarizeIcon /> },
       { id: 'dashboards', title: '自定义仪表盘', path: '/operator/analytics/dashboards', icon: <DashboardIcon /> },
       { id: 'value-assessment', title: '价值评估', path: '/operator/analytics/value', icon: <AssessmentIcon /> },
-    ],
-  },
-  {
-    id: 'operator-management',
-    title: '运营方管理',
-    icon: <AdminPanelSettingsIcon />,
-    items: [
-      { id: 'registration-approval', title: '机构注册审核', path: '/operator/operation/registration-approval', icon: <VerifiedUserIcon /> },
-      { id: 'space-governance', title: '数据空间治理', path: '/operator/governance', icon: <GavelIcon /> },
-      { id: 'global-policies', title: '全局策略管理', path: '/operator/policies', icon: <PolicyIcon /> },
-      { id: 'monitoring', title: '全局监控', path: '/operator/monitoring', icon: <MonitorIcon /> },
-      { id: 'authentication', title: '身份认证配置', path: '/operator/operation/auth', icon: <VpnKeyIcon /> },
-      { id: 'certificates', title: '证书管理', path: '/operator/operation/certificates', icon: <VpnKeyIcon /> },
-    ],
-  },
-  {
-    id: 'operator-security',
-    title: '高级安全管理',
-    icon: <SecurityIcon />,
-    items: [
-      { id: 'access-control', title: '访问控制管理', path: '/operator/security/access', icon: <AdminPanelSettingsIcon /> },
-      { id: 'audit-logs', title: '安全审计日志', path: '/operator/security/audit', icon: <ReceiptLongIcon /> },
-      { id: 'compliance', title: '合规性检查', path: '/operator/security/compliance', icon: <FactCheckIcon /> },
     ],
   },
 ];

@@ -3,9 +3,11 @@ import { lazy } from 'react';
 import MainLayout from '../layouts/MainLayout';
 import ToBeConstructed from '../pages/ToBeConstructed';
 import { DataCatalogProvider } from '../contexts/DataCatalogContext';
+import DynamicDashboard from '../components/DynamicDashboard';
+import ProtectedRoute from '../components/ProtectedRoute';
+import Login from '../pages/Login';
 
 // 懒加载页面组件 - 运营方
-const OperatorDashboard = lazy(() => import('../pages/operator/Dashboard'));
 const OperatorResourceList = lazy(() => import('../pages/operator/resources/ResourceList'));
 const OperatorResourceEdit = lazy(() => import('../pages/operator/resources/ResourceEdit'));
 const OperatorPolicyList = lazy(() => import('../pages/operator/policies/PolicyList'));
@@ -36,7 +38,6 @@ const OperatorSecurityCompliance = lazy(() => import('../pages/operator/security
 const OperatorToBeConstructed = () => <ToBeConstructed pageName="运营方功能页面" />;
 
 // 懒加载页面组件 - 提供者
-
 const ProviderDataDiscovery = lazy(() => import('../pages/provider/resources/DataDiscovery'));
 const ProviderResourceList = lazy(() => import('../pages/provider/resources/ResourceList'));
 const ProviderDataCatalogManagement = lazy(() => import('../pages/provider/resources/DataCatalogManagement'));
@@ -68,7 +69,6 @@ const ProviderValueAssessment = lazy(() => import('../pages/provider/analytics/V
 const ProviderToBeConstructed = () => <ToBeConstructed pageName="提供者功能页面" />;
 
 // 懒加载页面组件 - 消费者
-
 const ConsumerResourceList = lazy(() => import('../pages/consumer/resources/ResourceList'));
 const ConsumerResourceEdit = lazy(() => import('../pages/consumer/resources/ResourceEdit'));
 const ConsumerPolicyList = lazy(() => import('../pages/consumer/policies/PolicyList'));
@@ -98,12 +98,20 @@ const ConsumerManageSubscription = lazy(() => import('../pages/consumer/subscrip
 
 const router = createHashRouter([
   {
+    path: '/login',
+    element: <Login />,
+  },
+  {
     path: '/',
-    element: <MainLayout />,
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
-        element: <OperatorDashboard />,
+        element: <DynamicDashboard />,
       },
       // 运营方路由
       {
