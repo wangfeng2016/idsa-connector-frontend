@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Card,
@@ -39,41 +39,105 @@ interface MarketItem {
 
 // 模拟数据
 const mockItems: MarketItem[] = [
+  // 研发数据类
   {
     id: 1,
-    title: '企业信用数据集',
-    description: '全面的企业信用评估数据，包含信用评分、风险指标等信息',
+    title: '产品设计数据集',
+    description: '包含CAD模型、设计图纸、技术规格等产品设计全流程数据',
     type: 'data',
-    provider: '数据提供商A',
-    price: 1000,
-    rating: 4.5,
-    reviews: 28,
-    tags: ['金融', '企业数据', '信用评估'],
-    imageUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%234CAF50"/><text x="50" y="50" font-size="12" fill="white" text-anchor="middle" dy=".3em">企业数据</text></svg>',
+    provider: '汽车研发中心A',
+    price: 15000,
+    rating: 4.7,
+    reviews: 32,
+    tags: ['研发数据', 'CAD模型', '产品设计'],
+    imageUrl: '/src/assets/images/mp_banner_rd_data.png',
   },
   {
     id: 2,
-    title: '数据清洗服务',
-    description: '专业的数据清洗和标准化服务，提高数据质量',
-    type: 'service',
-    provider: '服务提供商B',
-    price: 500,
-    rating: 4.8,
-    reviews: 45,
-    tags: ['数据处理', '数据质量', '服务'],
-    imageUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%232196F3"/><text x="50" y="50" font-size="12" fill="white" text-anchor="middle" dy=".3em">数据服务</text></svg>',
+    title: '测试验证数据',
+    description: '车辆性能测试、安全测试、耐久性测试等验证数据集',
+    type: 'data',
+    provider: '测试验证实验室B',
+    price: 12000,
+    rating: 4.5,
+    reviews: 28,
+    tags: ['研发数据', '测试验证', '性能数据'],
+    imageUrl: '/src/assets/images/mp_banner_rd_data.png',
   },
+  // 市场数据类
   {
     id: 3,
-    title: '数据可视化应用',
-    description: '强大的数据可视化工具，支持多种图表类型和交互方式',
-    type: 'app',
-    provider: '应用开发商C',
-    price: 299,
+    title: '消费者行为分析数据',
+    description: '汽车消费者购买偏好、使用习惯、满意度调研等市场数据',
+    type: 'data',
+    provider: '市场调研公司C',
+    price: 8000,
+    rating: 4.3,
+    reviews: 45,
+    tags: ['市场数据', '消费者行为', '市场调研'],
+    imageUrl: '/src/assets/images/mp_banner_mkt_data.png',
+  },
+  {
+    id: 4,
+    title: '竞品分析数据集',
+    description: '竞争对手产品信息、价格策略、市场份额等竞品分析数据',
+    type: 'data',
+    provider: '商业情报公司D',
+    price: 10000,
+    rating: 4.6,
+    reviews: 38,
+    tags: ['市场数据', '竞品分析', '商业情报'],
+    imageUrl: '/src/assets/images/mp_banner_mkt_data.png',
+  },
+  // 供应链数据类
+  {
+    id: 5,
+    title: '供应商评估数据',
+    description: '供应商资质、产能、质量评级、交付能力等评估数据',
+    type: 'data',
+    provider: '供应链管理平台E',
+    price: 6000,
+    rating: 4.4,
+    reviews: 52,
+    tags: ['供应链数据', '供应商评估', '质量管理'],
+    imageUrl: '/src/assets/images/mp_banner_sc_data.png',
+  },
+  {
+    id: 6,
+    title: '物流运输数据',
+    description: '运输路线、配送时效、成本分析等物流运输全链条数据',
+    type: 'data',
+    provider: '物流服务商F',
+    price: 7500,
     rating: 4.2,
-    reviews: 156,
-    tags: ['可视化', '分析工具', '应用'],
-    imageUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23FF5722"/><text x="50" y="50" font-size="12" fill="white" text-anchor="middle" dy=".3em">应用工具</text></svg>',
+    reviews: 41,
+    tags: ['供应链数据', '物流运输', '成本分析'],
+    imageUrl: '/src/assets/images/mp_banner_sc_data.png',
+  },
+  // 生产制造数据类
+  {
+    id: 7,
+    title: '生产工艺数据集',
+    description: '生产线工艺参数、设备运行数据、质量控制指标等制造数据',
+    type: 'data',
+    provider: '智能制造工厂G',
+    price: 18000,
+    rating: 4.8,
+    reviews: 29,
+    tags: ['生产制造数据', '工艺参数', '质量控制'],
+    imageUrl: '/src/assets/images/mp_banner_mf_data.png',
+  },
+  {
+    id: 8,
+    title: '设备维护数据',
+    description: '生产设备维护记录、故障诊断、预测性维护等设备管理数据',
+    type: 'data',
+    provider: '设备维护服务商H',
+    price: 9000,
+    rating: 4.1,
+    reviews: 36,
+    tags: ['生产制造数据', '设备维护', '预测性维护'],
+    imageUrl: '/src/assets/images/mp_banner_mf_data.png',
   },
 ];
 
@@ -81,6 +145,33 @@ const Marketplace = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [itemType, setItemType] = useState('all');
   const [items] = useState<MarketItem[]>(mockItems);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
+  // 筛选数据
+  const filteredItems = items.filter(item => {
+    const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         item.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesType = itemType === 'all' || item.type === itemType;
+    return matchesSearch && matchesType;
+  });
+
+  // 计算分页
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = filteredItems.slice(startIndex, endIndex);
+
+  // 处理分页变化
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setCurrentPage(value);
+  };
+
+  // 当筛选条件变化时重置到第一页
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, itemType]);
 
   // 获取类型标签颜色
   const getTypeColor = (type: string) => {
@@ -170,23 +261,17 @@ const Marketplace = () => {
       {/* 市场资产列表 */}
       <Box 
         sx={{ 
-          display: 'flex',
-          flexWrap: 'wrap',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
           gap: 3,
-          justifyContent: 'flex-start',
-          alignItems: 'stretch',
-          '& > *': {
-            flex: '1 1 300px',
-            minWidth: 300,
-            maxWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 16px)' }
-          }
+          alignItems: 'stretch'
         }}
       >
-        {items.map((item) => (
-            <Card>
+        {currentItems.map((item) => (
+          <Card key={item.id}>
               <CardMedia
                 component="img"
-                height="140"
+                height="98"
                 image={item.imageUrl}
                 alt={item.title}
               />
@@ -247,7 +332,12 @@ const Marketplace = () => {
 
       {/* 分页 */}
       <Box display="flex" justifyContent="center" mt={4}>
-        <Pagination count={10} color="primary" />
+        <Pagination 
+          count={totalPages} 
+          page={currentPage}
+          onChange={handlePageChange}
+          color="primary" 
+        />
       </Box>
     </Box>
   );

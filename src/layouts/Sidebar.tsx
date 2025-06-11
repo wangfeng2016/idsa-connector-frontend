@@ -277,24 +277,23 @@ const providerMenuGroups: MenuGroup[] = [
 // 数据消费者菜单配置
 const consumerMenuGroups: MenuGroup[] = [
   {
+    id: 'ecosystem',
+    title: '数据空间生态交互',
+    icon: <StoreIcon />,
+    items: [
+      { id: 'register-dataspace', title: '数据空间机构注册', path: '/consumer/identity/register-dataspace', icon: <BusinessIcon /> },
+      { id: 'marketplace', title: '数据市场浏览', path: '/consumer/ecosystem', icon: <ShoppingCartIcon /> },
+      { id: 'data-subscription', title: '数据订阅', path: '/consumer/subscriptions/subscribe', icon: <SubscriptionsIcon /> },
+      { id: 'subscription-management', title: '订阅管理', path: '/consumer/subscriptions', icon: <SubscriptionsIcon /> },
+    ],
+  },
+  {
     id: 'connection-management',
     title: '数据连接与交换管理',
     icon: <SyncAltIcon />,
     items: [
       { id: 'connector-status', title: '连接器状态', path: '/consumer/connections', icon: <SwapHorizIcon /> },
       { id: 'data-exchange', title: '数据交换', path: '/consumer/connections/exchange', icon: <SwapHorizIcon /> },
-      { id: 'exchange-logs', title: '交换日志', path: '/consumer/connections/logs', icon: <ReceiptLongIcon /> },
-    ],
-  },
-  {
-    id: 'ecosystem',
-    title: '数据空间生态交互',
-    icon: <StoreIcon />,
-    items: [
-      { id: 'marketplace', title: '数据市场浏览', path: '/consumer/ecosystem', icon: <ShoppingCartIcon /> },
-      { id: 'participants', title: '参与方目录', path: '/consumer/ecosystem/participants', icon: <PeopleIcon /> },
-      { id: 'service-discovery', title: '服务发现', path: '/consumer/ecosystem/services', icon: <ExploreIcon /> },
-      { id: 'transactions', title: '交易管理', path: '/consumer/ecosystem/transactions', icon: <ReceiptIcon /> },
     ],
   },
   {
@@ -303,31 +302,7 @@ const consumerMenuGroups: MenuGroup[] = [
     icon: <SettingsIcon />,
     items: [
       { id: 'system-params', title: '系统参数配置', path: '/consumer/system', icon: <TuneIcon /> },
-      { id: 'backup', title: '备份与恢复', path: '/consumer/system/backup', icon: <BackupIcon /> },
-      { id: 'plugins', title: '插件管理', path: '/consumer/system/plugins', icon: <ExtensionIcon /> },
       { id: 'updates', title: '系统更新管理', path: '/consumer/system/updates', icon: <SystemUpdateIcon /> },
-    ],
-  },
-  {
-    id: 'consumer-management',
-    title: '数据消费者管理',
-    icon: <CloudDownloadIcon />,
-    items: [
-      { id: 'data-discovery', title: '数据发现', path: '/consumer/discovery', icon: <SearchIcon /> },
-      { id: 'subscription-management', title: '订阅管理', path: '/consumer/subscriptions', icon: <SubscriptionsIcon /> },
-      { id: 'usage-monitoring', title: '使用监控', path: '/consumer/monitoring', icon: <MonitorIcon /> },
-      { id: 'data-integration', title: '数据集成', path: '/consumer/integration', icon: <IntegrationInstructionsIcon /> },
-    ],
-  },
-  {
-    id: 'consumer-operations',
-    title: '消费管理',
-    icon: <ShoppingBasketIcon />,
-    items: [
-      { id: 'procurement', title: '数据采购', path: '/consumer/procurement', icon: <ShoppingCartIcon /> },
-      { id: 'cost-management', title: '成本管理', path: '/consumer/costs', icon: <AccountBalanceWalletIcon /> },
-      { id: 'data-lineage', title: '数据血缘', path: '/consumer/lineage', icon: <AccountTreeIcon /> },
-      { id: 'quality-assessment', title: '质量评估', path: '/consumer/quality', icon: <AssessmentIcon /> },
     ],
   },
 ];

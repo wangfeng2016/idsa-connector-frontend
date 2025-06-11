@@ -76,13 +76,14 @@ const ConsumerPolicyEdit = lazy(() => import('../pages/consumer/policies/PolicyE
 const ConsumerConnectorStatus = lazy(() => import('../pages/consumer/connections/ConnectorStatus'));
 const ConsumerDataExchange = lazy(() => import('../pages/consumer/connections/DataExchange'));
 const ConsumerExchangeLogs = lazy(() => import('../pages/consumer/connections/ExchangeLogs'));
-const ConsumerMarketplace = lazy(() => import('../pages/consumer/ecosystem/Marketplace'));
+const ConsumerMarketplace = lazy(() => import('../pages/consumer/ecosystem/marketplace'));
 const ConsumerServiceDiscovery = lazy(() => import('../pages/consumer/ecosystem/ServiceDiscovery'));
 const ConsumerTransactions = lazy(() => import('../pages/consumer/ecosystem/Transactions'));
 const ConsumerSystemConfig = lazy(() => import('../pages/consumer/system/SystemConfig'));
 // 消费者系统备份、插件、更新组件已映射到ToBeConstructed
 const ConsumerAuthentication = lazy(() => import('../pages/consumer/identity/Authentication'));
 const ConsumerCertificateManagement = lazy(() => import('../pages/consumer/identity/CertificateManagement'));
+const ConsumerRegisterDataSpace = lazy(() => import('../pages/consumer/identity/RegisterDataspace'));
 const ConsumerComplianceReports = lazy(() => import('../pages/consumer/analytics/ComplianceReports'));
 const ConsumerDashboards = lazy(() => import('../pages/consumer/analytics/Dashboards'));
 
@@ -92,6 +93,8 @@ const ConsumerValueAssessment = lazy(() => import('../pages/consumer/analytics/V
 
 // 待构建的消费者组件
 const ConsumerToBeConstructed = () => <ToBeConstructed pageName="消费者功能页面" />;
+const ConsumerDataSubscription = lazy(() => import('../pages/consumer/subscriptions/DataSubscription'));
+const ConsumerManageSubscription = lazy(() => import('../pages/consumer/subscriptions/ManageSubscription'));
 
 const router = createHashRouter([
   {
@@ -397,6 +400,10 @@ const router = createHashRouter([
         element: <ConsumerToBeConstructed />,
       },
       {
+        path: 'consumer/identity/register-dataspace',
+        element: <ConsumerRegisterDataSpace />,
+      },
+      {
         path: 'consumer/auth',
         element: <ConsumerAuthentication />,
       },
@@ -426,7 +433,11 @@ const router = createHashRouter([
       },
       {
         path: 'consumer/subscriptions',
-        element: <ConsumerToBeConstructed />,
+        element: <ConsumerManageSubscription />,
+      },
+      {
+        path: 'consumer/subscriptions/subscribe',
+        element: <ConsumerDataSubscription />,
       },
       {
         path: 'consumer/monitoring',

@@ -21,7 +21,6 @@ import {
   People,
   AttachMoney,
   Dataset,
-  Visibility,
   Share,
   Analytics,
 } from '@mui/icons-material';

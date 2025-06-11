@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Card,
@@ -164,7 +164,7 @@ const Marketplace = () => {
   const currentItems = filteredItems.slice(startIndex, endIndex);
 
   // 处理分页变化
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
   };
 
@@ -271,7 +271,7 @@ const Marketplace = () => {
           <Card key={item.id}>
               <CardMedia
                 component="img"
-                height="140"
+                height="98"
                 image={item.imageUrl}
                 alt={item.title}
               />
