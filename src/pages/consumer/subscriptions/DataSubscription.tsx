@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Card,
@@ -10,7 +10,6 @@ import {
   StepLabel,
   StepContent,
   Paper,
-  Divider,
   Chip,
   Alert,
   CircularProgress,

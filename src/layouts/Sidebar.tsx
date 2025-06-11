@@ -47,18 +47,12 @@ import SystemUpdateIcon from '@mui/icons-material/SystemUpdate';
 import BusinessIcon from '@mui/icons-material/Business';
 // 新增角色特定图标
 import GavelIcon from '@mui/icons-material/Gavel';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import PublishIcon from '@mui/icons-material/Publish';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import MonitorIcon from '@mui/icons-material/Monitor';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import SearchIcon from '@mui/icons-material/Search';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
-import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
 interface SidebarProps {
   open: boolean;

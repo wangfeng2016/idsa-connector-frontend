@@ -23,6 +23,12 @@ import {
   LocalOffer as LocalOfferIcon,
 } from '@mui/icons-material';
 
+// 导入图片资源
+import mpBannerRdData from '../../../assets/images/mp_banner_rd_data.png';
+import mpBannerMktData from '../../../assets/images/mp_banner_mkt_data.png';
+import mpBannerScData from '../../../assets/images/mp_banner_sc_data.png';
+import mpBannerMfData from '../../../assets/images/mp_banner_mf_data.png';
+
 // 市场资产类型
 interface MarketItem {
   id: number;
@@ -50,7 +56,7 @@ const mockItems: MarketItem[] = [
     rating: 4.7,
     reviews: 32,
     tags: ['研发数据', 'CAD模型', '产品设计'],
-    imageUrl: '/src/assets/images/mp_banner_rd_data.png',
+    imageUrl: mpBannerRdData,
   },
   {
     id: 2,
@@ -62,7 +68,7 @@ const mockItems: MarketItem[] = [
     rating: 4.5,
     reviews: 28,
     tags: ['研发数据', '测试验证', '性能数据'],
-    imageUrl: '/src/assets/images/mp_banner_rd_data.png',
+    imageUrl: mpBannerRdData,
   },
   // 市场数据类
   {
@@ -75,7 +81,7 @@ const mockItems: MarketItem[] = [
     rating: 4.3,
     reviews: 45,
     tags: ['市场数据', '消费者行为', '市场调研'],
-    imageUrl: '/src/assets/images/mp_banner_mkt_data.png',
+    imageUrl: mpBannerMktData,
   },
   {
     id: 4,
@@ -87,7 +93,7 @@ const mockItems: MarketItem[] = [
     rating: 4.6,
     reviews: 38,
     tags: ['市场数据', '竞品分析', '商业情报'],
-    imageUrl: '/src/assets/images/mp_banner_mkt_data.png',
+    imageUrl: mpBannerMktData,
   },
   // 供应链数据类
   {
@@ -100,7 +106,7 @@ const mockItems: MarketItem[] = [
     rating: 4.4,
     reviews: 52,
     tags: ['供应链数据', '供应商评估', '质量管理'],
-    imageUrl: '/src/assets/images/mp_banner_sc_data.png',
+    imageUrl: mpBannerScData,
   },
   {
     id: 6,
@@ -112,7 +118,7 @@ const mockItems: MarketItem[] = [
     rating: 4.2,
     reviews: 41,
     tags: ['供应链数据', '物流运输', '成本分析'],
-    imageUrl: '/src/assets/images/mp_banner_sc_data.png',
+    imageUrl: mpBannerScData,
   },
   // 生产制造数据类
   {
@@ -125,7 +131,7 @@ const mockItems: MarketItem[] = [
     rating: 4.8,
     reviews: 29,
     tags: ['生产制造数据', '工艺参数', '质量控制'],
-    imageUrl: '/src/assets/images/mp_banner_mf_data.png',
+    imageUrl: mpBannerMfData,
   },
   {
     id: 8,
@@ -137,7 +143,7 @@ const mockItems: MarketItem[] = [
     rating: 4.1,
     reviews: 36,
     tags: ['生产制造数据', '设备维护', '预测性维护'],
-    imageUrl: '/src/assets/images/mp_banner_mf_data.png',
+    imageUrl: mpBannerMfData,
   },
 ];
 
