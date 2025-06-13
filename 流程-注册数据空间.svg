@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <!-- 定义箭头标记 -->
+ <defs>
+  <marker id="arrowhead" markerHeight="7" markerWidth="10" orient="auto" refX="9" refY="3.5">
+   <polygon fill="#333" id="svg_1" points="0 0, 10 3.5, 0 7"/>
+  </marker>
+  <marker id="dasharrow" markerHeight="7" markerWidth="10" orient="auto" refX="9" refY="3.5">
+   <polygon fill="#666" id="svg_2" points="0 0, 10 3.5, 0 7"/>
+  </marker>
+ </defs>
+ <!-- 背景 -->
+ <!-- 标题 -->
+ <!-- 参与方泳道 -->
+ <!-- 系统泳道 -->
+ <!-- 参与方对象 -->
+ <!-- 企业 -->
+ <!-- 数据空间运营方 -->
+ <!-- 系统对象 -->
+ <!-- 数据空间运营平台 -->
+ <!-- 企业A连接器 -->
+ <!-- 连接线 -->
+ <!-- 企业到数据空间运营平台的连接 -->
+ <!-- 数据空间运营方到数据空间运营平台的连接 -->
+ <!-- 企业到企业A连接器的连接 -->
+ <!-- 消息和序号 -->
+ <!-- 1. 提交注册申请 -->
+ <!-- 2. 审核申请 -->
+ <!-- 3. 生成证书 -->
+ <!-- 4. 通知审核结果 -->
+ <!-- 5. 下载证书 -->
+ <!-- 6. 配置连接器 -->
+ <!-- 7. 注册到数据空间 -->
+ <!-- 图例 -->
+ <!-- 实线箭头 -->
+ <!-- 虚线箭头 -->
+ <!-- 序号说明 -->
+ <!-- 流程说明 -->
+ <!-- 简化说明 -->
+ <g class="layer">
+  <title>Layer 1</title>
+  <rect fill="#f8f9fa" height="600" id="svg_3" stroke="#dee2e6" width="800"/>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="18" font-weight="bold" id="svg_4" text-anchor="middle" x="400" y="30">企业加入数据空间流程协作图</text>
+  <rect fill="#e3f2fd" height="120" id="svg_5" rx="5" stroke="#1976d2" stroke-width="2" width="700" x="50" y="60"/>
+  <text fill="#1976d2" font-family="Arial, sans-serif" font-size="14" font-weight="bold" id="svg_6" x="60" y="80">参与方 (Participants)</text>
+  <rect fill="#f3e5f5" height="120" id="svg_7" rx="5" stroke="#7b1fa2" stroke-width="2" width="700" x="50" y="200"/>
+  <text fill="#7b1fa2" font-family="Arial, sans-serif" font-size="14" font-weight="bold" id="svg_8" x="60" y="220">系统 (Systems)</text>
+  <rect fill="#ffffff" height="60" id="svg_9" rx="5" stroke="#1976d2" stroke-width="2" width="120" x="100" y="100"/>
+  <text fill="#1976d2" font-family="Arial, sans-serif" font-size="12" font-weight="bold" id="svg_10" text-anchor="middle" x="160" y="125">企业</text>
+  <text fill="#1976d2" font-family="Arial, sans-serif" font-size="10" id="svg_11" text-anchor="middle" x="160" y="140">(Enterprise)</text>
+  <rect fill="#ffffff" height="60" id="svg_12" rx="5" stroke="#1976d2" stroke-width="2" width="120" x="500" y="100"/>
+  <text fill="#1976d2" font-family="Arial, sans-serif" font-size="12" font-weight="bold" id="svg_13" text-anchor="middle" x="560" y="120">数据空间</text>
+  <text fill="#1976d2" font-family="Arial, sans-serif" font-size="12" font-weight="bold" id="svg_14" text-anchor="middle" x="560" y="135">运营方</text>
+  <text fill="#1976d2" font-family="Arial, sans-serif" font-size="10" id="svg_15" text-anchor="middle" x="560" y="150">(Operator)</text>
+  <rect fill="#ffffff" height="60" id="svg_16" rx="5" stroke="#7b1fa2" stroke-width="2" width="120" x="300" y="240"/>
+  <text fill="#7b1fa2" font-family="Arial, sans-serif" font-size="12" font-weight="bold" id="svg_17" text-anchor="middle" x="360" y="260">数据空间</text>
+  <text fill="#7b1fa2" font-family="Arial, sans-serif" font-size="12" font-weight="bold" id="svg_18" text-anchor="middle" x="360" y="275">运营平台</text>
+  <text fill="#7b1fa2" font-family="Arial, sans-serif" font-size="10" id="svg_19" text-anchor="middle" x="360" y="290">(Platform)</text>
+  <rect fill="#ffffff" height="60" id="svg_20" rx="5" stroke="#7b1fa2" stroke-width="2" width="120" x="100" y="240"/>
+  <text fill="#7b1fa2" font-family="Arial, sans-serif" font-size="12" font-weight="bold" id="svg_21" text-anchor="middle" x="160" y="260">企业A</text>
+  <text fill="#7b1fa2" font-family="Arial, sans-serif" font-size="12" font-weight="bold" id="svg_22" text-anchor="middle" x="160" y="275">连接器</text>
+  <text fill="#7b1fa2" font-family="Arial, sans-serif" font-size="10" id="svg_23" text-anchor="middle" x="160" y="290">(Connector)</text>
+  <line id="svg_24" stroke="#666" stroke-width="2" x1="160" x2="160" y1="160" y2="240"/>
+  <line id="svg_25" stroke="#666" stroke-width="2" x1="560" x2="360" y1="160" y2="240"/>
+  <line id="svg_26" stroke="#666" stroke-width="2" x1="160" x2="160" y1="160" y2="240"/>
+  <path d="m160,170q100,10 180,80" fill="none" id="svg_27" marker-end="url(#arrowhead)" stroke="#333" stroke-width="2"/>
+  <circle cx="170" cy="175" fill="#ff5722" id="svg_28" r="12" stroke="white" stroke-width="2"/>
+  <text fill="white" font-family="Arial, sans-serif" font-size="10" font-weight="bold" id="svg_29" text-anchor="middle" x="170" y="180">1</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="11" id="svg_30" x="250" y="165">提交注册申请</text>
+  <path d="m500,130q-50,10 -120,120" fill="none" id="svg_31" marker-end="url(#arrowhead)" stroke="#333" stroke-width="2"/>
+  <circle cx="490" cy="135" fill="#ff5722" id="svg_32" r="12" stroke="white" stroke-width="2"/>
+  <text fill="white" font-family="Arial, sans-serif" font-size="10" font-weight="bold" id="svg_33" text-anchor="middle" x="490" y="140">2</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="11" id="svg_34" x="440" y="125">审核申请</text>
+  <path d="m420,270q60,10 120,-120" fill="none" id="svg_35" marker-end="url(#arrowhead)" stroke="#333" stroke-width="2"/>
+  <circle cx="430" cy="275" fill="#ff5722" id="svg_36" r="12" stroke="white" stroke-width="2"/>
+  <text fill="white" font-family="Arial, sans-serif" font-size="10" font-weight="bold" id="svg_37" text-anchor="middle" x="430" y="280">3</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="11" id="svg_38" x="480" y="295">生成证书</text>
+  <path d="m300,270q-70,10 -120,-100" fill="none" id="svg_39" marker-end="url(#arrowhead)" stroke="#333" stroke-width="2"/>
+  <circle cx="290" cy="275" fill="#ff5722" id="svg_40" r="12" stroke="white" stroke-width="2"/>
+  <text fill="white" font-family="Arial, sans-serif" font-size="10" font-weight="bold" id="svg_41" text-anchor="middle" x="290" y="280">4</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="11" id="svg_42" x="230" y="295">通知审核结果</text>
+  <path d="m180,170q60,20 140,80" fill="none" id="svg_43" marker-end="url(#dasharrow)" stroke="#666" stroke-dasharray="5,5" stroke-width="2"/>
+  <circle cx="190" cy="175" fill="#4caf50" id="svg_44" r="12" stroke="white" stroke-width="2"/>
+  <text fill="white" font-family="Arial, sans-serif" font-size="10" font-weight="bold" id="svg_45" text-anchor="middle" x="190" y="180">5</text>
+  <text fill="#666" font-family="Arial, sans-serif" font-size="11" id="svg_46" x="250" y="185">下载证书</text>
+  <path d="m160,180q0,30 0,60" fill="none" id="svg_47" marker-end="url(#arrowhead)" stroke="#333" stroke-width="2"/>
+  <circle cx="150" cy="190" fill="#ff5722" id="svg_48" r="12" stroke="white" stroke-width="2"/>
+  <text fill="white" font-family="Arial, sans-serif" font-size="10" font-weight="bold" id="svg_49" text-anchor="middle" x="150" y="195">6</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="11" id="svg_50" x="120" y="215">配置连接器</text>
+  <path d="m220,270q40,10 80,0" fill="none" id="svg_51" marker-end="url(#arrowhead)" stroke="#333" stroke-width="2"/>
+  <circle cx="230" cy="275" fill="#ff5722" id="svg_52" r="12" stroke="white" stroke-width="2"/>
+  <text fill="white" font-family="Arial, sans-serif" font-size="10" font-weight="bold" id="svg_53" text-anchor="middle" x="230" y="280">7</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="11" id="svg_54" x="240" y="295">注册到数据空间</text>
+  <rect fill="#ffffff" height="120" id="svg_55" rx="5" stroke="#ccc" width="200" x="550" y="350"/>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="12" font-weight="bold" id="svg_56" x="560" y="370">图例 (Legend)</text>
+  <line id="svg_57" marker-end="url(#arrowhead)" stroke="#333" stroke-width="2" x1="560" x2="590" y1="385" y2="385"/>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="10" id="svg_58" x="600" y="390">同步操作</text>
+  <line id="svg_59" marker-end="url(#dasharrow)" stroke="#666" stroke-dasharray="5,5" stroke-width="2" x1="560" x2="590" y1="405" y2="405"/>
+  <text fill="#666" font-family="Arial, sans-serif" font-size="10" id="svg_60" x="600" y="410">可选操作</text>
+  <circle cx="570" cy="425" fill="#ff5722" id="svg_61" r="8" stroke="white"/>
+  <text fill="white" font-family="Arial, sans-serif" font-size="8" font-weight="bold" id="svg_62" text-anchor="middle" x="570" y="428">N</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="10" id="svg_63" x="585" y="430">操作序号</text>
+  <circle cx="570" cy="445" fill="#4caf50" id="svg_64" r="8" stroke="white"/>
+  <text fill="white" font-family="Arial, sans-serif" font-size="8" font-weight="bold" id="svg_65" text-anchor="middle" x="570" y="448">N</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="10" id="svg_66" x="585" y="450">可选操作</text>
+  <rect fill="#ffffff" height="200" id="svg_67" rx="5" stroke="#ccc" width="480" x="50" y="350"/>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="12" font-weight="bold" id="svg_68" x="60" y="370">流程说明 (Process Description)</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="11" id="svg_69" x="60" y="390">1. 企业向数据空间运营平台提交注册申请</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="11" id="svg_70" x="60" y="410">2. 数据空间运营方通过平台审核企业申请</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="11" id="svg_71" x="60" y="430">3. 审核通过后，运营方指示平台生成数字证书</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="11" id="svg_72" x="60" y="450">4. 平台向企业发送审核结果通知</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="11" id="svg_73" x="60" y="470">5. 企业从平台下载数字证书（可选）</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="11" id="svg_74" x="60" y="490">6. 企业配置并安装连接器</text>
+  <text fill="#333" font-family="Arial, sans-serif" font-size="11" id="svg_75" x="60" y="510">7. 连接器向数据空间运营平台注册</text>
+  <text fill="#666" font-family="Arial, sans-serif" font-size="10" font-style="italic" id="svg_76" x="60" y="535">注：此图简化了参与方和系统，使用弯曲箭头避免重叠</text>
+ </g>
+</svg>
