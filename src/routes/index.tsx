@@ -69,32 +69,8 @@ const ProviderValueAssessment = lazy(() => import('../pages/provider/analytics/V
 const ProviderToBeConstructed = () => <ToBeConstructed pageName="提供者功能页面" />;
 
 // 懒加载页面组件 - 消费者
-const ConsumerResourceList = lazy(() => import('../pages/consumer/resources/ResourceList'));
-const ConsumerResourceEdit = lazy(() => import('../pages/consumer/resources/ResourceEdit'));
-const ConsumerPolicyList = lazy(() => import('../pages/consumer/policies/PolicyList'));
-const ConsumerPolicyEdit = lazy(() => import('../pages/consumer/policies/PolicyEdit'));
 const ConsumerConnectorStatus = lazy(() => import('../pages/consumer/connections/ConnectorStatus'));
 const ConsumerDataExchange = lazy(() => import('../pages/consumer/connections/DataExchange'));
-const ConsumerExchangeLogs = lazy(() => import('../pages/consumer/connections/ExchangeLogs'));
-const ConsumerMarketplace = lazy(() => import('../pages/consumer/ecosystem/marketplace'));
-const ConsumerServiceDiscovery = lazy(() => import('../pages/consumer/ecosystem/ServiceDiscovery'));
-const ConsumerTransactions = lazy(() => import('../pages/consumer/ecosystem/Transactions'));
-const ConsumerSystemConfig = lazy(() => import('../pages/consumer/system/SystemConfig'));
-// 消费者系统备份、插件、更新组件已映射到ToBeConstructed
-const ConsumerAuthentication = lazy(() => import('../pages/consumer/identity/Authentication'));
-const ConsumerCertificateManagement = lazy(() => import('../pages/consumer/identity/CertificateManagement'));
-const ConsumerRegisterDataSpace = lazy(() => import('../pages/consumer/identity/RegisterDataspace'));
-const ConsumerComplianceReports = lazy(() => import('../pages/consumer/analytics/ComplianceReports'));
-const ConsumerDashboards = lazy(() => import('../pages/consumer/analytics/Dashboards'));
-
-const ConsumerValueAssessment = lazy(() => import('../pages/consumer/analytics/ValueAssessment'));
-
-// 消费者其他功能组件已映射到ToBeConstructed
-
-// 待构建的消费者组件
-const ConsumerToBeConstructed = () => <ToBeConstructed pageName="消费者功能页面" />;
-const ConsumerDataSubscription = lazy(() => import('../pages/consumer/subscriptions/DataSubscription'));
-const ConsumerManageSubscription = lazy(() => import('../pages/consumer/subscriptions/ManageSubscription'));
 
 const router = createHashRouter([
   {

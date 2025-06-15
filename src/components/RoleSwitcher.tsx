@@ -5,7 +5,6 @@ import { useRole } from '../contexts/RoleContext';
 import type { UserRole } from '../contexts/RoleContext';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 
 const roleOptions: UserRole[] = [
   {
