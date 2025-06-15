@@ -223,21 +223,21 @@ const router = createHashRouter([
         element: <OperatorSecurityCompliance />,
       },
       
-      // 提供者路由
+      // 企业用户路由
       {
-        path: 'provider/resources',
+        path: 'enterprise/resources',
         element: <ProviderResourceList />,
       },
       {
-        path: 'provider/resources/edit',
+        path: 'enterprise/resources/edit',
         element: <ProviderResourceEdit />,
       },
       {
-        path: 'provider/quality',
+        path: 'enterprise/quality',
         element: <ProviderToBeConstructed />,
       },
       {
-        path: 'provider/catalog',
+        path: 'enterprise/catalog',
         element: (
           <DataCatalogProvider>
             <ProviderDataCatalogManagement />
@@ -246,231 +246,114 @@ const router = createHashRouter([
       },
 
       {
-        path: 'provider/policies',
+        path: 'enterprise/policies',
         element: <ProviderPolicyList />,
       },
       {
-        path: 'provider/policies/edit',
+        path: 'enterprise/policies/edit',
         element: <ProviderPolicyEdit />,
       },
       {
-        path: 'provider/policies/dataset-policy-edit',
+        path: 'enterprise/policies/dataset-policy-edit',
         element: <ProviderDatasetPolicyEdit />,
       },
       {
-        path: 'provider/policies/dataset-policy-list',
+        path: 'enterprise/policies/dataset-policy-list',
         element: <ProviderDatasetPolicyList />,
       },
       {
-        path: 'provider/publishing',
+        path: 'enterprise/publishing',
         element: <ProviderToBeConstructed />,
       },
       {
-        path: 'provider/connections',
+        path: 'enterprise/connections',
         element: <ProviderConnectorStatus />,
       },
       {
-        path: 'provider/connections/exchange',
+        path: 'enterprise/connections/exchange',
         element: <ProviderDataExchange />,
       },
       {
-        path: 'provider/connections/logs',
+        path: 'enterprise/connections/logs',
         element: <ProviderExchangeLogs />,
       },
       {
-        path: 'provider/ecosystem',
+        path: 'enterprise/ecosystem',
         element: <ProviderMarketplace />,
       },
       {
-        path: 'provider/ecosystem/onshelf',
+        path: 'enterprise/ecosystem/onshelf',
         element: <ProviderOnShelf />,
       },
       {
-        path: 'provider/ecosystem/services',
+        path: 'enterprise/ecosystem/services',
         element: <ProviderServiceDiscovery />,
       },
       {
-        path: 'provider/resources/data-discovery',
+        path: 'enterprise/resources/data-discovery',
         element: <ProviderDataDiscovery />,
       },
       {
-        path: 'provider/ecosystem/transactions',
+        path: 'enterprise/ecosystem/transactions',
         element: <ProviderTransactions />,
       },
       {
-        path: 'provider/analytics',
+        path: 'enterprise/analytics',
         element: <DatasetUsageAnalysis />,
       },
       {
-        path: 'provider/revenue',
+        path: 'enterprise/revenue',
         element: <ProviderToBeConstructed />,
       },
       {
-        path: 'provider/system',
+        path: 'enterprise/system',
         element: <ProviderSystemConfig />,
       },
       {
-        path: 'provider/system/backup',
+        path: 'enterprise/system/backup',
         element: <ProviderToBeConstructed />,
       },
       {
-        path: 'provider/system/plugins',
+        path: 'enterprise/system/plugins',
         element: <ProviderToBeConstructed />,
       },
       {
-        path: 'provider/system/updates',
+        path: 'enterprise/system/updates',
         element: <ProviderToBeConstructed />,
       },
       {
-        path: 'provider/identity/register-dataspace',
+        path: 'enterprise/identity/register-dataspace',
         element: <ProviderRegisterDataSpace />,
       },
       {
-        path: 'provider/auth',
+        path: 'enterprise/auth',
         element: <ProviderAuthentication />,
       },
       {
-        path: 'provider/auth/certificates',
+        path: 'enterprise/auth/certificates',
         element: <ProviderCertificateManagement />,
       },
       {
-        path: 'provider/analytics/compliance',
+        path: 'enterprise/analytics/compliance',
         element: <ProviderComplianceReports />,
       },
       {
-        path: 'provider/analytics/dashboards',
+        path: 'enterprise/analytics/dashboards',
         element: <ProviderDashboards />,
       },
       {
-        path: 'provider/analytics/value',
+        path: 'enterprise/analytics/value',
         element: <ProviderValueAssessment />,
       },
-      
-      // 消费者路由
       {
-        path: 'consumer/resources',
-        element: <ConsumerResourceList />,
-      },
-      {
-        path: 'consumer/resources/edit',
-        element: <ConsumerResourceEdit />,
-      },
-      {
-        path: 'consumer/policies',
-        element: <ConsumerPolicyList />,
-      },
-      {
-        path: 'consumer/policies/edit',
-        element: <ConsumerPolicyEdit />,
-      },
-      {
-        path: 'consumer/connections',
+        path: 'enterprise/consumer-connections',
         element: <ConsumerConnectorStatus />,
       },
       {
-        path: 'consumer/connections/exchange',
+        path: 'enterprise/consumer-connections/exchange',
         element: <ConsumerDataExchange />,
       },
-      {
-        path: 'consumer/connections/logs',
-        element: <ConsumerExchangeLogs />,
-      },
-      {
-        path: 'consumer/ecosystem',
-        element: <ConsumerMarketplace />,
-      },
-      {
-        path: 'consumer/ecosystem/participants',
-        element: <ConsumerToBeConstructed />,
-      },
-      {
-        path: 'consumer/ecosystem/services',
-        element: <ConsumerServiceDiscovery />,
-      },
-      {
-        path: 'consumer/ecosystem/transactions',
-        element: <ConsumerTransactions />,
-      },
-      {
-        path: 'consumer/system',
-        element: <ConsumerSystemConfig />,
-      },
-      {
-        path: 'consumer/system/backup',
-        element: <ConsumerToBeConstructed />,
-      },
-      {
-        path: 'consumer/system/plugins',
-        element: <ConsumerToBeConstructed />,
-      },
-      {
-        path: 'consumer/system/updates',
-        element: <ConsumerToBeConstructed />,
-      },
-      {
-        path: 'consumer/identity/register-dataspace',
-        element: <ConsumerRegisterDataSpace />,
-      },
-      {
-        path: 'consumer/auth',
-        element: <ConsumerAuthentication />,
-      },
-      {
-        path: 'consumer/auth/certificates',
-        element: <ConsumerCertificateManagement />,
-      },
-      {
-        path: 'consumer/analytics',
-        element: <ConsumerComplianceReports />,
-      },
-      {
-        path: 'consumer/analytics/compliance',
-        element: <ConsumerComplianceReports />,
-      },
-      {
-        path: 'consumer/analytics/dashboards',
-        element: <ConsumerDashboards />,
-      },
-      {
-        path: 'consumer/analytics/value',
-        element: <ConsumerValueAssessment />,
-      },
-      {
-        path: 'consumer/discovery',
-        element: <ConsumerToBeConstructed />,
-      },
-      {
-        path: 'consumer/subscriptions',
-        element: <ConsumerManageSubscription />,
-      },
-      {
-        path: 'consumer/subscriptions/subscribe',
-        element: <ConsumerDataSubscription />,
-      },
-      {
-        path: 'consumer/monitoring',
-        element: <ConsumerToBeConstructed />,
-      },
-      {
-        path: 'consumer/integration',
-        element: <ConsumerToBeConstructed />,
-      },
-      {
-        path: 'consumer/procurement',
-        element: <ConsumerToBeConstructed />,
-      },
-      {
-        path: 'consumer/costs',
-        element: <ConsumerToBeConstructed />,
-      },
-      {
-        path: 'consumer/lineage',
-        element: <ConsumerToBeConstructed />,
-      },
-      {
-        path: 'consumer/quality',
-        element: <ConsumerToBeConstructed />,
-      },
+
       // 404页面
       {
         path: '*',

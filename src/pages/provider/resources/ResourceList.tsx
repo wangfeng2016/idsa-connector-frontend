@@ -89,12 +89,12 @@ const ResourceList = () => {
 
   // 处理资源编辑
   const handleEditResource = (id: number) => {
-    navigate(`/provider/resources/edit/${id}`);
+    navigate(`/enterprise/resources/edit/${id}`);
   };
 
   // 处理添加资源
   const handleAddResource = () => {
-    navigate('/provider/resources/edit/create');
+    navigate('/enterprise/resources/edit/create');
   };
 
   // 获取资源统计信息

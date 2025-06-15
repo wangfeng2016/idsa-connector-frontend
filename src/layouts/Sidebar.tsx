@@ -153,92 +153,47 @@ const operatorMenuGroups: MenuGroup[] = [
   },
 ];
 
-// 数据提供者菜单配置
-const providerMenuGroups: MenuGroup[] = [
+// 企业用户菜单配置
+const enterpriseMenuGroups: MenuGroup[] = [
   {
-    id: 'resources',
-    title: '数据资源管理',
-    icon: <StorageIcon />,
+    id: 'data-providing',
+    title: '数据提供',
+    icon: <PublishIcon />,
     items: [
-      { id: 'data-discovery', title: '数据发现', path: '/provider/resources/data-discovery', icon: <ExploreIcon /> },
-      { id: 'resource-list', title: '资源列表', path: '/provider/resources', icon: <FolderIcon /> },
-      { id: 'catalog-management', title: '数据目录管理', path: '/provider/catalog', icon: <LibraryBooksIcon /> },
+      { id: 'data-discovery', title: '数据发现', path: '/enterprise/resources/data-discovery', icon: <ExploreIcon /> },
+      { id: 'resource-list', title: '资源列表', path: '/enterprise/resources', icon: <FolderIcon /> },
+      { id: 'catalog-management', title: '数据目录管理', path: '/enterprise/catalog', icon: <LibraryBooksIcon /> },
+      { id: 'dataset-policy-edit', title: '数据集策略管理', path: '/enterprise/policies/dataset-policy-edit', icon: <DescriptionIcon /> },
+      { id: 'dataset-policy-list', title: '数据集策略列表', path: '/enterprise/policies/dataset-policy-list', icon: <ListIcon /> },
+      { id: 'connector-status', title: '连接器状态', path: '/enterprise/connections', icon: <SwapHorizIcon /> },
+      { id: 'data-exchange', title: '数据交换', path: '/enterprise/connections/exchange', icon: <SwapHorizIcon /> },
+      { id: 'register-dataspace', title: '数据空间机构注册', path: '/enterprise/identity/register-dataspace', icon: <BusinessIcon /> },
     ],
   },
   {
-    id: 'policy-management',
-    title: '数据使用策略管理',
-    icon: <PolicyIcon />,
+    id: 'data-consuming',
+    title: '数据消费',
+    icon: <SubscriptionsIcon />,
     items: [
-      { id: 'dataset-policy-edit', title: '数据集策略管理', path: '/provider/policies/dataset-policy-edit', icon: <DescriptionIcon /> },
-      { id: 'dataset-policy-list', title: '数据集策略列表', path: '/provider/policies/dataset-policy-list', icon: <ListIcon /> },
+      { id: 'marketplace', title: '数据市场浏览', path: '/enterprise/ecosystem', icon: <ShoppingCartIcon /> },
+      { id: 'data-subscription', title: '数据订阅', path: '/enterprise/subscriptions/subscribe', icon: <SubscriptionsIcon /> },
+      { id: 'subscription-management', title: '订阅管理', path: '/enterprise/subscriptions', icon: <SubscriptionsIcon /> },
+      { id: 'consumer-connector-status', title: '连接器状态', path: '/enterprise/consumer-connections', icon: <SwapHorizIcon /> },
+      { id: 'consumer-data-exchange', title: '数据交换', path: '/enterprise/consumer-connections/exchange', icon: <SwapHorizIcon /> },
     ],
   },
   {
-    id: 'ecosystem',
-    title: '数据空间生态交互',
-    icon: <StoreIcon />,
-    items: [
-      { id: 'register-dataspace', title: '数据空间机构注册', path: '/provider/identity/register-dataspace', icon: <BusinessIcon /> },
-      { id: 'onshelf', title: '数据发布', path: '/provider/ecosystem/onshelf', icon: <PublishIcon /> },
-      { id: 'marketplace', title: '数据市场浏览', path: '/provider/ecosystem', icon: <ShoppingCartIcon /> },
-      { id: 'usage-analytics', title: '数据使用分析', path: '/provider/analytics', icon: <AnalyticsIcon /> },
-    ],
-  },
-  {
-    id: 'connection-management',
-    title: '数据连接与交换管理',
-    icon: <SyncAltIcon />,
-    items: [
-      { id: 'connector-status', title: '连接器状态', path: '/provider/connections', icon: <SwapHorizIcon /> },
-      { id: 'data-exchange', title: '数据交换', path: '/provider/connections/exchange', icon: <SwapHorizIcon /> },
-    ],
-  },
-  {
-    id: 'system',
-    title: '系统配置与管理',
+    id: 'system-management',
+    title: '系统管理',
     icon: <SettingsIcon />,
     items: [
-      { id: 'system-params', title: '系统参数配置', path: '/provider/system', icon: <TuneIcon /> },
-      { id: 'updates', title: '系统更新管理', path: '/provider/system/updates', icon: <SystemUpdateIcon /> },
-    ],
-  },
-
-
-];
-
-// 数据消费者菜单配置
-const consumerMenuGroups: MenuGroup[] = [
-  {
-    id: 'ecosystem',
-    title: '数据空间生态交互',
-    icon: <StoreIcon />,
-    items: [
-      { id: 'register-dataspace', title: '数据空间机构注册', path: '/consumer/identity/register-dataspace', icon: <BusinessIcon /> },
-      { id: 'marketplace', title: '数据市场浏览', path: '/consumer/ecosystem', icon: <ShoppingCartIcon /> },
-      { id: 'data-subscription', title: '数据订阅', path: '/consumer/subscriptions/subscribe', icon: <SubscriptionsIcon /> },
-      { id: 'subscription-management', title: '订阅管理', path: '/consumer/subscriptions', icon: <SubscriptionsIcon /> },
-    ],
-  },
-  {
-    id: 'connection-management',
-    title: '数据连接与交换管理',
-    icon: <SyncAltIcon />,
-    items: [
-      { id: 'connector-status', title: '连接器状态', path: '/consumer/connections', icon: <SwapHorizIcon /> },
-      { id: 'data-exchange', title: '数据交换', path: '/consumer/connections/exchange', icon: <SwapHorizIcon /> },
-    ],
-  },
-  {
-    id: 'system',
-    title: '系统配置与管理',
-    icon: <SettingsIcon />,
-    items: [
-      { id: 'system-params', title: '系统参数配置', path: '/consumer/system', icon: <TuneIcon /> },
-      { id: 'updates', title: '系统更新管理', path: '/consumer/system/updates', icon: <SystemUpdateIcon /> },
+      { id: 'system-params', title: '系统参数配置', path: '/enterprise/system', icon: <TuneIcon /> },
+      { id: 'updates', title: '系统更新管理', path: '/enterprise/system/updates', icon: <SystemUpdateIcon /> },
     ],
   },
 ];
+
+
 
 
 
@@ -246,8 +201,7 @@ const consumerMenuGroups: MenuGroup[] = [
 const getMenuGroupsByRole = (roleType: string) => {
   const roleMenus = {
     operator: operatorMenuGroups,
-    provider: providerMenuGroups,
-    consumer: consumerMenuGroups,
+    enterprise: enterpriseMenuGroups,
   };
   
   return roleMenus[roleType as keyof typeof roleMenus] || [];

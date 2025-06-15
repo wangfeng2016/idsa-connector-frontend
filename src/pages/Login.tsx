@@ -43,19 +43,12 @@ const Login: React.FC = () => {
             permissions: ['*'],
             organizationId: 'operator-org'
           });
-        } else if (username === 'provider_admin') {
+        } else if (username === 'enterprise_admin') {
           switchRole({
-            type: 'provider',
-            name: '数据提供者',
-            permissions: ['data:provide', 'data:manage'],
-            organizationId: 'provider-org'
-          });
-        } else if (username === 'consumer_admin') {
-          switchRole({
-            type: 'consumer',
-            name: '数据消费者',
-            permissions: ['data:consume', 'data:subscribe'],
-            organizationId: 'consumer-org'
+            type: 'enterprise',
+            name: '企业用户',
+            permissions: ['data:provide', 'data:manage', 'data:consume', 'data:subscribe'],
+            organizationId: 'enterprise-org'
           });
         }
         navigate('/');
@@ -186,7 +179,7 @@ const Login: React.FC = () => {
 
           <Box sx={{ mt: 3, textAlign: 'center' }}>
             <Typography variant="caption" color="text.secondary">
-              测试账号：operator_admin / provider_admin / consumer_admin
+              测试账号：operator_admin / enterprise_admin
               <br />
               密码：admin123
             </Typography>

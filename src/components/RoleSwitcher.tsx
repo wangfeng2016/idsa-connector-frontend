@@ -15,16 +15,10 @@ const roleOptions: UserRole[] = [
     organizationId: 'operator-org'
   },
   {
-    type: 'provider',
-    name: '数据提供者',
-    permissions: ['provider:*'],
-    organizationId: 'provider-org'
-  },
-  {
-    type: 'consumer',
-    name: '数据消费者',
-    permissions: ['consumer:*'],
-    organizationId: 'consumer-org'
+    type: 'enterprise',
+    name: '企业用户',
+    permissions: ['enterprise:*'],
+    organizationId: 'enterprise-org'
   }
 ];
 
@@ -32,10 +26,8 @@ const getRoleIcon = (roleType: string) => {
   switch (roleType) {
     case 'operator':
       return <BusinessCenterIcon sx={{ fontSize: 16, mr: 1 }} />;
-    case 'provider':
+    case 'enterprise':
       return <CloudUploadIcon sx={{ fontSize: 16, mr: 1 }} />;
-    case 'consumer':
-      return <ShoppingBasketIcon sx={{ fontSize: 16, mr: 1 }} />;
     default:
       return null;
   }

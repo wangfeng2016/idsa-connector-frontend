@@ -29,19 +29,12 @@ const getUserRole = (username: string): UserRole | null => {
         permissions: ['*'],
         organizationId: 'operator-org'
       };
-    case 'provider_admin':
+    case 'enterprise_admin':
       return {
-        type: 'provider',
-        name: '数据提供者',
-        permissions: ['data:provide', 'data:manage'],
-        organizationId: 'provider-org'
-      };
-    case 'consumer_admin':
-      return {
-        type: 'consumer',
-        name: '数据消费者',
-        permissions: ['data:consume', 'data:subscribe'],
-        organizationId: 'consumer-org'
+        type: 'enterprise',
+        name: '企业用户',
+        permissions: ['data:provide', 'data:manage', 'data:consume', 'data:subscribe'],
+        organizationId: 'enterprise-org'
       };
     default:
       return null;
@@ -55,8 +48,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // 简单的用户名密码验证（实际项目中应该调用后端API）
     const validCredentials = [
       { username: 'operator_admin', password: 'admin123' },
-      { username: 'provider_admin', password: 'admin123' },
-      { username: 'consumer_admin', password: 'admin123' }
+      { username: 'enterprise_admin', password: 'admin123' }
     ];
 
     const credential = validCredentials.find(

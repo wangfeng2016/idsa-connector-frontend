@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, type ReactNode } from 'react';
 
 export interface UserRole {
-  type: 'operator' | 'provider' | 'consumer';
+  type: 'operator' | 'enterprise';
   name: string;
   permissions: string[];
   organizationId: string;
