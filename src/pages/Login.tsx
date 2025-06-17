@@ -36,14 +36,7 @@ const Login: React.FC = () => {
       const success = await login(username, password);
       if (success) {
         // 根据用户名设置角色
-        if (username === 'operator_admin') {
-          switchRole({
-            type: 'operator',
-            name: '数据空间运营者',
-            permissions: ['*'],
-            organizationId: 'operator-org'
-          });
-        } else if (username === 'enterprise_admin') {
+        if (username === 'enterprise_admin') {
           switchRole({
             type: 'enterprise',
             name: '企业用户',
@@ -179,7 +172,7 @@ const Login: React.FC = () => {
 
           <Box sx={{ mt: 3, textAlign: 'center' }}>
             <Typography variant="caption" color="text.secondary">
-              测试账号：operator_admin / enterprise_admin
+              测试账号：enterprise_admin
               <br />
               密码：admin123
             </Typography>

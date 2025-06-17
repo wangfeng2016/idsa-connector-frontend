@@ -8,12 +8,6 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const roleOptions: UserRole[] = [
   {
-    type: 'operator',
-    name: '数据空间运营者',
-    permissions: ['*'],
-    organizationId: 'operator-org'
-  },
-  {
     type: 'enterprise',
     name: '企业用户',
     permissions: ['enterprise:*'],
@@ -23,8 +17,6 @@ const roleOptions: UserRole[] = [
 
 const getRoleIcon = (roleType: string) => {
   switch (roleType) {
-    case 'operator':
-      return <BusinessCenterIcon sx={{ fontSize: 16, mr: 1 }} />;
     case 'enterprise':
       return <CloudUploadIcon sx={{ fontSize: 16, mr: 1 }} />;
     default:

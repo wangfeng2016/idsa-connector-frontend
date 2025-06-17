@@ -7,35 +7,7 @@ import DynamicDashboard from '../components/DynamicDashboard';
 import ProtectedRoute from '../components/ProtectedRoute';
 import Login from '../pages/Login';
 
-// 懒加载页面组件 - 运营方
-const OperatorResourceList = lazy(() => import('../pages/operator/resources/ResourceList'));
-const OperatorResourceEdit = lazy(() => import('../pages/operator/resources/ResourceEdit'));
-const OperatorPolicyList = lazy(() => import('../pages/operator/policies/PolicyList'));
-const OperatorPolicyEdit = lazy(() => import('../pages/operator/policies/PolicyEdit'));
-const OperatorConnectorStatus = lazy(() => import('../pages/operator/connections/ConnectorStatus'));
-const OperatorDataExchange = lazy(() => import('../pages/operator/connections/DataExchange'));
-const OperatorExchangeLogs = lazy(() => import('../pages/operator/connections/ExchangeLogs'));
-const OperatorMarketplace = lazy(() => import('../pages/operator/ecosystem/Marketplace'));
-const OperatorParticipants = lazy(() => import('../pages/operator/ecosystem/Participants'));
-const OperatorServiceDiscovery = lazy(() => import('../pages/operator/ecosystem/ServiceDiscovery'));
-const OperatorTransactions = lazy(() => import('../pages/operator/ecosystem/Transactions'));
-const OperatorSystemConfig = lazy(() => import('../pages/operator/system/SystemConfig'));
-const OperatorBackup = lazy(() => import('../pages/operator/system/Backup'));
-const OperatorPlugins = lazy(() => import('../pages/operator/system/Plugins'));
-const OperatorUpdates = lazy(() => import('../pages/operator/system/Updates'));
-const OperatorAuthentication = lazy(() => import('../pages/operator/operation/Authentication'));
-const OperatorCertificateManagement = lazy(() => import('../pages/operator/operation/CertificateManagement'));
-const OperatorRegistrationApproval = lazy(() => import('../pages/operator/operation/RegistrationApproval'));
-const OperatorComplianceReports = lazy(() => import('../pages/operator/analytics/ComplianceReports'));
-const OperatorDashboards = lazy(() => import('../pages/operator/analytics/Dashboards'));
 
-const OperatorValueAssessment = lazy(() => import('../pages/operator/analytics/ValueAssessment'));
-const OperatorAccessControl = lazy(() => import('../pages/operator/security/AccessControl'));
-const OperatorAuditLogs = lazy(() => import('../pages/operator/security/AuditLogs'));
-const OperatorSecurityCompliance = lazy(() => import('../pages/operator/security/Compliance'));
-
-// 待构建的运营方组件
-const OperatorToBeConstructed = () => <ToBeConstructed pageName="运营方功能页面" />;
 
 // 懒加载页面组件 - 提供者
 const ProviderDataDiscovery = lazy(() => import('../pages/provider/resources/DataDiscovery'));
@@ -89,115 +61,7 @@ const router = createHashRouter([
         index: true,
         element: <DynamicDashboard />,
       },
-      // 运营方路由
-      {
-        path: 'operator/resources',
-        element: <OperatorResourceList />,
-      },
-      {
-        path: 'operator/resources/edit',
-        element: <OperatorResourceEdit />,
-      },
-      {
-        path: 'operator/policies',
-        element: <OperatorPolicyList />,
-      },
-      {
-        path: 'operator/policies/edit',
-        element: <OperatorPolicyEdit />,
-      },
-      {
-        path: 'operator/connections',
-        element: <OperatorConnectorStatus />,
-      },
-      {
-        path: 'operator/connections/exchange',
-        element: <OperatorDataExchange />,
-      },
-      {
-        path: 'operator/connections/logs',
-        element: <OperatorExchangeLogs />,
-      },
-      {
-        path: 'operator/ecosystem',
-        element: <OperatorMarketplace />,
-      },
-      {
-        path: 'operator/ecosystem/participants',
-        element: <OperatorParticipants />,
-      },
-      {
-        path: 'operator/ecosystem/services',
-        element: <OperatorServiceDiscovery />,
-      },
-      {
-        path: 'operator/ecosystem/transactions',
-        element: <OperatorTransactions />,
-      },
-      {
-        path: 'operator/system',
-        element: <OperatorSystemConfig />,
-      },
-      {
-        path: 'operator/system/backup',
-        element: <OperatorBackup />,
-      },
-      {
-        path: 'operator/system/plugins',
-        element: <OperatorPlugins />,
-      },
-      {
-        path: 'operator/system/updates',
-        element: <OperatorUpdates />,
-      },
-      {
-        path: 'operator/operation/auth',
-        element: <OperatorAuthentication />,
-      },
-      {
-        path: 'operator/operation/certificates',
-        element: <OperatorCertificateManagement />,
-      },
-      {
-        path: 'operator/operation/registration-approval',
-        element: <OperatorRegistrationApproval />,
-      },
-      {
-        path: 'operator/analytics',
-        element: <OperatorComplianceReports />,
-      },
-      {
-        path: 'operator/analytics/compliance',
-        element: <OperatorComplianceReports />,
-      },
-      {
-        path: 'operator/analytics/dashboards',
-        element: <OperatorDashboards />,
-      },
-      {
-        path: 'operator/analytics/value',
-        element: <OperatorValueAssessment />,
-      },
-      {
-        path: 'operator/governance',
-        element: <OperatorToBeConstructed />,
-      },
-      {
-        path: 'operator/monitoring',
-        element: <OperatorToBeConstructed />,
-      },
-      {
-        path: 'operator/security/access',
-        element: <OperatorAccessControl />,
-      },
-      {
-        path: 'operator/security/audit',
-        element: <OperatorAuditLogs />,
-      },
-      {
-        path: 'operator/security/compliance',
-        element: <OperatorSecurityCompliance />,
-      },
+
       
       // 企业用户路由
       {

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, type ReactNode } from 'react';
 
 export interface UserRole {
-  type: 'operator' | 'enterprise';
+  type: 'enterprise';
   name: string;
   permissions: string[];
   organizationId: string;
@@ -14,10 +14,10 @@ interface RoleContextType {
 }
 
 const defaultRole: UserRole = {
-  type: 'operator',
-  name: '数据空间运营者',
-  permissions: ['*'],
-  organizationId: 'default-org'
+  type: 'enterprise',
+  name: '企业用户',
+  permissions: ['data:provide', 'data:manage', 'data:consume', 'data:subscribe'],
+  organizationId: 'enterprise-org'
 };
 
 const RoleContext = createContext<RoleContextType | undefined>(undefined);

@@ -113,41 +113,7 @@ interface MenuItem {
   icon: React.ReactNode;
 }
 
-// 数据空间运营方菜单配置
-const operatorMenuGroups: MenuGroup[] = [
-  {
-    id: 'ecosystem',
-    title: '数据空间生态交互',
-    icon: <StoreIcon />,
-    items: [
-      { id: 'marketplace', title: '数据市场浏览', path: '/operator/ecosystem', icon: <ShoppingCartIcon /> },
-      { id: 'participants', title: '参与方目录', path: '/operator/ecosystem/participants', icon: <PeopleIcon /> },
-      { id: 'settlement', title: '清算管理', path: '/operator/ecosystem/settlement', icon: <ReceiptIcon /> },
-      { id: 'registration-approval', title: '机构注册审核', path: '/operator/operation/registration-approval', icon: <VerifiedUserIcon /> },
-      { id: 'certificates', title: '证书管理', path: '/operator/operation/certificates', icon: <VpnKeyIcon /> },
-    ],
-  },
-  {
-    id: 'system',
-    title: '系统配置与管理',
-    icon: <SettingsIcon />,
-    items: [
-      { id: 'system-params', title: '系统参数配置', path: '/operator/system', icon: <TuneIcon /> },
-      { id: 'updates', title: '系统更新管理', path: '/operator/system/updates', icon: <SystemUpdateIcon /> },
-    ],
-  },
-  {
-    id: 'analytics',
-    title: '分析与报表',
-    icon: <BarChartIcon />,
-    items: [
-      { id: 'data-flow', title: '数据流通分析', path: '/operator/analytics', icon: <TimelineIcon /> },
-      { id: 'compliance-reports', title: '合规报表', path: '/operator/analytics/compliance', icon: <SummarizeIcon /> },
-      { id: 'dashboards', title: '自定义仪表盘', path: '/operator/analytics/dashboards', icon: <DashboardIcon /> },
-      { id: 'value-assessment', title: '价值评估', path: '/operator/analytics/value', icon: <AssessmentIcon /> },
-    ],
-  },
-];
+
 
 // 企业用户菜单配置
 const enterpriseMenuGroups: MenuGroup[] = [
@@ -196,7 +162,6 @@ const enterpriseMenuGroups: MenuGroup[] = [
 // 根据角色获取菜单组
 const getMenuGroupsByRole = (roleType: string) => {
   const roleMenus = {
-    operator: operatorMenuGroups,
     enterprise: enterpriseMenuGroups,
   };
   
