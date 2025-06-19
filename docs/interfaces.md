@@ -724,14 +724,14 @@
 **接口描述**: 添加或移除资源收藏  
 **接口报文格式**: POST /api/resources/{id}/favorite  
 
-## 3. 策略管理模块
+## 3. 数据集策略管理模块
 
-### 3.1 获取策略列表
+### 3.1 获取数据集策略配置
 
-**接口名称**: 获取策略列表  
-**对应页面**: provider/policies/PolicyList.tsx  
-**接口描述**: 分页获取数据使用策略列表  
-**接口报文格式**: GET /api/policies  
+**接口名称**: 获取数据集策略配置  
+**对应页面**: provider/dataset-policy-edit/DatasetPolicyEdit.tsx  
+**接口描述**: 获取指定数据集的策略配置信息  
+**接口报文格式**: GET /api/datasets/{datasetId}/policy  
 
 **响应体 JSON Schema**:
 ```json
@@ -742,50 +742,192 @@
     "data": {
       "type": "object",
       "properties": {
-        "policies": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {"type": "integer"},
-              "name": {"type": "string"},
-              "type": {"type": "string"},
-              "target": {"type": "string"},
-              "status": {"type": "string", "enum": ["active", "inactive", "pending"]},
-              "createdAt": {"type": "string", "format": "date-time"},
-              "updatedAt": {"type": "string", "format": "date-time"},
-              "description": {"type": "string"},
-              "createdBy": {"type": "string"}
+        "datasetId": {"type": "integer"},
+        "datasetName": {"type": "string"},
+        "policyConfig": {
+          "type": "object",
+          "properties": {
+            "restrict_consumer": {
+              "type": "object",
+              "properties": {
+                "enabled": {"type": "boolean"},
+                "allowedConsumers": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                }
+              }
+            },
+            "restrict_connector": {
+              "type": "object",
+              "properties": {
+                "enabled": {"type": "boolean"},
+                "allowedConnectors": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                }
+              }
+            },
+            "time_limit": {
+              "type": "object",
+              "properties": {
+                "enabled": {"type": "boolean"},
+                "startTime": {"type": "string", "format": "date-time"},
+                "endTime": {"type": "string", "format": "date-time"}
+              }
+            },
+            "usage_count": {
+              "type": "object",
+              "properties": {
+                "enabled": {"type": "boolean"},
+                "maxCount": {"type": "integer"}
+              }
             }
           }
         },
-        "total": {"type": "integer"}
+        "odrlSpec": {"type": "object"},
+        "idsSpec": {"type": "object"},
+        "createdAt": {"type": "string", "format": "date-time"},
+        "updatedAt": {"type": "string", "format": "date-time"}
       }
     }
   }
 }
 ```
 
-### 3.2 创建策略
+### 3.2 设置数据集策略配置
 
-**接口名称**: 创建数据使用策略  
-**对应页面**: provider/policies/PolicyEdit.tsx  
-**接口描述**: 创建新的数据使用策略  
-**接口报文格式**: POST /api/policies  
+**接口名称**: 设置数据集策略配置  
+**对应页面**: provider/dataset-policy-edit/DatasetPolicyEdit.tsx  
+**接口描述**: 为指定数据集设置策略配置，包括组合策略配置和生成的ODRL/IDS规范  
+**接口报文格式**: POST /api/datasets/{datasetId}/policy  
 
-### 3.3 更新策略
+**请求体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "policyConfig": {
+      "type": "object",
+      "properties": {
+        "restrict_consumer": {
+          "type": "object",
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "allowedConsumers": {
+              "type": "array",
+              "items": {"type": "string"}
+            }
+          },
+          "required": ["enabled"]
+        },
+        "restrict_connector": {
+          "type": "object",
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "allowedConnectors": {
+              "type": "array",
+              "items": {"type": "string"}
+            }
+          },
+          "required": ["enabled"]
+        },
+        "time_limit": {
+          "type": "object",
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "startTime": {"type": "string", "format": "date-time"},
+            "endTime": {"type": "string", "format": "date-time"}
+          },
+          "required": ["enabled"]
+        },
+        "usage_count": {
+          "type": "object",
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "maxCount": {"type": "integer"}
+          },
+          "required": ["enabled"]
+        }
+      },
+      "required": ["restrict_consumer", "restrict_connector", "time_limit", "usage_count"]
+    },
+    "odrlSpec": {
+      "type": "object",
+      "description": "生成的ODRL策略规范"
+    },
+    "idsSpec": {
+      "type": "object",
+      "description": "生成的IDS策略规范"
+    }
+  },
+  "required": ["policyConfig", "odrlSpec", "idsSpec"]
+}
+```
 
-**接口名称**: 更新数据使用策略  
-**对应页面**: provider/policies/PolicyEdit.tsx  
-**接口描述**: 更新现有策略  
-**接口报文格式**: PUT /api/policies/{id}  
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "message": {"type": "string"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "policyId": {"type": "integer"},
+        "datasetId": {"type": "integer"},
+        "createdAt": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}
+```
 
-### 3.4 删除策略
+### 3.3 更新数据集策略配置
 
-**接口名称**: 删除数据使用策略  
-**对应页面**: provider/policies/PolicyList.tsx  
-**接口描述**: 删除策略  
-**接口报文格式**: DELETE /api/policies/{id}  
+**接口名称**: 更新数据集策略配置  
+**对应页面**: provider/dataset-policy-edit/DatasetPolicyEdit.tsx  
+**接口描述**: 更新指定数据集的策略配置  
+**接口报文格式**: PUT /api/datasets/{datasetId}/policy  
+
+**请求体 JSON Schema**: 与3.2接口相同
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "message": {"type": "string"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "policyId": {"type": "integer"},
+        "datasetId": {"type": "integer"},
+        "updatedAt": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}
+```
+
+### 3.4 删除数据集策略配置
+
+**接口名称**: 删除数据集策略配置  
+**对应页面**: provider/dataset-policy-edit/DatasetPolicyEdit.tsx  
+**接口描述**: 删除指定数据集的策略配置  
+**接口报文格式**: DELETE /api/datasets/{datasetId}/policy  
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "message": {"type": "string"}
+  }
+}
+```  
 
 ## 4. 连接器管理模块
 

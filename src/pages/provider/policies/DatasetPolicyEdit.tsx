@@ -5,12 +5,14 @@ import {
   CardContent,
   Typography,
   FormControl,
+  FormControlLabel,
   InputLabel,
   Select,
   MenuItem,
   TextField,
   Button,
   Stack,
+  Switch,
   Autocomplete,
   Chip,
   Alert,
@@ -31,14 +33,21 @@ interface Dataset {
   uuid: string;
 }
 
-// 策略配置接口
-interface PolicyConfig {
+// 单个策略类配置接口
+interface PolicyClassConfig {
+  id: string;
   type: PolicyType;
+  enabled: boolean;
   consumers?: string[];
   connectors?: string[];
   startTime?: string;
   endTime?: string;
   maxUsageCount?: number;
+}
+
+// 组合策略配置接口
+interface CombinedPolicyConfig {
+  policyClasses: PolicyClassConfig[];
 }
 
 // 模拟消费者数据
@@ -57,13 +66,7 @@ const mockConnectors = [
   { id: 'connector-004', name: '连接器Delta', endpoint: 'https://connector-d.example.com' },
 ];
 
-// 策略类型选项
-const policyTypeOptions = [
-  { value: 'restrict_consumer', label: '指定消费者' },
-  { value: 'restrict_connector', label: '指定连接器' },
-  { value: 'time_limit', label: '限定使用时间' },
-  { value: 'usage_count', label: '限定使用次数' },
-];
+
 
 // 生成UUID的辅助函数
 const generateUUID = () => {
@@ -85,7 +88,7 @@ const convertToDatasets = (): Dataset[] => {
 };
 
 // 生成IDS策略规范
-const generateIDSPolicy = (dataset: Dataset, config: PolicyConfig): string => {
+const generateIDSPolicy = (dataset: Dataset, config: CombinedPolicyConfig): string => {
   const basePolicy = {
     "@context": {
       "ids": "https://w3id.org/idsa/core/",
@@ -106,69 +109,80 @@ const generateIDSPolicy = (dataset: Dataset, config: PolicyConfig): string => {
     }]
   };
 
-  // 根据策略类型添加约束
+  // 根据启用的策略类型添加约束
   const permission = basePolicy["ids:permission"][0] as any;
+  const constraints: any[] = [];
   
-  switch (config.type) {
-    case 'restrict_consumer':
-      if (config.consumers && config.consumers.length > 0) {
-        basePolicy["ids:consumer"] = config.consumers[0];
-      }
-      break;
-    case 'restrict_connector':
-      if (config.connectors && config.connectors.length > 0) {
-        permission["ids:constraint"] = [{
-          "@type": "ids:Constraint",
-          "ids:leftOperand": { "@id": "idsc:CONNECTOR" },
-          "ids:operator": { "@id": "idsc:EQUALS" },
-          "ids:rightOperand": [{
-            "@value": config.connectors[0],
-            "@type": "xsd:string"
-          }]
-        }];
-      }
-      break;
-    case 'time_limit':
-      if (config.startTime && config.endTime) {
-        permission["ids:constraint"] = [{
-          "@type": "ids:Constraint",
-          "ids:leftOperand": { "@id": "idsc:POLICY_EVALUATION_TIME" },
-          "ids:operator": { "@id": "idsc:AFTER" },
-          "ids:rightOperand": [{
-            "@value": config.startTime,
-            "@type": "xsd:dateTimeStamp"
-          }]
-        }, {
-          "@type": "ids:Constraint",
-          "ids:leftOperand": { "@id": "idsc:POLICY_EVALUATION_TIME" },
-          "ids:operator": { "@id": "idsc:BEFORE" },
-          "ids:rightOperand": [{
-            "@value": config.endTime,
-            "@type": "xsd:dateTimeStamp"
-          }]
-        }];
-      }
-      break;
-    case 'usage_count':
-      if (config.maxUsageCount) {
-        permission["ids:constraint"] = [{
-          "@type": "ids:Constraint",
-          "ids:leftOperand": { "@id": "idsc:COUNT" },
-          "ids:operator": { "@id": "idsc:LTEQ" },
-          "ids:rightOperand": [{
-            "@value": config.maxUsageCount.toString(),
-            "@type": "xsd:double"
-          }]
-        }];
-      }
-      break;
+  // 处理启用的策略类
+  const enabledPolicies = config.policyClasses.filter(p => p.enabled);
+  
+  enabledPolicies.forEach(policyClass => {
+    switch (policyClass.type) {
+      case 'restrict_consumer':
+        if (policyClass.consumers && policyClass.consumers.length > 0) {
+          basePolicy["ids:consumer"] = policyClass.consumers[0];
+        }
+        break;
+      case 'restrict_connector':
+        if (policyClass.connectors && policyClass.connectors.length > 0) {
+          constraints.push({
+            "@type": "ids:Constraint",
+            "ids:leftOperand": { "@id": "idsc:CONNECTOR" },
+            "ids:operator": { "@id": "idsc:EQUALS" },
+            "ids:rightOperand": [{
+              "@value": policyClass.connectors[0],
+              "@type": "xsd:string"
+            }]
+          });
+        }
+        break;
+      case 'time_limit':
+        if (policyClass.startTime && policyClass.endTime) {
+          constraints.push({
+            "@type": "ids:Constraint",
+            "ids:leftOperand": { "@id": "idsc:POLICY_EVALUATION_TIME" },
+            "ids:operator": { "@id": "idsc:AFTER" },
+            "ids:rightOperand": [{
+              "@value": policyClass.startTime,
+              "@type": "xsd:dateTimeStamp"
+            }]
+          }, {
+            "@type": "ids:Constraint",
+            "ids:leftOperand": { "@id": "idsc:POLICY_EVALUATION_TIME" },
+            "ids:operator": { "@id": "idsc:BEFORE" },
+            "ids:rightOperand": [{
+              "@value": policyClass.endTime,
+              "@type": "xsd:dateTimeStamp"
+            }]
+          });
+        }
+        break;
+      case 'usage_count':
+        if (policyClass.maxUsageCount) {
+          constraints.push({
+            "@type": "ids:Constraint",
+            "ids:leftOperand": { "@id": "idsc:COUNT" },
+            "ids:operator": { "@id": "idsc:LTEQ" },
+            "ids:rightOperand": [{
+              "@value": policyClass.maxUsageCount.toString(),
+              "@type": "xsd:double"
+            }]
+          });
+        }
+        break;
+    }
+  });
+
+  // 如果有约束条件，添加到permission中
+  if (constraints.length > 0) {
+    permission["ids:constraint"] = constraints;
   }
 
   return JSON.stringify(basePolicy, null, 2);
 };
 
 // 生成ODRL策略规范
-const generateODRLPolicy = (dataset: Dataset, config: PolicyConfig): string => {
+const generateODRLPolicy = (dataset: Dataset, config: CombinedPolicyConfig): string => {
   const basePolicy = {
     "@context": [
       "http://www.w3.org/ns/odrl.jsonld",
@@ -193,44 +207,55 @@ const generateODRLPolicy = (dataset: Dataset, config: PolicyConfig): string => {
   };
 
   const permission = basePolicy.permission[0] as any;
+  const constraints: any[] = [];
+  
+  // 处理启用的策略类
+  const enabledPolicies = config.policyClasses.filter(p => p.enabled);
+  
+  enabledPolicies.forEach(policyClass => {
+    switch (policyClass.type) {
+      case 'restrict_consumer':
+        if (policyClass.consumers && policyClass.consumers.length > 0) {
+          permission.assignee = policyClass.consumers[0];
+        }
+        break;
+      case 'restrict_connector':
+        if (policyClass.connectors && policyClass.connectors.length > 0) {
+          constraints.push({
+            "leftOperand": "connector",
+            "operator": "eq",
+            "rightOperand": policyClass.connectors[0]
+          });
+        }
+        break;
+      case 'time_limit':
+        if (policyClass.startTime && policyClass.endTime) {
+          constraints.push({
+            "leftOperand": "dateTime",
+            "operator": "gteq",
+            "rightOperand": { "@value": policyClass.startTime, "@type": "xsd:dateTime" }
+          }, {
+            "leftOperand": "dateTime",
+            "operator": "lteq",
+            "rightOperand": { "@value": policyClass.endTime, "@type": "xsd:dateTime" }
+          });
+        }
+        break;
+      case 'usage_count':
+        if (policyClass.maxUsageCount) {
+          constraints.push({
+            "leftOperand": "count",
+            "operator": "lteq",
+            "rightOperand": policyClass.maxUsageCount
+          });
+        }
+        break;
+    }
+  });
 
-  switch (config.type) {
-    case 'restrict_consumer':
-      if (config.consumers && config.consumers.length > 0) {
-        permission.assignee = config.consumers[0];
-      }
-      break;
-    case 'restrict_connector':
-      if (config.connectors && config.connectors.length > 0) {
-        permission.constraint = [{
-          "leftOperand": "connector",
-          "operator": "eq",
-          "rightOperand": config.connectors[0]
-        }];
-      }
-      break;
-    case 'time_limit':
-      if (config.startTime && config.endTime) {
-        permission.constraint = [{
-          "leftOperand": "dateTime",
-          "operator": "gteq",
-          "rightOperand": { "@value": config.startTime, "@type": "xsd:dateTime" }
-        }, {
-          "leftOperand": "dateTime",
-          "operator": "lteq",
-          "rightOperand": { "@value": config.endTime, "@type": "xsd:dateTime" }
-        }];
-      }
-      break;
-    case 'usage_count':
-      if (config.maxUsageCount) {
-        permission.constraint = [{
-          "leftOperand": "count",
-          "operator": "lteq",
-          "rightOperand": config.maxUsageCount
-        }];
-      }
-      break;
+  // 如果有约束条件，添加到permission中
+  if (constraints.length > 0) {
+    permission.constraint = constraints;
   }
 
   return JSON.stringify(basePolicy, null, 2);
@@ -239,14 +264,34 @@ const generateODRLPolicy = (dataset: Dataset, config: PolicyConfig): string => {
 const DatasetPolicyEdit: React.FC = () => {
   const [datasets] = useState<Dataset[]>(convertToDatasets());
   const [selectedDataset, setSelectedDataset] = useState<Dataset | null>(null);
-  const [policyType, setPolicyType] = useState<PolicyType>('restrict_consumer');
-  const [policyConfig, setPolicyConfig] = useState<PolicyConfig>({
-    type: 'restrict_consumer',
-    consumers: [],
-    connectors: [],
-    startTime: '',
-    endTime: '',
-    maxUsageCount: 1,
+  const [policyConfig, setPolicyConfig] = useState<CombinedPolicyConfig>({
+    policyClasses: [
+      {
+        id: 'restrict_consumer',
+        type: 'restrict_consumer',
+        enabled: false,
+        consumers: [],
+      },
+      {
+        id: 'restrict_connector',
+        type: 'restrict_connector',
+        enabled: false,
+        connectors: [],
+      },
+      {
+        id: 'time_limit',
+        type: 'time_limit',
+        enabled: false,
+        startTime: '',
+        endTime: '',
+      },
+      {
+        id: 'usage_count',
+        type: 'usage_count',
+        enabled: false,
+        maxUsageCount: 1,
+      }
+    ]
   });
   const [idsPolicy, setIdsPolicy] = useState<string>('');
   const [odrlPolicy, setOdrlPolicy] = useState<string>('');
@@ -261,13 +306,13 @@ const DatasetPolicyEdit: React.FC = () => {
     }
   }, [selectedDataset, policyConfig]);
 
-  // 处理策略类型变化
-  const handlePolicyTypeChange = (event: SelectChangeEvent) => {
-    const newType = event.target.value as PolicyType;
-    setPolicyType(newType);
+  // 处理策略类启用/禁用
+  const handlePolicyClassToggle = (policyType: PolicyType) => {
     setPolicyConfig({
       ...policyConfig,
-      type: newType,
+      policyClasses: policyConfig.policyClasses.map(pc => 
+        pc.type === policyType ? { ...pc, enabled: !pc.enabled } : pc
+      )
     });
   };
 
@@ -275,7 +320,9 @@ const DatasetPolicyEdit: React.FC = () => {
   const handleConsumersChange = (_event: any, newValue: string[]) => {
     setPolicyConfig({
       ...policyConfig,
-      consumers: newValue,
+      policyClasses: policyConfig.policyClasses.map(pc => 
+        pc.type === 'restrict_consumer' ? { ...pc, consumers: newValue } : pc
+      )
     });
   };
 
@@ -283,7 +330,9 @@ const DatasetPolicyEdit: React.FC = () => {
   const handleConnectorsChange = (_event: any, newValue: string[]) => {
     setPolicyConfig({
       ...policyConfig,
-      connectors: newValue,
+      policyClasses: policyConfig.policyClasses.map(pc => 
+        pc.type === 'restrict_connector' ? { ...pc, connectors: newValue } : pc
+      )
     });
   };
 
@@ -291,7 +340,9 @@ const DatasetPolicyEdit: React.FC = () => {
   const handleTimeChange = (field: 'startTime' | 'endTime') => (event: React.ChangeEvent<HTMLInputElement>) => {
     setPolicyConfig({
       ...policyConfig,
-      [field]: event.target.value,
+      policyClasses: policyConfig.policyClasses.map(pc => 
+        pc.type === 'time_limit' ? { ...pc, [field]: event.target.value } : pc
+      )
     });
   };
 
@@ -300,7 +351,9 @@ const DatasetPolicyEdit: React.FC = () => {
     const value = parseInt(event.target.value) || 1;
     setPolicyConfig({
       ...policyConfig,
-      maxUsageCount: value,
+      policyClasses: policyConfig.policyClasses.map(pc => 
+        pc.type === 'usage_count' ? { ...pc, maxUsageCount: value } : pc
+      )
     });
   };
 
@@ -322,9 +375,22 @@ const DatasetPolicyEdit: React.FC = () => {
     alert('策略保存成功！');
   };
 
-  // 渲染策略配置选项
-  const renderPolicyOptions = () => {
-    switch (policyType) {
+  // 获取策略类型的显示名称
+  const getPolicyTypeLabel = (type: PolicyType): string => {
+    const labels = {
+      'restrict_consumer': '限制消费者',
+      'restrict_connector': '限制连接器',
+      'time_limit': '时间限制',
+      'usage_count': '使用次数限制'
+    };
+    return labels[type];
+  };
+
+  // 渲染单个策略类配置
+  const renderPolicyClassConfig = (policyClass: PolicyClassConfig) => {
+    if (!policyClass.enabled) return null;
+
+    switch (policyClass.type) {
       case 'restrict_consumer':
         return (
           <Autocomplete
@@ -334,7 +400,7 @@ const DatasetPolicyEdit: React.FC = () => {
               const consumer = mockConsumers.find(c => c.id === option);
               return consumer ? `${consumer.name} (${consumer.organization})` : option;
             }}
-            value={policyConfig.consumers || []}
+            value={policyClass.consumers || []}
             onChange={handleConsumersChange}
             renderTags={(value, getTagProps) =>
               value.map((option, index) => {
@@ -359,7 +425,6 @@ const DatasetPolicyEdit: React.FC = () => {
             )}
           />
         );
-      
       case 'restrict_connector':
         return (
           <Autocomplete
@@ -369,7 +434,7 @@ const DatasetPolicyEdit: React.FC = () => {
               const connector = mockConnectors.find(c => c.id === option);
               return connector ? `${connector.name} (${connector.endpoint})` : option;
             }}
-            value={policyConfig.connectors || []}
+            value={policyClass.connectors || []}
             onChange={handleConnectorsChange}
             renderTags={(value, getTagProps) =>
               value.map((option, index) => {
@@ -394,7 +459,6 @@ const DatasetPolicyEdit: React.FC = () => {
             )}
           />
         );
-      
       case 'time_limit':
         return (
           <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
@@ -402,7 +466,7 @@ const DatasetPolicyEdit: React.FC = () => {
               fullWidth
               label="开始时间"
               type="datetime-local"
-              value={policyConfig.startTime}
+              value={policyClass.startTime || ''}
               onChange={handleTimeChange('startTime')}
               InputLabelProps={{
                 shrink: true,
@@ -413,7 +477,7 @@ const DatasetPolicyEdit: React.FC = () => {
               fullWidth
               label="结束时间"
               type="datetime-local"
-              value={policyConfig.endTime}
+              value={policyClass.endTime || ''}
               onChange={handleTimeChange('endTime')}
               InputLabelProps={{
                 shrink: true,
@@ -422,20 +486,18 @@ const DatasetPolicyEdit: React.FC = () => {
             />
           </Box>
         );
-      
       case 'usage_count':
         return (
           <TextField
             fullWidth
             label="最大使用次数"
             type="number"
-            value={policyConfig.maxUsageCount}
+            value={policyClass.maxUsageCount || 1}
             onChange={handleUsageCountChange}
             inputProps={{ min: 1 }}
             helperText="数据可以被使用的最大次数"
           />
         );
-      
       default:
         return null;
     }
@@ -504,36 +566,36 @@ const DatasetPolicyEdit: React.FC = () => {
               <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
                 策略配置
               </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                选择并配置多个策略类别来创建组合策略
+              </Typography>
               
-              <Stack spacing={3}>
-                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
-                  <Box sx={{ flex: { xs: 1, md: 0.5 } }}>
-                    <FormControl fullWidth>
-                      <InputLabel>策略类型</InputLabel>
-                      <Select
-                        value={policyType}
-                        label="策略类型"
-                        onChange={handlePolicyTypeChange}
-                      >
-                        {policyTypeOptions.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Box>
-                </Box>
-                
-                <Divider sx={{ my: 2 }} />
-                
-                <Box>
-                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 500 }}>
-                    策略参数配置
-                  </Typography>
-                  {renderPolicyOptions()}
-                </Box>
-              </Stack>
+              {/* 策略类别列表 */}
+              {policyConfig.policyClasses.map((policyClass) => (
+                <Card key={policyClass.id} variant="outlined" sx={{ mb: 2 }}>
+                  <CardContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={policyClass.enabled}
+                            onChange={() => handlePolicyClassToggle(policyClass.type)}
+                            color="primary"
+                          />
+                        }
+                        label={
+                          <Typography variant="subtitle1" fontWeight="medium">
+                            {getPolicyTypeLabel(policyClass.type)}
+                          </Typography>
+                        }
+                      />
+                    </Box>
+                    
+                    {/* 策略参数配置 */}
+                    {renderPolicyClassConfig(policyClass)}
+                  </CardContent>
+                </Card>
+              ))}
               
               <Box sx={{ mt: 4, display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
