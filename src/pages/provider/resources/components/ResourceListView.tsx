@@ -23,9 +23,7 @@ import {
   Visibility as VisibilityIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
-  AccountTree as AccountTreeIcon,
   Download as DownloadIcon,
-  Share as ShareIcon,
   TrendingUp as TrendingUpIcon,
   Storage as StorageIcon,
   Schedule as ScheduleIcon,
@@ -271,15 +269,7 @@ const ResourceListView = ({
                 <EditIcon fontSize="small" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="数据血缘">
-              <IconButton
-                size="small"
-                onClick={() => console.log('查看数据血缘:', resource.id)}
-                color="info"
-              >
-                <AccountTreeIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
+
             <Tooltip title="下载">
               <IconButton
                 size="small"
@@ -289,15 +279,7 @@ const ResourceListView = ({
                 <DownloadIcon fontSize="small" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="分享">
-              <IconButton
-                size="small"
-                onClick={() => console.log('分享资源:', resource.name)}
-                color="secondary"
-              >
-                <ShareIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
+
             <Tooltip title="删除">
               <IconButton
                 size="small"

@@ -5,8 +5,8 @@ import { type GridSortModel } from '@mui/x-data-grid';
  * 自定义Hook，用于处理资源列表的视图状态
  */
 export const useResourceView = () => {
-  // 视图类型：列表、卡片、树状图
-  const [viewType, setViewType] = useState<'list' | 'card' | 'tree'>('list');
+  // 视图类型：列表、卡片
+  const [viewType, setViewType] = useState<'list' | 'card'>('list');
   
   // 排序模型
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
@@ -33,7 +33,7 @@ export const useResourceView = () => {
   });
 
   // 切换视图类型
-  const changeViewType = (type: 'list' | 'card' | 'tree') => {
+  const changeViewType = (type: 'list' | 'card') => {
     setViewType(type);
   };
 

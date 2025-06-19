@@ -17,7 +17,7 @@ import ResourceToolbar from './components/ResourceToolbar';
 import ResourceFilterBar from './components/ResourceFilterBar';
 import ResourceListView from './components/ResourceListView';
 import ResourceCardView from './components/ResourceCardView';
-import ResourceTreeView from './components/ResourceTreeView';
+
 import ResourceDetailPanel from './components/ResourceDetailPanel';
 import DeleteConfirmDialog from './components/DeleteConfirmDialog';
 
@@ -197,12 +197,7 @@ const ResourceList = () => {
                 />
               )}
               
-              {viewType === 'tree' && (
-                <ResourceTreeView 
-                  resources={filteredResources}
-                  onViewDetails={viewResourceDetails}
-                />
-              )}
+
             </>
           )}
         </Box>

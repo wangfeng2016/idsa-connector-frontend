@@ -15,13 +15,12 @@ import {
 import {
   ViewList as ViewListIcon,
   ViewModule as ViewModuleIcon,
-  AccountTree as AccountTreeIcon,
   Delete as DeleteIcon,
   Download as DownloadIcon,
   ViewColumn as ViewColumnIcon,
 } from '@mui/icons-material';
 
-type ViewType = 'list' | 'card' | 'tree';
+type ViewType = 'list' | 'card';
 
 interface ResourceToolbarProps {
   viewType: ViewType;
@@ -99,9 +98,7 @@ const ResourceToolbar = ({
             <ToggleButton value="card" aria-label="卡片视图">
               <ViewModuleIcon fontSize="small" />
             </ToggleButton>
-            <ToggleButton value="tree" aria-label="树状视图">
-              <AccountTreeIcon fontSize="small" />
-            </ToggleButton>
+
           </ToggleButtonGroup>
           
           {selectedCount > 0 && (

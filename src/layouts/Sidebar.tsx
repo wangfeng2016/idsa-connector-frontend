@@ -124,7 +124,6 @@ const enterpriseMenuGroups: MenuGroup[] = [
     items: [
       { id: 'data-discovery', title: '数据发现', path: '/enterprise/resources/data-discovery', icon: <ExploreIcon /> },
       { id: 'resource-list', title: '资源列表', path: '/enterprise/resources', icon: <FolderIcon /> },
-      { id: 'catalog-management', title: '数据目录管理', path: '/enterprise/catalog', icon: <LibraryBooksIcon /> },
       { id: 'dataset-policy-edit', title: '数据集策略管理', path: '/enterprise/policies/dataset-policy-edit', icon: <DescriptionIcon /> },
       { id: 'dataset-policy-list', title: '数据集策略列表', path: '/enterprise/policies/dataset-policy-list', icon: <ListIcon /> },
       { id: 'connector-status', title: '连接器状态', path: '/enterprise/connections', icon: <SwapHorizIcon /> },

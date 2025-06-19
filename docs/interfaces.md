@@ -87,6 +87,487 @@
 
 ## 2. 数据资源管理模块
 
+## 2. 数据发现模块
+
+### 2.1 测试数据源连接
+
+**接口名称**: 设置数据源
+**对应页面**: provider/resources/DataDiscovery.tsx  
+**接口描述**: 在保存数据源配置前测试连接是否成功  
+**接口报文格式**: POST /api/data-discovery/test-connection  
+
+**请求体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["database", "filesystem"],
+      "description": "数据源类型"
+    },
+    "database": {
+      "type": "object",
+      "properties": {
+        "host": {"type": "string", "description": "主机地址"},
+        "port": {"type": "integer", "description": "端口号"},
+        "database": {"type": "string", "description": "数据库名"},
+        "username": {"type": "string", "description": "用户名"},
+        "password": {"type": "string", "description": "密码"}
+      },
+      "required": ["host", "port", "database", "username", "password"]
+    },
+    "filesystem": {
+      "type": "object",
+      "properties": {
+        "path": {"type": "string", "description": "文件路径"},
+        "recursive": {"type": "boolean", "description": "是否递归扫描"},
+        "filePattern": {"type": "string", "description": "文件过滤规则"}
+      },
+      "required": ["path"]
+    }
+  },
+  "required": ["type"]
+}
+```
+
+**接口名称**: 设置数据源
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "connected": {"type": "boolean", "description": "连接是否成功"},
+    "message": {"type": "string", "description": "连接结果消息"},
+    "details": {
+      "type": "object",
+      "properties": {
+        "responseTime": {"type": "number", "description": "响应时间(ms)"},
+        "version": {"type": "string", "description": "数据库版本或文件系统信息"},
+        "availableSchemas": {"type": "array", "items": {"type": "string"}, "description": "可用的数据库模式(仅数据库)"},
+        "fileCount": {"type": "integer", "description": "文件数量(仅文件系统)"}
+      }
+    }
+  }
+}
+```
+
+### 2.2 保存数据源配置
+
+**接口名称**: 保存数据源配置  
+**对应页面**: provider/resources/DataDiscovery.tsx  
+**接口描述**: 保存数据源连接配置信息  
+**接口报文格式**: POST /api/data-discovery/data-sources  
+
+**请求体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {"type": "string", "description": "数据源名称"},
+    "type": {
+      "type": "string",
+      "enum": ["database", "filesystem"],
+      "description": "数据源类型"
+    },
+    "config": {
+      "type": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "host": {"type": "string"},
+            "port": {"type": "integer"},
+            "database": {"type": "string"},
+            "username": {"type": "string"},
+            "password": {"type": "string"}
+          },
+          "required": ["host", "port", "database", "username", "password"]
+        },
+        {
+          "properties": {
+            "path": {"type": "string"},
+            "recursive": {"type": "boolean"},
+            "filePattern": {"type": "string"}
+          },
+          "required": ["path"]
+        }
+      ]
+    }
+  },
+  "required": ["name", "type", "config"]
+}
+```
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string", "description": "数据源ID"},
+        "name": {"type": "string"},
+        "type": {"type": "string"},
+        "createdAt": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}
+```
+
+### 2.3 获取数据源列表
+
+**接口名称**: 获取数据源列表  
+**对应页面**: provider/resources/DataDiscovery.tsx  
+**接口描述**: 获取已配置的数据源列表  
+**接口报文格式**: GET /api/data-discovery/data-sources  
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "type": {"type": "string", "enum": ["database", "filesystem"]},
+          "config": {"type": "object"},
+          "status": {"type": "string", "enum": ["active", "inactive", "error"]},
+          "lastTested": {"type": "string", "format": "date-time"},
+          "createdAt": {"type": "string", "format": "date-time"}
+        }
+      }
+    }
+  }
+}
+```
+
+### 2.4 启动数据发现扫描
+
+**接口名称**: 启动数据发现扫描  
+**对应页面**: provider/resources/DataDiscovery.tsx  
+**接口描述**: 对配置的数据源启动自动化数据发现扫描  
+**接口报文格式**: POST /api/data-discovery/scan  
+
+**请求体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "dataSourceIds": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "要扫描的数据源ID列表"
+    },
+    "scanOptions": {
+      "type": "object",
+      "properties": {
+        "includeMetadata": {"type": "boolean", "description": "是否提取元数据"},
+        "detectSensitiveData": {"type": "boolean", "description": "是否识别敏感数据"},
+        "analyzeDataQuality": {"type": "boolean", "description": "是否分析数据质量"},
+        "maxSampleRows": {"type": "integer", "description": "最大采样行数"}
+      }
+    }
+  },
+  "required": ["dataSourceIds"]
+}
+```
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "taskId": {"type": "string", "description": "扫描任务ID"},
+        "status": {"type": "string", "enum": ["started", "running"]},
+        "estimatedDuration": {"type": "integer", "description": "预估完成时间(秒)"}
+      }
+    }
+  }
+}
+```
+
+### 2.5 查询扫描进度
+
+**接口名称**: 查询扫描进度  
+**对应页面**: provider/resources/DataDiscovery.tsx  
+**接口描述**: 查询数据发现扫描任务的进度和状态  
+**接口报文格式**: GET /api/data-discovery/scan/{taskId}/progress  
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "taskId": {"type": "string"},
+        "status": {"type": "string", "enum": ["running", "completed", "failed", "cancelled"]},
+        "progress": {"type": "number", "minimum": 0, "maximum": 100, "description": "完成百分比"},
+        "currentStep": {"type": "string", "description": "当前执行步骤"},
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "status": {"type": "string", "enum": ["pending", "running", "completed", "failed"]},
+              "progress": {"type": "number"}
+            }
+          }
+        },
+        "statistics": {
+          "type": "object",
+          "properties": {
+            "dataSourcesScanned": {"type": "integer"},
+            "tablesFound": {"type": "integer"},
+            "filesFound": {"type": "integer"},
+            "metadataExtracted": {"type": "integer"},
+            "sensitiveDataDetected": {"type": "integer"}
+          }
+        },
+        "startTime": {"type": "string", "format": "date-time"},
+        "estimatedEndTime": {"type": "string", "format": "date-time"},
+        "errorMessage": {"type": "string"}
+      }
+    }
+  }
+}
+```
+
+### 2.6 获取发现结果
+
+**接口名称**: 获取数据发现结果  
+**对应页面**: provider/resources/DataDiscovery.tsx  
+**接口描述**: 获取扫描完成后的数据发现结果  
+**接口报文格式**: GET /api/data-discovery/scan/{taskId}/results  
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "taskId": {"type": "string"},
+        "summary": {
+          "type": "object",
+          "properties": {
+            "totalDatasets": {"type": "integer"},
+            "totalRecords": {"type": "integer"},
+            "totalFileSize": {"type": "integer", "description": "总文件大小(字节)"}
+          }
+        },
+        "discoveredAssets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "name": {"type": "string"},
+              "type": {"type": "string", "enum": ["table", "view", "file", "dataset"]},
+              "source": {"type": "string", "description": "来源数据源名称"},
+              "schema": {"type": "string", "description": "数据库模式(仅数据库)"},
+              "path": {"type": "string", "description": "文件路径(仅文件系统)"},
+              "recordCount": {"type": "integer", "description": "记录数量"},
+              "columnCount": {"type": "integer", "description": "字段数量"},
+              "dataVolume": {
+                "type": "object",
+                "properties": {
+                  "recordCount": {"type": "integer", "description": "记录数"},
+                  "fileSize": {"type": "integer", "description": "文件大小(字节)"},
+                  "estimatedSize": {"type": "string", "description": "预估大小(如1.2MB, 500KB)"}
+                }
+              },
+              "metadata": {
+                "type": "object",
+                "properties": {
+                  "columns": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {"type": "string"},
+                        "type": {"type": "string"},
+                        "nullable": {"type": "boolean"},
+                        "primaryKey": {"type": "boolean"}
+                      }
+                    }
+                  },
+                  "lastModified": {"type": "string", "format": "date-time"},
+                  "encoding": {"type": "string", "description": "文件编码"}
+                }
+              },
+              "sampleData": {
+                "type": "array",
+                "description": "样本数据(前几行)",
+                "items": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### 2.7 确认发现结果
+
+**接口名称**: 确认数据发现结果  
+**对应页面**: provider/resources/DataDiscovery.tsx  
+**接口描述**: 确认发现的数据资产，进入资源信息完善步骤  
+**接口报文格式**: POST /api/data-discovery/confirm-results  
+
+**请求体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "taskId": {"type": "string"},
+    "confirmedAssets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "assetId": {"type": "string"},
+          "confirmed": {"type": "boolean"},
+          "customName": {"type": "string", "description": "自定义名称"}
+        },
+        "required": ["assetId", "confirmed"]
+      }
+    }
+  },
+  "required": ["taskId", "confirmedAssets"]
+}
+```
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "confirmedCount": {"type": "integer"},
+        "sessionId": {"type": "string", "description": "资源完善会话ID"},
+        "confirmedAssets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "assetId": {"type": "string"},
+              "name": {"type": "string"},
+              "type": {"type": "string"},
+              "dataVolume": {
+                "type": "object",
+                "properties": {
+                  "recordCount": {"type": "integer"},
+                  "fileSize": {"type": "integer"},
+                  "estimatedSize": {"type": "string"}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### 2.8 资源信息完善
+
+**接口名称**: 完善资源信息  
+**对应页面**: provider/resources/DataDiscovery.tsx  
+**接口描述**: 为确认的数据资产补充业务信息，然后添加到数据资源列表  
+**接口报文格式**: POST /api/data-discovery/complete-resource-info  
+
+**请求体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "sessionId": {"type": "string", "description": "资源完善会话ID"},
+    "resourcesInfo": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "assetId": {"type": "string"},
+          "businessDomain": {"type": "string", "description": "业务域"},
+          "owner": {"type": "string", "description": "数据所有者"},
+          "accessLevel": {
+            "type": "string",
+            "enum": ["public", "internal", "confidential"],
+            "description": "访问级别"
+          },
+          "tags": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "标签列表"
+          },
+          "description": {"type": "string", "description": "资源描述"},
+          "category": {"type": "string", "description": "资源分类"}
+        },
+        "required": ["assetId", "businessDomain", "owner", "accessLevel"]
+      }
+    }
+  },
+  "required": ["sessionId", "resourcesInfo"]
+}
+```
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "addedCount": {"type": "integer", "description": "成功添加的资源数量"},
+        "resourceIds": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "新创建的资源ID列表"
+        },
+        "failedAssets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "assetId": {"type": "string"},
+              "error": {"type": "string", "description": "失败原因"}
+            }
+          },
+          "description": "添加失败的资产列表"
+        }
+      }
+    }
+  }
+}
+```
+
 ### 2.1 获取资源列表
 
 **接口名称**: 获取数据资源列表  

@@ -2,7 +2,7 @@ import { createHashRouter } from 'react-router-dom';
 import { lazy } from 'react';
 import MainLayout from '../layouts/MainLayout';
 import ToBeConstructed from '../pages/ToBeConstructed';
-import { DataCatalogProvider } from '../contexts/DataCatalogContext';
+
 import DynamicDashboard from '../components/DynamicDashboard';
 import ProtectedRoute from '../components/ProtectedRoute';
 import Login from '../pages/Login';
@@ -12,7 +12,7 @@ import Login from '../pages/Login';
 // 懒加载页面组件 - 提供者
 const ProviderDataDiscovery = lazy(() => import('../pages/provider/resources/DataDiscovery'));
 const ProviderResourceList = lazy(() => import('../pages/provider/resources/ResourceList'));
-const ProviderDataCatalogManagement = lazy(() => import('../pages/provider/resources/DataCatalogManagement'));
+
 const ProviderResourceEdit = lazy(() => import('../pages/provider/resources/ResourceEdit'));
 const ProviderPolicyList = lazy(() => import('../pages/provider/policies/PolicyList'));
 const ProviderPolicyEdit = lazy(() => import('../pages/provider/policies/PolicyEdit'));
@@ -76,14 +76,7 @@ const router = createHashRouter([
         path: 'enterprise/quality',
         element: <ProviderToBeConstructed />,
       },
-      {
-        path: 'enterprise/catalog',
-        element: (
-          <DataCatalogProvider>
-            <ProviderDataCatalogManagement />
-          </DataCatalogProvider>
-        ),
-      },
+
 
       {
         path: 'enterprise/policies',

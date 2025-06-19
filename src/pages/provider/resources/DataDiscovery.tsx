@@ -24,7 +24,6 @@ import {
   Paper,
   Checkbox,
   Alert,
-
 } from '@mui/material';
 import {
   Storage as DatabaseIcon,
@@ -38,10 +37,17 @@ import {
 interface DataSource {
   id: string;
   name: string;
-  type: 'database' | 'filesystem' | 'cloud' | 'api';
-  connectionString: string;
-  priority: 'high' | 'medium' | 'low';
-  securityLevel: 'public' | 'internal' | 'confidential';
+  type: 'database' | 'filesystem';
+  // 数据库连接信息
+  host?: string;
+  port?: number;
+  database?: string;
+  username?: string;
+  password?: string;
+  // 文件系统连接信息
+  path?: string;
+  recursive?: boolean;
+  filePattern?: string;
 }
 
 interface DiscoveryResult {
@@ -51,13 +57,22 @@ interface DiscoveryResult {
   source: string;
   recordCount: number;
   columns: number;
-  dataQuality: 'excellent' | 'good' | 'fair' | 'poor';
-  businessCategory: string;
-  sensitiveData: boolean;
+  fileSize?: number; // 文件大小（字节）
+  estimatedSize?: string; // 估算大小（如"1.2GB"）
   confirmed: boolean;
 }
 
-const steps = ['数据源配置', '自动化扫描与分析', '发现结果确认'];
+interface ResourceInfo {
+  assetId: string;
+  businessDomain: string;
+  owner: string;
+  accessLevel: 'public' | 'internal' | 'confidential';
+  tags: string[];
+  description?: string;
+  category?: string;
+}
+
+const steps = ['数据源配置', '自动化扫描与分析', '发现结果确认', '资源信息完善'];
 
 const DataDiscovery: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -66,32 +81,43 @@ const DataDiscovery: React.FC = () => {
       id: '1',
       name: '客户数据库',
       type: 'database',
-      connectionString: 'postgresql://localhost:5432/customers',
-      priority: 'high',
-      securityLevel: 'confidential'
+      host: 'localhost',
+      port: 5432,
+      database: 'customers',
+      username: 'admin',
+      password: '******'
     },
     {
       id: '2',
       name: '产品文件系统',
       type: 'filesystem',
-      connectionString: '/data/products',
-      priority: 'medium',
-      securityLevel: 'internal'
+      path: '/data/products',
+      recursive: true,
+      filePattern: '*.csv,*.json'
     }
   ]);
   
   const [newDataSource, setNewDataSource] = useState<Partial<DataSource>>({
     name: '',
     type: 'database',
-    connectionString: '',
-    priority: 'medium',
-    securityLevel: 'internal'
+    host: '',
+    port: undefined,
+    database: '',
+    username: '',
+    password: '',
+    path: '',
+    recursive: false,
+    filePattern: ''
   });
   
   const [scanning, setScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
   const [scanningText, setScanningText] = useState('准备开始扫描...');
   const [scanComplete, setScanComplete] = useState(false);
+  
+  // 资源信息完善相关状态
+  const [resourcesInfo, setResourcesInfo] = useState<ResourceInfo[]>([]);
+  const [sessionId, setSessionId] = useState<string>('');
   
   const [discoveryResults, setDiscoveryResults] = useState<DiscoveryResult[]>([
     {
@@ -101,9 +127,8 @@ const DataDiscovery: React.FC = () => {
       source: '客户数据库',
       recordCount: 15420,
       columns: 12,
-      dataQuality: 'excellent',
-      businessCategory: '客户管理',
-      sensitiveData: true,
+      fileSize: 2048576, // 2MB
+      estimatedSize: '2.0MB',
       confirmed: false
     },
     {
@@ -113,9 +138,8 @@ const DataDiscovery: React.FC = () => {
       source: '客户数据库',
       recordCount: 89650,
       columns: 18,
-      dataQuality: 'good',
-      businessCategory: '交易管理',
-      sensitiveData: false,
+      fileSize: 15728640, // 15MB
+      estimatedSize: '15.0MB',
       confirmed: false
     },
     {
@@ -125,9 +149,8 @@ const DataDiscovery: React.FC = () => {
       source: '产品文件系统',
       recordCount: 2340,
       columns: 0,
-      dataQuality: 'fair',
-      businessCategory: '产品管理',
-      sensitiveData: false,
+      fileSize: 524288, // 512KB
+      estimatedSize: '512KB',
       confirmed: false
     }
   ]);
@@ -135,6 +158,21 @@ const DataDiscovery: React.FC = () => {
   const handleNext = () => {
     if (activeStep === 1 && !scanComplete) {
       startScanning();
+    } else if (activeStep === 2) {
+      // 确认发现结果，进入资源信息完善步骤
+      const confirmedAssets = discoveryResults.filter(r => r.confirmed);
+      const initialResourcesInfo = confirmedAssets.map(asset => ({
+        assetId: asset.id,
+        businessDomain: '',
+        owner: '',
+        accessLevel: 'internal' as const,
+        tags: [],
+        description: '',
+        category: ''
+      }));
+      setResourcesInfo(initialResourcesInfo);
+      setSessionId(`session_${Date.now()}`);
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
     } else {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
@@ -145,22 +183,42 @@ const DataDiscovery: React.FC = () => {
   };
 
   const addDataSource = () => {
-    if (newDataSource.name && newDataSource.connectionString) {
+    const isValidDatabase = newDataSource.type === 'database' && 
+      newDataSource.name && newDataSource.host && newDataSource.port && 
+      newDataSource.database && newDataSource.username && newDataSource.password;
+    
+    const isValidFilesystem = newDataSource.type === 'filesystem' && 
+      newDataSource.name && newDataSource.path;
+    
+    if (isValidDatabase || isValidFilesystem) {
       const dataSource: DataSource = {
         id: Date.now().toString(),
-        name: newDataSource.name,
+        name: newDataSource.name!,
         type: newDataSource.type || 'database',
-        connectionString: newDataSource.connectionString,
-        priority: newDataSource.priority || 'medium',
-        securityLevel: newDataSource.securityLevel || 'internal'
+        ...(newDataSource.type === 'database' ? {
+          host: newDataSource.host,
+          port: newDataSource.port,
+          database: newDataSource.database,
+          username: newDataSource.username,
+          password: newDataSource.password
+        } : {
+          path: newDataSource.path,
+          recursive: newDataSource.recursive,
+          filePattern: newDataSource.filePattern
+        })
       };
       setDataSources([...dataSources, dataSource]);
       setNewDataSource({
         name: '',
         type: 'database',
-        connectionString: '',
-        priority: 'medium',
-        securityLevel: 'internal'
+        host: '',
+        port: undefined,
+        database: '',
+        username: '',
+        password: '',
+        path: '',
+        recursive: false,
+        filePattern: ''
       });
     }
   };
@@ -222,14 +280,11 @@ const DataDiscovery: React.FC = () => {
     }
   };
 
-  const getQualityColor = (quality: string) => {
-    switch (quality) {
-      case 'excellent': return 'success';
-      case 'good': return 'info';
-      case 'fair': return 'warning';
-      case 'poor': return 'error';
-      default: return 'default';
-    }
+  const formatFileSize = (bytes?: number) => {
+    if (!bytes) return '-';
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
   };
 
   const renderStepContent = (step: number) => {
@@ -255,16 +310,22 @@ const DataDiscovery: React.FC = () => {
                         {getDataSourceIcon(source.type)}
                         <Typography variant="subtitle2">{source.name}</Typography>
                         <Chip 
-                          label={source.priority} 
+                          label={source.type === 'database' ? '数据库' : '文件系统'} 
                           size="small" 
-                          color={source.priority === 'high' ? 'error' : source.priority === 'medium' ? 'warning' : 'default'}
+                          color={source.type === 'database' ? 'primary' : 'secondary'}
                         />
                       </Box>
                       <Typography variant="body2" color="text.secondary" noWrap>
-                        {source.connectionString}
+                        {source.type === 'database' 
+                          ? `${source.host}:${source.port}/${source.database}`
+                          : source.path
+                        }
                       </Typography>
                       <Typography variant="caption" display="block">
-                        安全级别: {source.securityLevel}
+                        {source.type === 'database' 
+                          ? `用户: ${source.username}`
+                          : `递归: ${source.recursive ? '是' : '否'}`
+                        }
                       </Typography>
                     </CardContent>
                   </Card>
@@ -295,48 +356,99 @@ const DataDiscovery: React.FC = () => {
                       >
                         <MenuItem value="database">数据库</MenuItem>
                         <MenuItem value="filesystem">文件系统</MenuItem>
-                        <MenuItem value="cloud">云存储</MenuItem>
-                        <MenuItem value="api">API接口</MenuItem>
                       </Select>
                     </FormControl>
                   </Box>
-                  <Box sx={{ flex: '1 1 100%', width: '100%' }}>
-                    <TextField
-                      fullWidth
-                      label="连接字符串"
-                      value={newDataSource.connectionString}
-                      onChange={(e) => setNewDataSource({...newDataSource, connectionString: e.target.value})}
-                      placeholder="例如: postgresql://user:password@host:port/database"
-                    />
-                  </Box>
-                  <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
-                    <FormControl fullWidth>
-                      <InputLabel>优先级</InputLabel>
-                      <Select
-                        value={newDataSource.priority}
-                        label="优先级"
-                        onChange={(e) => setNewDataSource({...newDataSource, priority: e.target.value as any})}
-                      >
-                        <MenuItem value="high">高</MenuItem>
-                        <MenuItem value="medium">中</MenuItem>
-                        <MenuItem value="low">低</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
-                  <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
-                    <FormControl fullWidth>
-                      <InputLabel>安全级别</InputLabel>
-                      <Select
-                        value={newDataSource.securityLevel}
-                        label="安全级别"
-                        onChange={(e) => setNewDataSource({...newDataSource, securityLevel: e.target.value as any})}
-                      >
-                        <MenuItem value="public">公开</MenuItem>
-                        <MenuItem value="internal">内部</MenuItem>
-                        <MenuItem value="confidential">机密</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
+                  
+                  {/* 数据库连接信息 */}
+                  {newDataSource.type === 'database' && (
+                    <>
+                      <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                        <TextField
+                          fullWidth
+                          label="主机地址"
+                          value={newDataSource.host || ''}
+                          onChange={(e) => setNewDataSource({...newDataSource, host: e.target.value})}
+                          placeholder="localhost"
+                        />
+                      </Box>
+                      <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                        <TextField
+                          fullWidth
+                          label="端口"
+                          type="number"
+                          value={newDataSource.port || ''}
+                          onChange={(e) => setNewDataSource({...newDataSource, port: parseInt(e.target.value) || undefined})}
+                          placeholder="5432"
+                        />
+                      </Box>
+                      <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                        <TextField
+                          fullWidth
+                          label="数据库名"
+                          value={newDataSource.database || ''}
+                          onChange={(e) => setNewDataSource({...newDataSource, database: e.target.value})}
+                          placeholder="database_name"
+                        />
+                      </Box>
+                      <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                        <TextField
+                          fullWidth
+                          label="用户名"
+                          value={newDataSource.username || ''}
+                          onChange={(e) => setNewDataSource({...newDataSource, username: e.target.value})}
+                          placeholder="username"
+                        />
+                      </Box>
+                      <Box sx={{ flex: '1 1 100%', width: '100%' }}>
+                        <TextField
+                          fullWidth
+                          label="密码"
+                          type="password"
+                          value={newDataSource.password || ''}
+                          onChange={(e) => setNewDataSource({...newDataSource, password: e.target.value})}
+                          placeholder="password"
+                        />
+                      </Box>
+                    </>
+                  )}
+                  
+                  {/* 文件系统连接信息 */}
+                  {newDataSource.type === 'filesystem' && (
+                    <>
+                      <Box sx={{ flex: '1 1 100%', width: '100%' }}>
+                        <TextField
+                          fullWidth
+                          label="文件路径"
+                          value={newDataSource.path || ''}
+                          onChange={(e) => setNewDataSource({...newDataSource, path: e.target.value})}
+                          placeholder="/data/files 或 C:\\Data\\Files"
+                        />
+                      </Box>
+                      <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                        <FormControl fullWidth>
+                          <InputLabel>递归扫描</InputLabel>
+                          <Select
+                            value={newDataSource.recursive ? 'true' : 'false'}
+                            label="递归扫描"
+                            onChange={(e) => setNewDataSource({...newDataSource, recursive: e.target.value === 'true'})}
+                          >
+                            <MenuItem value="true">是</MenuItem>
+                            <MenuItem value="false">否</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                      <Box sx={{ flex: '1 1 calc(100% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                        <TextField
+                          fullWidth
+                          label="文件过滤规则"
+                          value={newDataSource.filePattern || ''}
+                          onChange={(e) => setNewDataSource({...newDataSource, filePattern: e.target.value})}
+                          placeholder="*.csv,*.json,*.xlsx"
+                        />
+                      </Box>
+                    </>
+                  )}
                   <Box sx={{ flex: '1 1 100%', width: '100%' }}>
                     <Button variant="outlined" onClick={addDataSource}>
                       添加数据源
@@ -450,9 +562,12 @@ const DataDiscovery: React.FC = () => {
                 <Card>
                   <CardContent sx={{ textAlign: 'center' }}>
                     <Typography variant="h4" color="warning.main">
-                      {discoveryResults.filter(r => r.sensitiveData).length}
+                      {discoveryResults.reduce((sum, r) => sum + (r.fileSize || 0), 0) > 1024*1024*1024 ? 
+                        Math.round(discoveryResults.reduce((sum, r) => sum + (r.fileSize || 0), 0) / (1024*1024*1024) * 100) / 100 + 'GB' :
+                        Math.round(discoveryResults.reduce((sum, r) => sum + (r.fileSize || 0), 0) / (1024*1024) * 100) / 100 + 'MB'
+                      }
                     </Typography>
-                    <Typography variant="caption">敏感数据集</Typography>
+                    <Typography variant="caption">总数据量</Typography>
                   </CardContent>
                 </Card>
               </Box>
@@ -479,9 +594,7 @@ const DataDiscovery: React.FC = () => {
                     <TableCell>数据源</TableCell>
                     <TableCell>记录数</TableCell>
                     <TableCell>字段数</TableCell>
-                    <TableCell>数据质量</TableCell>
-                    <TableCell>业务分类</TableCell>
-                    <TableCell>敏感数据</TableCell>
+                    <TableCell>数据量</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -500,21 +613,7 @@ const DataDiscovery: React.FC = () => {
                       <TableCell>{result.source}</TableCell>
                       <TableCell>{result.recordCount.toLocaleString()}</TableCell>
                       <TableCell>{result.columns || '-'}</TableCell>
-                      <TableCell>
-                        <Chip 
-                          label={result.dataQuality} 
-                          size="small" 
-                          color={getQualityColor(result.dataQuality) as any}
-                        />
-                      </TableCell>
-                      <TableCell>{result.businessCategory}</TableCell>
-                      <TableCell>
-                        {result.sensitiveData ? (
-                          <WarningIcon color="warning" />
-                        ) : (
-                          <CheckIcon color="success" />
-                        )}
-                      </TableCell>
+                      <TableCell>{result.estimatedSize || formatFileSize(result.fileSize)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -522,7 +621,129 @@ const DataDiscovery: React.FC = () => {
             </TableContainer>
             
             <Alert severity="info" sx={{ mt: 2 }}>
-              请确认所有发现的数据资产信息。确认后，这些数据将自动添加到资源列表和数据目录中。
+              请确认所有发现的数据资产信息。确认后，将进入资源信息完善步骤。
+            </Alert>
+          </Box>
+        );
+        
+      case 3:
+        return (
+          <Box>
+            <Typography variant="h6" gutterBottom>
+              资源信息完善
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              为确认的数据资产补充业务信息，包括业务域、所有者、访问级别和标签等。
+            </Typography>
+            
+            {resourcesInfo.map((resource, index) => {
+              const asset = discoveryResults.find(r => r.id === resource.assetId);
+              if (!asset) return null;
+              
+              return (
+                <Card key={resource.assetId} sx={{ mb: 3 }}>
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      {asset.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                      {asset.type} | {asset.source} | {asset.recordCount.toLocaleString()} 条记录 | {asset.estimatedSize}
+                    </Typography>
+                    
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                      <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                        <TextField
+                          fullWidth
+                          label="业务域 *"
+                          value={resource.businessDomain}
+                          onChange={(e) => {
+                            const newResourcesInfo = [...resourcesInfo];
+                            newResourcesInfo[index].businessDomain = e.target.value;
+                            setResourcesInfo(newResourcesInfo);
+                          }}
+                          placeholder="如：客户管理、财务管理、产品管理等"
+                        />
+                      </Box>
+                      <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                        <TextField
+                          fullWidth
+                          label="数据所有者 *"
+                          value={resource.owner}
+                          onChange={(e) => {
+                            const newResourcesInfo = [...resourcesInfo];
+                            newResourcesInfo[index].owner = e.target.value;
+                            setResourcesInfo(newResourcesInfo);
+                          }}
+                          placeholder="如：张三、李四等"
+                        />
+                      </Box>
+                      <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                        <FormControl fullWidth>
+                          <InputLabel>访问级别 *</InputLabel>
+                          <Select
+                            value={resource.accessLevel}
+                            label="访问级别 *"
+                            onChange={(e) => {
+                              const newResourcesInfo = [...resourcesInfo];
+                              newResourcesInfo[index].accessLevel = e.target.value as 'public' | 'internal' | 'confidential';
+                              setResourcesInfo(newResourcesInfo);
+                            }}
+                          >
+                            <MenuItem value="public">公开</MenuItem>
+                            <MenuItem value="internal">内部</MenuItem>
+                            <MenuItem value="confidential">机密</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                      <Box sx={{ flex: '1 1 calc(50% - 8px)', minWidth: { xs: 'calc(100% - 8px)', md: 'calc(50% - 8px)' } }}>
+                        <TextField
+                          fullWidth
+                          label="资源分类"
+                          value={resource.category}
+                          onChange={(e) => {
+                            const newResourcesInfo = [...resourcesInfo];
+                            newResourcesInfo[index].category = e.target.value;
+                            setResourcesInfo(newResourcesInfo);
+                          }}
+                          placeholder="如：主数据、交易数据、参考数据等"
+                        />
+                      </Box>
+                      <Box sx={{ flex: '1 1 100%', width: '100%' }}>
+                        <TextField
+                          fullWidth
+                          label="标签"
+                          value={resource.tags.join(', ')}
+                          onChange={(e) => {
+                            const newResourcesInfo = [...resourcesInfo];
+                            newResourcesInfo[index].tags = e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag);
+                            setResourcesInfo(newResourcesInfo);
+                          }}
+                          placeholder="用逗号分隔多个标签，如：客户数据, 核心业务, 高价值"
+                        />
+                      </Box>
+                      <Box sx={{ flex: '1 1 100%', width: '100%' }}>
+                        <TextField
+                          fullWidth
+                          multiline
+                          rows={3}
+                          label="资源描述"
+                          value={resource.description}
+                          onChange={(e) => {
+                            const newResourcesInfo = [...resourcesInfo];
+                            newResourcesInfo[index].description = e.target.value;
+                            setResourcesInfo(newResourcesInfo);
+                          }}
+                          placeholder="详细描述该数据资源的内容、用途和特点"
+                        />
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              );
+            })}
+            
+            <Alert severity="success" sx={{ mt: 2 }}>
+              完善资源信息后，点击"添加到数据资源列表"将这些数据资产正式加入到数据目录中。
             </Alert>
           </Box>
         );
@@ -569,7 +790,8 @@ const DataDiscovery: React.FC = () => {
           disabled={activeStep === 1 && scanning}
         >
           {activeStep === 1 && !scanning && !scanComplete ? '开始扫描' : 
-           activeStep === steps.length - 1 ? '完成' : '下一步'}
+           activeStep === 2 ? '进入资源信息完善' :
+           activeStep === steps.length - 1 ? '添加到数据资源列表' : '下一步'}
         </Button>
       </Box>
     </Box>
