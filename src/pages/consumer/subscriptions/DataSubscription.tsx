@@ -22,6 +22,12 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  TextField,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton,
   useTheme,
   alpha,
 } from '@mui/material';
@@ -36,11 +42,30 @@ import {
   Dataset as DatasetIcon,
   Gavel as GavelIcon,
   Security as SecurityIcon,
+  Search as SearchIcon,
+  Refresh as RefreshIcon,
+  Link as LinkIcon,
 } from '@mui/icons-material';
+
 import ResponsiveContainer from '../../../layouts/ResponsiveContainer';
 
-// 合同协商步骤定义
-const negotiationSteps = [
+// 订阅流程步骤定义
+const subscriptionSteps = [
+  {
+    label: '连接器地址配置',
+    description: '输入对端Provider连接器地址并验证连接',
+    automated: false,
+  },
+  {
+    label: '数据资源发现',
+    description: '获取对端可用的数据资源列表',
+    automated: true,
+  },
+  {
+    label: '资源选择确认',
+    description: '选择要订阅的数据资源并确认订阅意向',
+    automated: false,
+  },
   {
     label: '发送合同请求',
     description: '向数据提供方发送包含合同条款意向的请求',
@@ -78,6 +103,52 @@ const negotiationSteps = [
   },
 ];
 
+// 数据资源接口
+interface DataResource {
+  id: string;
+  name: string;
+  description: string;
+  type: string;
+  size: string;
+  updateFrequency: string;
+  pricePerMonth: number;
+  currency: string;
+}
+
+// 模拟远程数据资源列表
+const mockRemoteResources: DataResource[] = [
+  {
+    id: 'DS-PROD-2024-0156',
+    name: '生产线实时监控数据集',
+    description: '包含温度、压力、振动等传感器数据，用于设备状态监控和预测性维护',
+    type: '传感器数据',
+    size: '2.5GB',
+    updateFrequency: '实时更新',
+    pricePerMonth: 8500,
+    currency: 'CNY',
+  },
+  {
+    id: 'DS-QUAL-2024-0089',
+    name: '产品质量检测数据',
+    description: '产品质量检测结果、缺陷分析、质量趋势等数据',
+    type: '质量数据',
+    size: '1.2GB',
+    updateFrequency: '每日更新',
+    pricePerMonth: 6000,
+    currency: 'CNY',
+  },
+  {
+    id: 'DS-MAINT-2024-0123',
+    name: '设备维护记录数据',
+    description: '设备维护历史、故障记录、维护成本等数据',
+    type: '维护数据',
+    size: '800MB',
+    updateFrequency: '每周更新',
+    pricePerMonth: 4500,
+    currency: 'CNY',
+  },
+];
+
 // 模拟数据源信息
 const mockDataSource = {
   providerId: 'ORG-2024-001',
@@ -100,9 +171,9 @@ const mockContractTerms = {
   updateFrequency: '实时更新',
 };
 
-interface NegotiationStatus {
+interface SubscriptionStatus {
   currentStep: number;
-  isNegotiating: boolean;
+  isProcessing: boolean;
   isCompleted: boolean;
   error: string | null;
   contractAccepted: boolean | null;
@@ -110,37 +181,115 @@ interface NegotiationStatus {
 
 const DataSubscription: React.FC = () => {
   const theme = useTheme();
-  const [negotiationStatus, setNegotiationStatus] = useState<NegotiationStatus>({
+  const [subscriptionStatus, setSubscriptionStatus] = useState<SubscriptionStatus>({
     currentStep: -1,
-    isNegotiating: false,
+    isProcessing: false,
     isCompleted: false,
     error: null,
     contractAccepted: null,
   });
   const [showContractDialog, setShowContractDialog] = useState(false);
   const [stepStatuses, setStepStatuses] = useState<string[]>([]);
+  
+  // 新增状态
+  const [connectorEndpoint, setConnectorEndpoint] = useState('');
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [remoteResources, setRemoteResources] = useState<DataResource[]>([]);
+  const [selectedResource, setSelectedResource] = useState<DataResource | null>(null);
+  const [isLoadingResources, setIsLoadingResources] = useState(false);
 
-  // 开始协商流程
-  const startNegotiation = () => {
-    setNegotiationStatus({
+  // 开始订阅流程
+  const startSubscription = () => {
+    setSubscriptionStatus({
       currentStep: 0,
-      isNegotiating: true,
+      isProcessing: true,
       isCompleted: false,
       error: null,
       contractAccepted: null,
     });
-    setStepStatuses(new Array(negotiationSteps.length).fill('pending'));
+    setStepStatuses(new Array(subscriptionSteps.length).fill('pending'));
+  };
+  
+  // 验证连接器地址
+  const validateConnector = async () => {
+    if (!connectorEndpoint.trim()) {
+      setSubscriptionStatus(prev => ({ ...prev, error: '请输入连接器地址' }));
+      return;
+    }
     
-    // 模拟自动化步骤执行
+    setIsConnecting(true);
+    setSubscriptionStatus(prev => ({ ...prev, error: null }));
+    
+    try {
+      // 模拟连接验证
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      setStepStatuses(prev => {
+        const newStatuses = [...prev];
+        newStatuses[0] = 'completed';
+        return newStatuses;
+      });
+      
+      setSubscriptionStatus(prev => ({ ...prev, currentStep: 1 }));
+      
+      // 自动进行资源发现
+      await discoverResources();
+      
+    } catch (error) {
+      setSubscriptionStatus(prev => ({ ...prev, error: '连接器地址验证失败，请检查地址是否正确' }));
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+  
+  // 发现数据资源
+  const discoverResources = async () => {
+    setIsLoadingResources(true);
+    
+    try {
+      // 模拟获取远程资源列表
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      setRemoteResources(mockRemoteResources);
+      
+      setStepStatuses(prev => {
+        const newStatuses = [...prev];
+        newStatuses[1] = 'completed';
+        return newStatuses;
+      });
+      
+      setSubscriptionStatus(prev => ({ ...prev, currentStep: 2 }));
+      
+    } catch (error) {
+      setSubscriptionStatus(prev => ({ ...prev, error: '获取数据资源列表失败' }));
+    } finally {
+      setIsLoadingResources(false);
+    }
+  };
+  
+  // 选择资源并开始合同协商
+  const selectResourceAndNegotiate = (resource: DataResource) => {
+    setSelectedResource(resource);
+    
+    setStepStatuses(prev => {
+      const newStatuses = [...prev];
+      newStatuses[2] = 'completed';
+      return newStatuses;
+    });
+    
+    setSubscriptionStatus(prev => ({ ...prev, currentStep: 3 }));
+    
+    // 开始合同协商流程
     executeAutomatedSteps();
   };
 
-  // 执行自动化步骤
+  // 执行自动化步骤（合同协商部分）
   const executeAutomatedSteps = async () => {
-    for (let i = 0; i < 3; i++) { // 前3步是自动化的
+    // 从第4步开始的自动化步骤（合同协商）
+    for (let i = 3; i < 6; i++) {
       await new Promise(resolve => setTimeout(resolve, 2000)); // 模拟处理时间
       
-      setNegotiationStatus(prev => ({ ...prev, currentStep: i }));
+      setSubscriptionStatus(prev => ({ ...prev, currentStep: i }));
       setStepStatuses(prev => {
         const newStatuses = [...prev];
         newStatuses[i] = 'completed';
@@ -149,10 +298,10 @@ const DataSubscription: React.FC = () => {
     }
     
     // 到达人工审核步骤
-    setNegotiationStatus(prev => ({ ...prev, currentStep: 3 }));
+    setSubscriptionStatus(prev => ({ ...prev, currentStep: 6 }));
     setStepStatuses(prev => {
       const newStatuses = [...prev];
-      newStatuses[3] = 'active';
+      newStatuses[6] = 'active';
       return newStatuses;
     });
     setShowContractDialog(true);
@@ -161,20 +310,20 @@ const DataSubscription: React.FC = () => {
   // 处理合同确认
   const handleContractDecision = async (accepted: boolean) => {
     setShowContractDialog(false);
-    setNegotiationStatus(prev => ({ ...prev, contractAccepted: accepted }));
+    setSubscriptionStatus(prev => ({ ...prev, contractAccepted: accepted }));
     
     if (accepted) {
       // 继续执行剩余的自动化步骤
       setStepStatuses(prev => {
         const newStatuses = [...prev];
-        newStatuses[3] = 'completed';
+        newStatuses[6] = 'completed';
         return newStatuses;
       });
       
-      for (let i = 4; i < negotiationSteps.length; i++) {
+      for (let i = 7; i < subscriptionSteps.length; i++) {
         await new Promise(resolve => setTimeout(resolve, 1500));
         
-        setNegotiationStatus(prev => ({ ...prev, currentStep: i }));
+        setSubscriptionStatus(prev => ({ ...prev, currentStep: i }));
         setStepStatuses(prev => {
           const newStatuses = [...prev];
           newStatuses[i] = 'completed';
@@ -182,22 +331,22 @@ const DataSubscription: React.FC = () => {
         });
       }
       
-      // 协商完成
-      setNegotiationStatus(prev => ({
+      // 订阅完成
+      setSubscriptionStatus(prev => ({
         ...prev,
-        isNegotiating: false,
+        isProcessing: false,
         isCompleted: true,
       }));
     } else {
       // 拒绝合同
-      setNegotiationStatus(prev => ({
+      setSubscriptionStatus(prev => ({
         ...prev,
-        isNegotiating: false,
-        error: '合同协商被拒绝',
+        isProcessing: false,
+        error: '合同订阅被拒绝',
       }));
       setStepStatuses(prev => {
         const newStatuses = [...prev];
-        newStatuses[3] = 'error';
+        newStatuses[6] = 'error';
         return newStatuses;
       });
     }
@@ -337,32 +486,103 @@ Connector端点：${mockDataSource.connectorEndpoint}
           </CardContent>
         </Card>
 
-        {/* 开始协商按钮 */}
-        {!negotiationStatus.isNegotiating && !negotiationStatus.isCompleted && !negotiationStatus.error && (
+        {/* 开始订阅按钮 */}
+        {!subscriptionStatus.isProcessing && !subscriptionStatus.isCompleted && !subscriptionStatus.error && subscriptionStatus.currentStep === -1 && (
           <Box sx={{ mb: 3, textAlign: 'center' }}>
+            <TextField
+              fullWidth
+              label="Provider 连接器地址"
+              placeholder="https://provider-connector.example.com"
+              value={connectorEndpoint}
+              onChange={(e) => setConnectorEndpoint(e.target.value)}
+              sx={{ mb: 2 }}
+            />
             <Button
               variant="contained"
               size="large"
               startIcon={<PlayArrowIcon />}
-              onClick={startNegotiation}
+              onClick={() => {
+                startSubscription();
+                validateConnector();
+              }}
+              disabled={!connectorEndpoint.trim()}
               sx={{ px: 4, py: 1.5 }}
             >
-              开始协商
+              开始订阅
             </Button>
           </Box>
         )}
 
-        {/* 协商流程步骤 */}
-        {(negotiationStatus.isNegotiating || negotiationStatus.isCompleted || negotiationStatus.error) && (
+        {/* 资源选择界面 */}
+        {subscriptionStatus.currentStep === 2 && remoteResources.length > 0 && (
+          <Card sx={{ mb: 3 }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                选择要订阅的数据资源
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                从 {connectorEndpoint} 发现了 {remoteResources.length} 个数据资源
+              </Typography>
+              <List>
+                {remoteResources.map((resource) => (
+                  <ListItem
+                    key={resource.id}
+                    sx={{
+                      border: 1,
+                      borderColor: 'divider',
+                      borderRadius: 1,
+                      mb: 1,
+                      '&:hover': {
+                        backgroundColor: 'action.hover',
+                      },
+                    }}
+                  >
+                    <ListItemText
+                      primary={resource.name}
+                      secondary={
+                        <Box>
+                          <Typography variant="body2" color="text.secondary">
+                            {resource.description}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            类型: {resource.type} | 大小: {resource.size} | 价格: {resource.pricePerMonth} {resource.currency}/月
+                          </Typography>
+                        </Box>
+                      }
+                    />
+                    <ListItemSecondaryAction>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onClick={() => selectResourceAndNegotiate(resource)}
+                      >
+                        选择订阅
+                      </Button>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* 订阅流程步骤 */}
+        {(subscriptionStatus.isProcessing || subscriptionStatus.isCompleted || subscriptionStatus.error) && subscriptionStatus.currentStep >= 0 && (
           <Card>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 3 }}>
                 <GavelIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-                合同协商流程
+                数据订阅流程
               </Typography>
               
-              <Stepper activeStep={negotiationStatus.currentStep} orientation="vertical">
-                {negotiationSteps.map((step, index) => (
+              {selectedResource && (
+                <Alert severity="info" sx={{ mb: 2 }}>
+                  正在订阅资源: {selectedResource.name}
+                </Alert>
+              )}
+              
+              <Stepper activeStep={subscriptionStatus.currentStep} orientation="vertical">
+                {subscriptionSteps.map((step, index) => (
                   <Step key={index}>
                     <StepLabel
                       icon={getStepIcon(index)}
@@ -377,6 +597,11 @@ Connector端点：${mockDataSource.connectorEndpoint}
                           {stepStatuses[index] === 'active' && (
                             <Typography variant="caption" color="primary">
                               进行中...
+                            </Typography>
+                          )}
+                          {index === 1 && isLoadingResources && (
+                            <Typography variant="caption" color="primary">
+                              正在获取资源列表...
                             </Typography>
                           )}
                         </Box>
@@ -394,17 +619,17 @@ Connector端点：${mockDataSource.connectorEndpoint}
               </Stepper>
 
               {/* 错误信息 */}
-              {negotiationStatus.error && (
+              {subscriptionStatus.error && (
                 <Alert severity="error" sx={{ mt: 3 }}>
-                  {negotiationStatus.error}
+                  {subscriptionStatus.error}
                 </Alert>
               )}
 
               {/* 完成信息 */}
-              {negotiationStatus.isCompleted && (
+              {subscriptionStatus.isCompleted && (
                 <Box sx={{ mt: 3 }}>
                   <Alert severity="success" sx={{ mb: 2 }}>
-                    合同协商已成功完成！数据订阅合同已生效。
+                    数据订阅已成功完成！数据订阅合同已生效。
                   </Alert>
                   
                   <Box sx={{ display: 'flex', gap: 2 }}>

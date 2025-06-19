@@ -21,7 +21,7 @@ const ProviderDatasetPolicyList = lazy(() => import('../pages/provider/policies/
 const ProviderConnectorStatus = lazy(() => import('../pages/provider/connections/ConnectorStatus'));
 const ProviderDataExchange = lazy(() => import('../pages/provider/connections/DataExchange'));
 const ProviderExchangeLogs = lazy(() => import('../pages/provider/connections/ExchangeLogs'));
-const ProviderMarketplace = lazy(() => import('../pages/provider/ecosystem/Marketplace'));
+const ConsumerMarketplace = lazy(() => import('../pages/consumer/ecosystem/Marketplace'));
 const ProviderOnShelf = lazy(() => import('../pages/provider/ecosystem/onshelf'));
 const ProviderServiceDiscovery = lazy(() => import('../pages/provider/ecosystem/ServiceDiscovery'));
 const ProviderTransactions = lazy(() => import('../pages/provider/ecosystem/Transactions'));
@@ -43,6 +43,7 @@ const ProviderToBeConstructed = () => <ToBeConstructed pageName="提供者功能
 // 懒加载页面组件 - 消费者
 const ConsumerConnectorStatus = lazy(() => import('../pages/consumer/connections/ConnectorStatus'));
 const ConsumerDataExchange = lazy(() => import('../pages/consumer/connections/DataExchange'));
+const ConsumerDataSubscription = lazy(() => import('../pages/consumer/subscriptions/DataSubscription'));
 
 const router = createHashRouter([
   {
@@ -112,7 +113,7 @@ const router = createHashRouter([
       },
       {
         path: 'enterprise/ecosystem',
-        element: <ProviderMarketplace />,
+        element: <ConsumerMarketplace />,
       },
       {
         path: 'enterprise/ecosystem/onshelf',
@@ -185,6 +186,10 @@ const router = createHashRouter([
       {
         path: 'enterprise/consumer-connections/exchange',
         element: <ConsumerDataExchange />,
+      },
+      {
+        path: 'enterprise/subscriptions/subscribe',
+        element: <ConsumerDataSubscription />,
       },
 
       // 404页面
