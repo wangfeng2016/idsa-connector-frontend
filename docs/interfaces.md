@@ -31,6 +31,14 @@
 }
 ```
 
+**请求体示例**:
+```json
+{
+  "username": "admin",
+  "password": "123456"
+}
+```
+
 **响应体 JSON Schema**:
 ```json
 {
@@ -67,6 +75,40 @@
 }
 ```
 
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+  "user": {
+    "username": "admin",
+    "role": {
+      "type": "enterprise",
+      "name": "系统管理员",
+      "permissions": [
+        "read:users",
+        "write:users",
+        "delete:users",
+        "manage:system",
+        "access:dashboard"
+      ],
+      "organizationId": "org_12345678"
+    }
+  },
+  "message": "登录成功"
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "token": null,
+  "user": null,
+  "message": "用户名或密码错误"
+}
+```
+
 ### 1.2 用户登出
 
 **接口名称**: 用户登出  
@@ -85,7 +127,21 @@
 }
 ```
 
-## 2. 数据资源管理模块
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "message": "登出成功"
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "会话已过期"
+}
+```
 
 ## 2. 数据发现模块
 
@@ -131,7 +187,32 @@
 }
 ```
 
-**接口名称**: 设置数据源
+**请求体示例（数据库类型）**:
+```json
+{
+  "type": "database",
+  "database": {
+    "host": "localhost",
+    "port": 3306,
+    "database": "sales_db",
+    "username": "db_user",
+    "password": "db_password"
+  }
+}
+```
+
+**请求体示例（文件系统类型）**:
+```json
+{
+  "type": "filesystem",
+  "filesystem": {
+    "path": "/data/csv_files",
+    "recursive": true,
+    "filePattern": "*.csv"
+  }
+}
+```
+
 **响应体 JSON Schema**:
 ```json
 {
@@ -149,6 +230,46 @@
         "fileCount": {"type": "integer", "description": "文件数量(仅文件系统)"}
       }
     }
+  }
+}
+```
+
+**响应体成功示例（数据库）**:
+```json
+{
+  "success": true,
+  "connected": true,
+  "message": "数据库连接成功",
+  "details": {
+    "responseTime": 125,
+    "version": "MySQL 8.0.25",
+    "availableSchemas": ["sales_db", "inventory_db", "user_db"]
+  }
+}
+```
+
+**响应体成功示例（文件系统）**:
+```json
+{
+  "success": true,
+  "connected": true,
+  "message": "文件系统连接成功",
+  "details": {
+    "responseTime": 45,
+    "version": "Linux ext4",
+    "fileCount": 156
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "connected": false,
+  "message": "连接失败：无法连接到数据库服务器",
+  "details": {
+    "responseTime": 5000
   }
 }
 ```
@@ -199,6 +320,34 @@
 }
 ```
 
+**请求体示例（数据库类型）**:
+```json
+{
+  "name": "销售数据库",
+  "type": "database",
+  "config": {
+    "host": "localhost",
+    "port": 3306,
+    "database": "sales_db",
+    "username": "db_user",
+    "password": "db_password"
+  }
+}
+```
+
+**请求体示例（文件系统类型）**:
+```json
+{
+  "name": "CSV文件数据源",
+  "type": "filesystem",
+  "config": {
+    "path": "/data/csv_files",
+    "recursive": true,
+    "filePattern": "*.csv"
+  }
+}
+```
+
 **响应体 JSON Schema**:
 ```json
 {
@@ -215,6 +364,27 @@
       }
     }
   }
+}
+```
+
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "id": "ds_001",
+    "name": "销售数据库",
+    "type": "database",
+    "createdAt": "2024-01-15T10:30:00Z"
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "数据源名称已存在"
 }
 ```
 
@@ -250,6 +420,48 @@
 }
 ```
 
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "ds_001",
+      "name": "销售数据库",
+      "type": "database",
+      "config": {
+        "host": "localhost",
+        "port": 3306,
+        "database": "sales_db"
+      },
+      "status": "active",
+      "lastTested": "2024-01-15T10:30:00Z",
+      "createdAt": "2024-01-10T08:00:00Z"
+    },
+    {
+      "id": "ds_002",
+      "name": "CSV文件数据源",
+      "type": "filesystem",
+      "config": {
+        "path": "/data/csv_files",
+        "recursive": true
+      },
+      "status": "inactive",
+      "lastTested": "2024-01-14T15:20:00Z",
+      "createdAt": "2024-01-12T09:15:00Z"
+    }
+  ]
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "获取数据源列表失败"
+}
+```
+
 ### 2.4 启动数据发现扫描
 
 **接口名称**: 启动数据发现扫描  
@@ -281,6 +493,19 @@
 }
 ```
 
+**请求体示例**:
+```json
+{
+  "dataSourceIds": ["ds_001", "ds_002"],
+  "scanOptions": {
+    "includeMetadata": true,
+    "detectSensitiveData": true,
+    "analyzeDataQuality": false,
+    "maxSampleRows": 1000
+  }
+}
+```
+
 **响应体 JSON Schema**:
 ```json
 {
@@ -296,6 +521,26 @@
       }
     }
   }
+}
+```
+
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "taskId": "scan_task_001",
+    "status": "started",
+    "estimatedDuration": 300
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "数据源不存在或无法访问"
 }
 ```
 
@@ -346,6 +591,75 @@
       }
     }
   }
+}
+```
+
+**响应体成功示例（运行中）**:
+```json
+{
+  "success": true,
+  "data": {
+    "taskId": "scan_task_001",
+    "status": "running",
+    "progress": 65,
+    "currentStep": "扫描数据库表结构",
+    "steps": [
+      {
+        "name": "连接数据源",
+        "status": "completed",
+        "progress": 100
+      },
+      {
+        "name": "扫描数据库表结构",
+        "status": "running",
+        "progress": 65
+      },
+      {
+        "name": "提取元数据",
+        "status": "pending",
+        "progress": 0
+      }
+    ],
+    "statistics": {
+      "dataSourcesScanned": 1,
+      "tablesFound": 15,
+      "filesFound": 0,
+      "metadataExtracted": 10,
+      "sensitiveDataDetected": 3
+    },
+    "startTime": "2024-01-15T10:30:00Z",
+    "estimatedEndTime": "2024-01-15T10:35:00Z"
+  }
+}
+```
+
+**响应体成功示例（已完成）**:
+```json
+{
+  "success": true,
+  "data": {
+    "taskId": "scan_task_001",
+    "status": "completed",
+    "progress": 100,
+    "currentStep": "扫描完成",
+    "statistics": {
+      "dataSourcesScanned": 2,
+      "tablesFound": 25,
+      "filesFound": 156,
+      "metadataExtracted": 181,
+      "sensitiveDataDetected": 8
+    },
+    "startTime": "2024-01-15T10:30:00Z",
+    "estimatedEndTime": "2024-01-15T10:35:00Z"
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "扫描任务不存在或已过期"
 }
 ```
 
@@ -428,6 +742,66 @@
 }
 ```
 
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "taskId": "scan_task_001",
+    "summary": {
+      "totalDatasets": 25,
+      "totalRecords": 1250000,
+      "totalFileSize": 524288000
+    },
+    "discoveredAssets": [
+      {
+        "id": "asset_001",
+        "name": "customers",
+        "type": "table",
+        "source": "销售数据库",
+        "schema": "sales_db",
+        "recordCount": 50000,
+        "columnCount": 8,
+        "dataVolume": {
+          "recordCount": 50000,
+          "fileSize": 10485760,
+          "estimatedSize": "10MB"
+        },
+        "metadata": {
+          "columns": [
+            {
+              "name": "customer_id",
+              "type": "int",
+              "nullable": false,
+              "primaryKey": true
+            },
+            {
+              "name": "customer_name",
+              "type": "varchar(100)",
+              "nullable": false,
+              "primaryKey": false
+            }
+          ],
+          "lastModified": "2024-01-15T09:30:00Z"
+        },
+        "sampleData": [
+          {"customer_id": 1, "customer_name": "张三"},
+          {"customer_id": 2, "customer_name": "李四"}
+        ]
+      }
+    ]
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "扫描任务未完成或结果已过期"
+}
+```
+
 ### 2.7 确认发现结果
 
 **接口名称**: 确认数据发现结果  
@@ -455,6 +829,28 @@
     }
   },
   "required": ["taskId", "confirmedAssets"]
+}
+```
+
+**请求体示例**:
+```json
+{
+  "taskId": "scan_task_001",
+  "confirmedAssets": [
+    {
+      "assetId": "asset_001",
+      "confirmed": true,
+      "customName": "客户信息表"
+    },
+    {
+      "assetId": "asset_002",
+      "confirmed": true
+    },
+    {
+      "assetId": "asset_003",
+      "confirmed": false
+    }
+  ]
 }
 ```
 
@@ -491,6 +887,47 @@
       }
     }
   }
+}
+```
+
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "confirmedCount": 2,
+    "sessionId": "session_001",
+    "confirmedAssets": [
+      {
+        "assetId": "asset_001",
+        "name": "客户信息表",
+        "type": "table",
+        "dataVolume": {
+          "recordCount": 50000,
+          "fileSize": 10485760,
+          "estimatedSize": "10MB"
+        }
+      },
+      {
+        "assetId": "asset_002",
+        "name": "orders",
+        "type": "table",
+        "dataVolume": {
+          "recordCount": 120000,
+          "fileSize": 25165824,
+          "estimatedSize": "24MB"
+        }
+      }
+    ]
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "扫描任务不存在或已过期"
 }
 ```
 
@@ -536,6 +973,33 @@
 }
 ```
 
+**请求体示例**:
+```json
+{
+  "sessionId": "session_001",
+  "resourcesInfo": [
+    {
+      "assetId": "asset_001",
+      "businessDomain": "销售管理",
+      "owner": "张三",
+      "accessLevel": "internal",
+      "tags": ["客户数据", "CRM", "销售"],
+      "description": "客户基本信息表，包含客户姓名、联系方式等",
+      "category": "业务数据"
+    },
+    {
+      "assetId": "asset_002",
+      "businessDomain": "订单管理",
+      "owner": "李四",
+      "accessLevel": "confidential",
+      "tags": ["订单数据", "交易记录"],
+      "description": "订单详细信息表",
+      "category": "交易数据"
+    }
+  ]
+}
+```
+
 **响应体 JSON Schema**:
 ```json
 {
@@ -568,7 +1032,45 @@
 }
 ```
 
-### 2.1 获取资源列表
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "addedCount": 2,
+    "resourceIds": ["res_001", "res_002"],
+    "failedAssets": []
+  }
+}
+```
+
+**响应体部分失败示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "addedCount": 1,
+    "resourceIds": ["res_001"],
+    "failedAssets": [
+      {
+        "assetId": "asset_002",
+        "error": "资源名称已存在"
+      }
+    ]
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "会话已过期，请重新确认发现结果"
+}
+```
+
+## 3 数据列表模块
+### 3.1 获取资源列表
 
 **接口名称**: 获取数据资源列表  
 **对应页面**: provider/resources/ResourceList.tsx  
@@ -628,7 +1130,61 @@
 }
 ```
 
-### 2.2 获取单个资源详情
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "resources": [
+      {
+        "id": 1,
+        "name": "客户信息表",
+        "description": "包含客户基本信息的数据表",
+        "type": "数据库表",
+        "domain": "销售管理",
+        "owner": "张三",
+        "accessLevel": "internal",
+        "status": "active",
+        "tags": ["客户数据", "CRM"],
+        "qualityScore": 85.5,
+        "usageFrequency": 120,
+        "dataVolume": "10MB",
+        "lastAccessed": "2024-01-15T14:30:00Z",
+        "isFavorite": true
+      },
+      {
+        "id": 2,
+        "name": "订单数据",
+        "description": "订单交易记录",
+        "type": "数据库表",
+        "domain": "订单管理",
+        "owner": "李四",
+        "accessLevel": "confidential",
+        "status": "active",
+        "tags": ["订单", "交易"],
+        "qualityScore": 92.0,
+        "usageFrequency": 85,
+        "dataVolume": "24MB",
+        "lastAccessed": "2024-01-15T16:20:00Z",
+        "isFavorite": false
+      }
+    ],
+    "total": 50,
+    "page": 1,
+    "pageSize": 20
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "获取资源列表失败"
+}
+```
+
+### 3.2 获取单个资源详情
 
 **接口名称**: 获取数据资源详情  
 **对应页面**: provider/resources/ResourceEdit.tsx  
@@ -666,7 +1222,40 @@
 }
 ```
 
-### 2.3 创建数据资源
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "name": "客户信息表",
+    "description": "包含客户基本信息的数据表，包括姓名、联系方式、地址等",
+    "type": "数据库表",
+    "domain": "销售管理",
+    "owner": "张三",
+    "accessLevel": "internal",
+    "status": "active",
+    "tags": ["客户数据", "CRM", "销售"],
+    "qualityScore": 85.5,
+    "usageFrequency": 120,
+    "dataVolume": "10MB",
+    "lastAccessed": "2024-01-15T14:30:00Z",
+    "isFavorite": true,
+    "createdAt": "2024-01-10T08:00:00Z",
+    "updatedAt": "2024-01-15T10:30:00Z"
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "资源不存在或已被删除"
+}
+```
+
+### 3.3 创建数据资源
 
 **接口名称**: 创建数据资源  
 **对应页面**: provider/resources/ResourceEdit.tsx  
@@ -689,14 +1278,52 @@
 }
 ```
 
-### 2.4 更新数据资源
+**请求体示例**:
+```json
+{
+  "name": "产品库存表",
+  "description": "产品库存信息，包含产品编号、库存数量、仓库位置等",
+  "type": "数据库表",
+  "domain": "库存管理",
+  "accessLevel": "internal",
+  "tags": ["库存", "产品", "仓储"]
+}
+```
+
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "id": 3,
+    "name": "产品库存表",
+    "description": "产品库存信息，包含产品编号、库存数量、仓库位置等",
+    "type": "数据库表",
+    "domain": "库存管理",
+    "accessLevel": "internal",
+    "status": "active",
+    "tags": ["库存", "产品", "仓储"],
+    "createdAt": "2024-01-15T16:45:00Z"
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "资源名称已存在"
+}
+```
+
+### 3.4 更新数据资源
 
 **接口名称**: 更新数据资源  
 **对应页面**: provider/resources/ResourceEdit.tsx  
 **接口描述**: 更新现有数据资源信息  
 **接口报文格式**: PUT /api/resources/{id}  
 
-### 2.5 删除数据资源
+### 3.5 删除数据资源
 
 **接口名称**: 删除数据资源  
 **对应页面**: provider/resources/ResourceList.tsx  
@@ -717,16 +1344,16 @@
 }
 ```
 
-### 2.6 切换资源收藏状态
+### 3.6 切换资源收藏状态
 
 **接口名称**: 切换资源收藏状态  
 **对应页面**: provider/resources/ResourceList.tsx  
 **接口描述**: 添加或移除资源收藏  
 **接口报文格式**: POST /api/resources/{id}/favorite  
 
-## 3. 数据集策略管理模块
+## 4. 数据集策略管理模块
 
-### 3.1 获取数据集策略配置
+### 4.1 获取数据集策略配置
 
 **接口名称**: 获取数据集策略配置  
 **对应页面**: provider/dataset-policy-edit/DatasetPolicyEdit.tsx  
@@ -794,7 +1421,7 @@
 }
 ```
 
-### 3.2 设置数据集策略配置
+### 4.2 设置数据集策略配置
 
 **接口名称**: 设置数据集策略配置  
 **对应页面**: provider/dataset-policy-edit/DatasetPolicyEdit.tsx  
@@ -883,14 +1510,14 @@
 }
 ```
 
-### 3.3 更新数据集策略配置
+### 4.3 更新数据集策略配置
 
 **接口名称**: 更新数据集策略配置  
 **对应页面**: provider/dataset-policy-edit/DatasetPolicyEdit.tsx  
 **接口描述**: 更新指定数据集的策略配置  
 **接口报文格式**: PUT /api/datasets/{datasetId}/policy  
 
-**请求体 JSON Schema**: 与3.2接口相同
+**请求体 JSON Schema**: 与4.2接口相同
 
 **响应体 JSON Schema**:
 ```json
@@ -911,7 +1538,7 @@
 }
 ```
 
-### 3.4 删除数据集策略配置
+### 4.4 删除数据集策略配置
 
 **接口名称**: 删除数据集策略配置  
 **对应页面**: provider/dataset-policy-edit/DatasetPolicyEdit.tsx  
@@ -929,13 +1556,13 @@
 }
 ```  
 
-## 4. 连接器管理模块
+## 5. 提供者连接器管理模块
 
-### 4.1 获取连接器状态
+### 5.1 获取提供者连接器状态
 
-**接口名称**: 获取连接器状态列表  
+**接口名称**: 获取提供者连接器状态列表  
 **对应页面**: provider/connections/ConnectorStatus.tsx  
-**接口描述**: 获取所有连接器的状态信息  
+**接口描述**: 获取所有提供者连接器的状态信息  
 **接口报文格式**: GET /api/connectors/status  
 
 **响应体 JSON Schema**:
@@ -978,11 +1605,11 @@
 }
 ```
 
-### 4.2 获取数据交换记录
+### 5.2 获取提供者数据交换记录
 
-**接口名称**: 获取数据交换记录  
+**接口名称**: 获取提供者数据交换记录  
 **对应页面**: provider/connections/DataExchange.tsx  
-**接口描述**: 分页获取数据交换历史记录  
+**接口描述**: 分页获取提供者数据交换历史记录  
 **接口报文格式**: GET /api/data-exchange/records  
 
 **响应体 JSON Schema**:
@@ -1021,81 +1648,37 @@
 }
 ```
 
-### 4.3 启动数据交换
+## 6. 消费者模块
 
-**接口名称**: 启动数据交换  
-**对应页面**: provider/connections/DataExchange.tsx  
-**接口描述**: 手动启动数据交换任务  
-**接口报文格式**: POST /api/data-exchange/start  
+### 6.1 数据订阅
 
-## 5. 生态系统模块
+#### 6.1.1 验证连接器地址
 
-### 5.1 获取市场数据
+**接口名称**: 验证Provider连接器地址  
+**对应页面**: consumer/subscriptions/DataSubscription.tsx  
+**接口描述**: 验证输入的Provider连接器地址是否有效  
+**接口报文格式**: POST /api/consumer/subscription/validate-connector  
 
-**接口名称**: 获取数据市场列表  
-**对应页面**: provider/ecosystem/Marketplace.tsx  
-**接口描述**: 获取数据市场中的可用数据集和服务  
-**接口报文格式**: GET /api/marketplace/items  
-
-**响应体 JSON Schema**:
+**请求体 JSON Schema**:
 ```json
 {
   "type": "object",
   "properties": {
-    "success": {"type": "boolean"},
-    "data": {
-      "type": "object",
-      "properties": {
-        "items": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {"type": "integer"},
-              "title": {"type": "string"},
-              "description": {"type": "string"},
-              "type": {"type": "string", "enum": ["data", "service", "app"]},
-              "provider": {"type": "string"},
-              "price": {"type": "number"},
-              "rating": {"type": "number"},
-              "reviews": {"type": "integer"},
-              "tags": {"type": "array", "items": {"type": "string"}},
-              "imageUrl": {"type": "string"}
-            }
-          }
-        },
-        "total": {"type": "integer"}
-      }
+    "connectorAddress": {
+      "type": "string",
+      "description": "Provider连接器地址"
     }
-  }
+  },
+  "required": ["connectorAddress"]
 }
 ```
 
-### 5.2 获取参与方列表
-
-**接口名称**: 获取数据空间参与方  
-**对应页面**: provider/ecosystem/Participants.tsx  
-**接口描述**: 获取数据空间中的所有参与方信息  
-**接口报文格式**: GET /api/participants  
-
-### 5.3 获取交易记录
-
-**接口名称**: 获取交易记录  
-**对应页面**: provider/ecosystem/Transactions.tsx  
-**接口描述**: 获取数据交易历史记录  
-**接口报文格式**: GET /api/transactions  
-
-## 6. 分析报表模块
-
-### 6.1 获取数据集使用分析
-
-**接口名称**: 获取数据集使用统计  
-**对应页面**: provider/analytics/DatasetUsageAnalysis.tsx  
-**接口描述**: 获取数据集的使用统计和分析数据  
-**接口报文格式**: GET /api/analytics/dataset-usage  
-
-**查询参数**:
-- timePeriod: 时间段 (week/month/quarter)
+**请求体示例**:
+```json
+{
+  "connectorAddress": "https://provider.example.com:8080/api/ids/connector"
+}
+```
 
 **响应体 JSON Schema**:
 ```json
@@ -1106,200 +1689,76 @@
     "data": {
       "type": "object",
       "properties": {
-        "overallStats": {
+        "isValid": {"type": "boolean"},
+        "connectorInfo": {
           "type": "object",
           "properties": {
-            "totalDatasets": {"type": "integer"},
-            "totalDownloads": {"type": "integer"},
-            "totalConsumers": {"type": "integer"},
-            "totalRevenue": {"type": "number"},
-            "platformCommission": {"type": "number"},
-            "netRevenue": {"type": "number"}
-          }
-        },
-        "datasetUsages": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {"type": "string"},
-              "name": {"type": "string"},
-              "category": {"type": "string"},
-              "downloadCount": {"type": "integer"},
-              "consumerCount": {"type": "integer"},
-              "revenue": {"type": "number"},
-              "lastAccessed": {"type": "string", "format": "date"},
-              "popularityTrend": {"type": "string", "enum": ["up", "down", "stable"]},
-              "description": {"type": "string"}
-            }
+            "name": {"type": "string"},
+            "version": {"type": "string"},
+            "description": {"type": "string"}
           }
         }
       }
-    }
+    },
+    "message": {"type": "string"}
   }
 }
 ```
 
-### 6.2 获取合规报表
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "isValid": true,
+    "connectorInfo": {
+      "name": "销售部门数据连接器",
+      "version": "2.1.0",
+      "description": "提供销售相关数据资源的连接器"
+    }
+  },
+  "message": "连接器验证成功"
+}
+```
 
-**接口名称**: 获取合规报表数据  
-**对应页面**: provider/analytics/ComplianceReports.tsx  
-**接口描述**: 获取数据合规性检查报表  
-**接口报文格式**: GET /api/analytics/compliance  
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "data": {
+    "isValid": false
+  },
+  "message": "连接器地址无效或无法访问"
+}
+```
 
-### 6.3 获取仪表盘数据
+#### 6.1.2 发现数据资源
 
-**接口名称**: 获取仪表盘数据  
-**对应页面**: provider/analytics/Dashboards.tsx  
-**接口描述**: 获取自定义仪表盘的数据  
-**接口报文格式**: GET /api/analytics/dashboard  
+**接口名称**: 发现Provider的数据资源  
+**对应页面**: consumer/subscriptions/DataSubscription.tsx  
+**接口描述**: 从指定的Provider连接器获取可用的数据资源列表  
+**接口报文格式**: POST /api/consumer/subscription/discover-resources  
 
-## 7. 系统管理模块
-
-### 7.1 获取系统配置
-
-**接口名称**: 获取系统配置  
-**对应页面**: provider/system/SystemConfig.tsx  
-**接口描述**: 获取系统配置参数  
-**接口报文格式**: GET /api/system/config  
-
-**响应体 JSON Schema**:
+**请求体 JSON Schema**:
 ```json
 {
   "type": "object",
   "properties": {
-    "success": {"type": "boolean"},
-    "data": {
-      "type": "object",
-      "properties": {
-        "general": {
-          "type": "object",
-          "properties": {
-            "systemName": {"type": "string"},
-            "adminEmail": {"type": "string"},
-            "language": {"type": "string"},
-            "timezone": {"type": "string"},
-            "autoUpdate": {"type": "boolean"},
-            "telemetry": {"type": "boolean"}
-          }
-        },
-        "network": {
-          "type": "object",
-          "properties": {
-            "hostAddress": {"type": "string"},
-            "port": {"type": "integer"},
-            "useHttps": {"type": "boolean"},
-            "proxyEnabled": {"type": "boolean"},
-            "proxyAddress": {"type": "string"},
-            "proxyPort": {"type": "string"}
-          }
-        },
-        "security": {
-          "type": "object",
-          "properties": {
-            "sessionTimeout": {"type": "integer"},
-            "maxLoginAttempts": {"type": "integer"},
-            "passwordPolicy": {"type": "string"},
-            "twoFactorAuth": {"type": "boolean"},
-            "allowedIPs": {"type": "string"}
-          }
-        },
-        "storage": {
-          "type": "object",
-          "properties": {
-            "dataPath": {"type": "string"},
-            "tempPath": {"type": "string"},
-            "maxUploadSize": {"type": "integer"},
-            "backupEnabled": {"type": "boolean"},
-            "backupSchedule": {"type": "string"},
-            "retentionDays": {"type": "integer"}
-          }
-        },
-        "api": {
-          "type": "object",
-          "properties": {
-            "enableREST": {"type": "boolean"},
-            "enableGraphQL": {"type": "boolean"},
-            "rateLimitPerMinute": {"type": "integer"},
-            "tokenExpiration": {"type": "integer"}
-          }
-        }
-      }
+    "connectorAddress": {
+      "type": "string",
+      "description": "Provider连接器地址"
     }
-  }
+  },
+  "required": ["connectorAddress"]
 }
 ```
 
-### 7.2 更新系统配置
-
-**接口名称**: 更新系统配置  
-**对应页面**: provider/system/SystemConfig.tsx  
-**接口描述**: 更新系统配置参数  
-**接口报文格式**: PUT /api/system/config  
-
-### 7.3 获取系统备份列表
-
-**接口名称**: 获取系统备份列表  
-**对应页面**: provider/system/Backup.tsx  
-**接口描述**: 获取系统备份文件列表  
-**接口报文格式**: GET /api/system/backups  
-
-### 7.4 创建系统备份
-
-**接口名称**: 创建系统备份  
-**对应页面**: provider/system/Backup.tsx  
-**接口描述**: 手动创建系统备份  
-**接口报文格式**: POST /api/system/backups  
-
-## 8. 身份认证管理模块
-
-### 8.1 获取用户列表
-
-**接口名称**: 获取用户列表  
-**对应页面**: provider/identity/Authentication.tsx  
-**接口描述**: 获取系统用户列表  
-**接口报文格式**: GET /api/identity/users  
-
-**响应体 JSON Schema**:
+**请求体示例**:
 ```json
 {
-  "type": "object",
-  "properties": {
-    "success": {"type": "boolean"},
-    "data": {
-      "type": "object",
-      "properties": {
-        "users": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {"type": "integer"},
-              "username": {"type": "string"},
-              "email": {"type": "string"},
-              "fullName": {"type": "string"},
-              "role": {"type": "string"},
-              "status": {"type": "string", "enum": ["active", "inactive", "locked", "pending"]},
-              "lastLogin": {"type": "string", "format": "date-time"},
-              "createdAt": {"type": "string", "format": "date-time"},
-              "permissions": {"type": "array", "items": {"type": "string"}},
-              "avatar": {"type": "string"}
-            }
-          }
-        },
-        "total": {"type": "integer"}
-      }
-    }
-  }
+  "connectorAddress": "https://provider.example.com:8080/api/ids/connector"
 }
 ```
-
-### 8.2 获取证书列表
-
-**接口名称**: 获取证书列表  
-**对应页面**: provider/identity/CertificateManagement.tsx  
-**接口描述**: 获取系统证书列表  
-**接口报文格式**: GET /api/identity/certificates  
 
 **响应体 JSON Schema**:
 ```json
@@ -1312,15 +1771,13 @@
       "items": {
         "type": "object",
         "properties": {
-          "id": {"type": "integer"},
+          "id": {"type": "string"},
           "name": {"type": "string"},
-          "type": {"type": "string", "enum": ["x509", "jwt", "oauth"]},
-          "issuer": {"type": "string"},
-          "subject": {"type": "string"},
-          "validFrom": {"type": "string", "format": "date-time"},
-          "validTo": {"type": "string", "format": "date-time"},
-          "status": {"type": "string", "enum": ["valid", "expired", "revoked", "pending"]},
-          "fingerprint": {"type": "string"}
+          "description": {"type": "string"},
+          "type": {"type": "string"},
+          "size": {"type": "string"},
+          "format": {"type": "string"},
+          "lastUpdated": {"type": "string", "format": "date-time"}
         }
       }
     }
@@ -1328,30 +1785,68 @@
 }
 ```
 
-### 8.3 获取活动会话
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "res_001",
+      "name": "客户销售数据集",
+      "description": "包含客户购买记录和销售统计的数据集",
+      "type": "dataset",
+      "size": "2.5GB",
+      "format": "CSV",
+      "lastUpdated": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": "res_002",
+      "name": "产品库存数据",
+      "description": "实时产品库存信息",
+      "type": "api",
+      "size": "实时",
+      "format": "JSON",
+      "lastUpdated": "2024-01-15T14:20:00Z"
+    }
+  ]
+}
+```
 
-**接口名称**: 获取活动会话列表  
-**对应页面**: provider/identity/Authentication.tsx  
-**接口描述**: 获取当前活动的用户会话  
-**接口报文格式**: GET /api/identity/sessions  
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "data": [],
+  "message": "无法连接到指定的连接器或连接器无可用资源"
+}
+```
 
-## 9. 安全管理模块
+#### 6.1.3 获取合同模板
 
-### 9.1 获取审计日志
+**接口名称**: 获取数据订阅合同模板  
+**对应页面**: consumer/subscriptions/DataSubscription.tsx  
+**接口描述**: 获取指定资源的合同模板  
+**接口报文格式**: POST /api/consumer/subscription/contract-template  
 
-**接口名称**: 获取审计日志  
-**对应页面**: provider/security/AuditLogs.tsx  
-**接口描述**: 分页获取系统审计日志  
-**接口报文格式**: GET /api/security/audit-logs  
+**请求体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "connectorAddress": {"type": "string"},
+    "resourceId": {"type": "string"}
+  },
+  "required": ["connectorAddress", "resourceId"]
+}
+```
 
-**查询参数**:
-- page: 页码
-- pageSize: 每页数量
-- startDate: 开始日期
-- endDate: 结束日期
-- user: 用户过滤
-- action: 操作过滤
-- status: 状态过滤
+**请求体示例**:
+```json
+{
+  "connectorAddress": "https://provider.example.com:8080/api/ids/connector",
+  "resourceId": "res_001"
+}
+```
 
 **响应体 JSON Schema**:
 ```json
@@ -1362,19 +1857,341 @@
     "data": {
       "type": "object",
       "properties": {
-        "logs": {
+        "templateId": {"type": "string"},
+        "terms": {
+          "type": "object",
+          "properties": {
+            "usagePurpose": {"type": "string"},
+            "accessDuration": {"type": "string"},
+            "dataRetention": {"type": "string"},
+            "restrictions": {"type": "array", "items": {"type": "string"}}
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "templateId": "template_001",
+    "terms": {
+      "usagePurpose": "数据分析和报告生成",
+      "accessDuration": "12个月",
+      "dataRetention": "合同期满后30天内删除",
+      "restrictions": ["不得用于商业转售", "不得与第三方共享"]
+    }
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "指定资源不存在或无可用合同模板"
+}
+```
+
+#### 6.1.4 协商合同条款
+
+**接口名称**: 协商合同条款  
+**对应页面**: consumer/subscriptions/DataSubscription.tsx  
+**接口描述**: 与Provider协商合同条款  
+**接口报文格式**: POST /api/consumer/subscription/negotiate-contract  
+
+#### 6.1.5 签署合同
+
+**接口名称**: 签署订阅合同  
+**对应页面**: consumer/subscriptions/DataSubscription.tsx  
+**接口描述**: 签署数据订阅合同  
+**接口报文格式**: POST /api/consumer/subscription/sign-contract  
+
+**请求体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "contractId": {"type": "string"},
+    "accepted": {"type": "boolean"},
+    "signature": {"type": "string"}
+  },
+  "required": ["contractId", "accepted"]
+}
+```
+
+**请求体示例**:
+```json
+{
+  "contractId": "contract_12345",
+  "accepted": true,
+  "signature": "digital_signature_hash_value"
+}
+```
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {"type": "string"},
+        "contractId": {"type": "string"},
+        "status": {"type": "string"},
+        "signedAt": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}
+```
+
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "subscriptionId": "sub_67890",
+    "contractId": "contract_12345",
+    "status": "active",
+    "signedAt": "2024-01-15T16:30:00Z"
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "合同签署失败：合同已过期或无效"
+}
+```
+
+### 6.2 订阅管理
+
+#### 6.2.1 获取订阅列表
+
+**接口名称**: 获取消费者订阅列表  
+**对应页面**: consumer/subscriptions/ManageSubscription.tsx  
+**接口描述**: 获取当前消费者的所有数据订阅记录  
+**接口报文格式**: GET /api/consumer/subscriptions  
+
+**查询参数**:
+- page: 页码
+- pageSize: 每页数量
+- search: 搜索关键词
+- status: 状态过滤 (active/expired/suspended/pending)
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "subscriptions": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "id": {"type": "integer"},
-              "timestamp": {"type": "string", "format": "date-time"},
-              "user": {"type": "string"},
-              "action": {"type": "string"},
-              "resource": {"type": "string"},
-              "details": {"type": "string"},
-              "status": {"type": "string", "enum": ["success", "failure", "warning"]},
-              "ipAddress": {"type": "string"}
+              "id": {"type": "string"},
+              "datasetName": {"type": "string"},
+              "datasetUuid": {"type": "string"},
+              "providerName": {"type": "string"},
+              "providerId": {"type": "string"},
+              "subscriptionDate": {"type": "string", "format": "date"},
+              "expiryDate": {"type": "string", "format": "date"},
+              "status": {"type": "string", "enum": ["active", "expired", "suspended", "pending"]},
+              "pricePerMonth": {"type": "number"},
+              "currency": {"type": "string"},
+              "dataTransferred": {"type": "number"},
+              "monthlyQuota": {"type": "number"},
+              "contractSummary": {"type": "string"}
+            }
+          }
+        },
+        "total": {"type": "integer"},
+        "statistics": {
+          "type": "object",
+          "properties": {
+            "activeCount": {"type": "integer"},
+            "expiredCount": {"type": "integer"},
+            "suspendedCount": {"type": "integer"},
+            "totalMonthlyCost": {"type": "number"}
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "subscriptions": [
+      {
+        "id": "sub_001",
+        "datasetName": "客户销售数据集",
+        "datasetUuid": "dataset_12345",
+        "providerName": "销售部门数据连接器",
+        "providerId": "provider_001",
+        "subscriptionDate": "2024-01-01",
+        "expiryDate": "2024-12-31",
+        "status": "active",
+        "pricePerMonth": 299.99,
+        "currency": "CNY",
+        "dataTransferred": 1024000000,
+        "monthlyQuota": 5368709120,
+        "contractSummary": "数据分析用途，12个月有效期"
+      },
+      {
+        "id": "sub_002",
+        "datasetName": "产品库存数据",
+        "datasetUuid": "dataset_67890",
+        "providerName": "库存管理连接器",
+        "providerId": "provider_002",
+        "subscriptionDate": "2023-12-15",
+        "expiryDate": "2024-01-14",
+        "status": "expired",
+        "pricePerMonth": 199.99,
+        "currency": "CNY",
+        "dataTransferred": 512000000,
+        "monthlyQuota": 2147483648,
+        "contractSummary": "实时库存查询，1个月试用期"
+      }
+    ],
+    "total": 2,
+    "statistics": {
+      "activeCount": 1,
+      "expiredCount": 1,
+      "suspendedCount": 0,
+      "totalMonthlyCost": 299.99
+    }
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "获取订阅列表失败"
+}
+```
+
+#### 6.2.2 获取订阅详情
+
+**接口名称**: 获取订阅详细信息  
+**对应页面**: consumer/subscriptions/ManageSubscription.tsx  
+**接口描述**: 获取指定订阅的详细信息  
+**接口报文格式**: GET /api/consumer/subscriptions/{subscriptionId}  
+
+#### 6.2.3 取消订阅
+
+**接口名称**: 取消数据订阅  
+**对应页面**: consumer/subscriptions/ManageSubscription.tsx  
+**接口描述**: 取消指定的数据订阅  
+**接口报文格式**: DELETE /api/consumer/subscriptions/{subscriptionId}  
+
+### 6.3 消费者连接器状态管理
+
+#### 6.3.1 获取消费者连接器状态
+
+**接口名称**: 获取消费者连接器状态  
+**对应页面**: consumer/connections/ConnectorStatus.tsx  
+**接口描述**: 获取消费者连接器的运行状态和配置信息  
+**接口报文格式**: GET /api/consumer/connector/status  
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "connectorInfo": {
+          "type": "object",
+          "properties": {
+            "id": {"type": "string"},
+            "name": {"type": "string"},
+            "version": {"type": "string"},
+            "status": {"type": "string", "enum": ["online", "offline", "error"]},
+            "uptime": {"type": "string"},
+            "lastHeartbeat": {"type": "string", "format": "date-time"}
+          }
+        },
+        "connections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "providerName": {"type": "string"},
+              "providerAddress": {"type": "string"},
+              "status": {"type": "string"},
+              "lastActivity": {"type": "string", "format": "date-time"}
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### 6.4 数据交换管理
+
+#### 6.4.1 获取消费者数据交换记录
+
+**接口名称**: 获取消费者数据交换记录  
+**对应页面**: consumer/connections/DataExchange.tsx  
+**接口描述**: 获取消费者的数据交换历史记录  
+**接口报文格式**: GET /api/consumer/data-exchange  
+
+**查询参数**:
+- page: 页码
+- pageSize: 每页数量
+- status: 状态过滤
+- dateRange: 日期范围
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "exchanges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "providerConnector": {"type": "string"},
+              "resourceName": {"type": "string"},
+              "resourceType": {"type": "string"},
+              "exchangeType": {"type": "string", "enum": ["pull", "push"]},
+              "status": {"type": "string", "enum": ["completed", "failed", "in_progress", "pending"]},
+              "startTime": {"type": "string", "format": "date-time"},
+              "endTime": {"type": "string", "format": "date-time"},
+              "dataSize": {"type": "string"},
+              "transferRate": {"type": "string"},
+              "errorMessage": {"type": "string"}
             }
           }
         },
@@ -1385,23 +2202,78 @@
 }
 ```
 
-### 9.2 获取访问控制规则
+#### 6.4.2 启动数据拉取
 
-**接口名称**: 获取访问控制规则  
-**对应页面**: provider/security/AccessControl.tsx  
-**接口描述**: 获取系统访问控制规则  
-**接口报文格式**: GET /api/security/access-control  
+**接口名称**: 启动数据拉取  
+**对应页面**: consumer/connections/DataExchange.tsx  
+**接口描述**: 从Provider拉取订阅的数据  
+**接口报文格式**: POST /api/consumer/data-exchange/pull  
 
-### 9.3 获取合规检查结果
+**请求体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "subscriptionId": {"type": "string"},
+    "resourceId": {"type": "string"},
+    "providerAddress": {"type": "string"}
+  },
+  "required": ["subscriptionId", "resourceId", "providerAddress"]
+}
+```
 
-**接口名称**: 获取合规检查结果  
-**对应页面**: provider/security/Compliance.tsx  
-**接口描述**: 获取系统合规性检查结果  
-**接口报文格式**: GET /api/security/compliance  
+**请求体示例**:
+```json
+{
+  "subscriptionId": "sub_001",
+  "resourceId": "res_001",
+  "providerAddress": "https://provider.example.com:8080/api/ids/connector"
+}
+```
 
-## 10. 通用接口
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "exchangeId": {"type": "string"},
+        "status": {"type": "string"},
+        "startTime": {"type": "string", "format": "date-time"},
+        "estimatedDuration": {"type": "string"}
+      }
+    }
+  }
+}
+```
 
-### 10.1 获取过滤选项
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "exchangeId": "exchange_12345",
+    "status": "in_progress",
+    "startTime": "2024-01-15T16:45:00Z",
+    "estimatedDuration": "约5分钟"
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "数据拉取启动失败：订阅已过期或Provider连接器不可用"
+}
+```
+
+## 7. 通用接口
+
+### 7.1 获取过滤选项
 
 **接口名称**: 获取过滤选项  
 **对应页面**: 多个列表页面  
@@ -1429,14 +2301,37 @@
 }
 ```
 
-### 10.2 文件上传
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "domains": ["销售", "财务", "人力资源", "市场营销", "运营"],
+    "dataTypes": ["数据库", "文件", "API", "流数据"],
+    "accessLevels": ["公开", "内部", "机密", "绝密"],
+    "statuses": ["活跃", "非活跃", "已删除", "待审核"],
+    "owners": ["张三", "李四", "王五", "赵六"],
+    "tags": ["客户数据", "销售报表", "财务分析", "库存管理", "用户行为"]
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "获取过滤选项失败"
+}
+```
+
+### 7.2 文件上传
 
 **接口名称**: 文件上传  
 **对应页面**: 多个编辑页面  
 **接口描述**: 通用文件上传接口  
 **接口报文格式**: POST /api/common/upload  
 
-### 10.3 文件下载
+### 7.3 文件下载
 
 **接口名称**: 文件下载  
 **对应页面**: 多个列表页面  

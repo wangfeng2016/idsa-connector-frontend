@@ -44,6 +44,7 @@ const ProviderToBeConstructed = () => <ToBeConstructed pageName="提供者功能
 const ConsumerConnectorStatus = lazy(() => import('../pages/consumer/connections/ConnectorStatus'));
 const ConsumerDataExchange = lazy(() => import('../pages/consumer/connections/DataExchange'));
 const ConsumerDataSubscription = lazy(() => import('../pages/consumer/subscriptions/DataSubscription'));
+const ConsumerManageSubscription = lazy(() => import('../pages/consumer/subscriptions/ManageSubscription'));
 
 const router = createHashRouter([
   {
@@ -70,7 +71,7 @@ const router = createHashRouter([
         element: <ProviderResourceList />,
       },
       {
-        path: 'enterprise/resources/edit',
+        path: 'enterprise/resources/edit/:id?',
         element: <ProviderResourceEdit />,
       },
       {
@@ -190,6 +191,10 @@ const router = createHashRouter([
       {
         path: 'enterprise/subscriptions/subscribe',
         element: <ConsumerDataSubscription />,
+      },
+      {
+        path: 'enterprise/subscriptions',
+        element: <ConsumerManageSubscription />,
       },
 
       // 404页面

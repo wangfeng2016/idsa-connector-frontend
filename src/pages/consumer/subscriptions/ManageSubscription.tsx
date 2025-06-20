@@ -300,7 +300,7 @@ const ManageSubscription: React.FC = () => {
   };
 
   return (
-    <ResponsiveContainer>
+    <ResponsiveContainer maxWidth="95%">
       <Box sx={{ p: 3 }}>
         {/* 页面标题 */}
         <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
