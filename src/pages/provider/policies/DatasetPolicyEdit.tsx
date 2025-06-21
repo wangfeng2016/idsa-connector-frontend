@@ -4,11 +4,7 @@ import {
   Card,
   CardContent,
   Typography,
-  FormControl,
   FormControlLabel,
-  InputLabel,
-  Select,
-  MenuItem,
   TextField,
   Button,
   Stack,
@@ -16,10 +12,8 @@ import {
   Autocomplete,
   Chip,
   Alert,
-  Divider,
   Paper,
 } from '@mui/material';
-import { type SelectChangeEvent } from '@mui/material/Select';
 import { mockResources } from '../../../contexts/ResourceContext';
 
 // 策略类型定义

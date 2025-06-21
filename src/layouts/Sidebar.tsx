@@ -15,8 +15,6 @@ import useResponsive from '../hooks/useResponsive';
 import { useRole } from '../contexts/RoleContext';
 
 // 图标导入
-import StoreIcon from '@mui/icons-material/Store';
-import BarChartIcon from '@mui/icons-material/BarChart';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -24,22 +22,14 @@ import FolderIcon from '@mui/icons-material/Folder';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ListIcon from '@mui/icons-material/List';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import ReceiptIcon from '@mui/icons-material/Receipt';
 import ExploreIcon from '@mui/icons-material/Explore';
-import PeopleIcon from '@mui/icons-material/People';
-import TimelineIcon from '@mui/icons-material/Timeline';
-import AssessmentIcon from '@mui/icons-material/Assessment';
-import SummarizeIcon from '@mui/icons-material/Summarize';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import TuneIcon from '@mui/icons-material/Tune';
 import SystemUpdateIcon from '@mui/icons-material/SystemUpdate';
 import BusinessIcon from '@mui/icons-material/Business';
+import DatasetIcon from '@mui/icons-material/Dataset';
 // 新增角色特定图标
 import PublishIcon from '@mui/icons-material/Publish';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 
 interface SidebarProps {
@@ -124,6 +114,7 @@ const enterpriseMenuGroups: MenuGroup[] = [
     items: [
       { id: 'data-discovery', title: '数据发现', path: '/enterprise/resources/data-discovery', icon: <ExploreIcon /> },
       { id: 'resource-list', title: '资源列表', path: '/enterprise/resources', icon: <FolderIcon /> },
+      { id: 'dataset-management', title: '数据集管理', path: '/enterprise/datasets', icon: <DatasetIcon /> },
       { id: 'dataset-policy-edit', title: '数据集策略管理', path: '/enterprise/policies/dataset-policy-edit', icon: <DescriptionIcon /> },
       { id: 'dataset-policy-list', title: '数据集策略列表', path: '/enterprise/policies/dataset-policy-list', icon: <ListIcon /> },
       { id: 'connector-status', title: '连接器状态', path: '/enterprise/connections', icon: <SwapHorizIcon /> },

@@ -12,8 +12,12 @@ import Login from '../pages/Login';
 // 懒加载页面组件 - 提供者
 const ProviderDataDiscovery = lazy(() => import('../pages/provider/resources/DataDiscovery'));
 const ProviderResourceList = lazy(() => import('../pages/provider/resources/ResourceList'));
-
 const ProviderResourceEdit = lazy(() => import('../pages/provider/resources/ResourceEdit'));
+
+// 数据集管理组件
+const ProviderDatasetList = lazy(() => import('../pages/provider/datasets/DatasetList'));
+const ProviderDatasetUpload = lazy(() => import('../pages/provider/datasets/DatasetUpload'));
+const ProviderDatasetTransform = lazy(() => import('../pages/provider/datasets/DatasetTransform'));
 const ProviderPolicyList = lazy(() => import('../pages/provider/policies/PolicyList'));
 const ProviderPolicyEdit = lazy(() => import('../pages/provider/policies/PolicyEdit'));
 const ProviderDatasetPolicyEdit = lazy(() => import('../pages/provider/policies/DatasetPolicyEdit'));
@@ -76,6 +80,27 @@ const router = createHashRouter([
       },
       {
         path: 'enterprise/quality',
+        element: <ProviderToBeConstructed />,
+      },
+      // 数据集管理路由
+      {
+        path: 'enterprise/datasets',
+        element: <ProviderDatasetList />,
+      },
+      {
+        path: 'enterprise/datasets/upload',
+        element: <ProviderDatasetUpload />,
+      },
+      {
+        path: 'enterprise/datasets/transform',
+        element: <ProviderDatasetTransform />,
+      },
+      {
+        path: 'enterprise/datasets/edit/:id',
+        element: <ProviderToBeConstructed />,
+      },
+      {
+        path: 'enterprise/datasets/view/:id',
         element: <ProviderToBeConstructed />,
       },
 

@@ -27,7 +27,6 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
-  IconButton,
   useTheme,
   alpha,
 } from '@mui/material';
@@ -42,9 +41,6 @@ import {
   Dataset as DatasetIcon,
   Gavel as GavelIcon,
   Security as SecurityIcon,
-  Search as SearchIcon,
-  Refresh as RefreshIcon,
-  Link as LinkIcon,
 } from '@mui/icons-material';
 
 import ResponsiveContainer from '../../../layouts/ResponsiveContainer';
@@ -193,7 +189,7 @@ const DataSubscription: React.FC = () => {
   
   // 新增状态
   const [connectorEndpoint, setConnectorEndpoint] = useState('');
-  const [isConnecting, setIsConnecting] = useState(false);
+  const [_isConnecting, setIsConnecting] = useState(false);
   const [remoteResources, setRemoteResources] = useState<DataResource[]>([]);
   const [selectedResource, setSelectedResource] = useState<DataResource | null>(null);
   const [isLoadingResources, setIsLoadingResources] = useState(false);

@@ -2,7 +2,11 @@
 
 ## 概述
 
-本文档详细描述了IDSA数据空间连接器前端系统所需的后端RESTful API接口设计。基于对前端页面和组件的分析，识别出以下主要功能模块的接口需求。
+本文档详细描述了IDSA数据空间连接器前端系统所需的后端RESTful API接口设计。下面示意图展示了相关实体和全生命周期逻辑。
+
+Data Resource → Dataset → Dataset Policy → Data Sharing
+     ↑            ↑           ↑              ↑
+  数据发现      数据集管理    策略配置      数据共享
 
 ## 1. 用户认证与授权模块
 
@@ -1428,9 +1432,400 @@
 **接口描述**: 添加或移除资源收藏  
 **接口报文格式**: POST /api/resources/{id}/favorite  
 
-## 4. 数据集策略管理模块
+## 4. 数据集管理模块
 
-### 4.1 获取数据集策略配置
+### 4.1 获取数据集列表
+
+**接口名称**: 获取数据集列表  
+**对应页面**: provider/datasets/DatasetList.tsx  
+**接口描述**: 分页获取数据集列表，支持过滤和排序  
+**接口报文格式**: GET /api/datasets  
+
+**查询参数**:
+- page: 页码，默认为1
+- pageSize: 每页数量，默认为10
+- searchTerm: 搜索关键词
+- type: 数据集类型过滤 (uploaded/transformed)
+- category: 分类过滤
+- status: 状态过滤
+- accessLevel: 访问级别过滤
+- sortBy: 排序字段
+- sortOrder: 排序方向
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "datasets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "name": {"type": "string"},
+              "description": {"type": "string"},
+              "type": {"type": "string", "enum": ["uploaded", "transformed"]},
+              "sourceType": {"type": "string", "enum": ["file", "database", "api"]},
+              "sourceResourceId": {"type": "string"},
+              "sourceResourceName": {"type": "string"},
+              "format": {"type": "string"},
+              "size": {"type": "string"},
+              "recordCount": {"type": "number"},
+              "status": {"type": "string", "enum": ["active", "processing", "error", "archived"]},
+              "category": {"type": "string"},
+              "accessLevel": {"type": "string", "enum": ["public", "private", "restricted"]},
+              "tags": {"type": "array", "items": {"type": "string"}},
+              "createdAt": {"type": "string", "format": "date-time"},
+              "updatedAt": {"type": "string", "format": "date-time"}
+            }
+          }
+        },
+        "total": {"type": "integer"},
+        "page": {"type": "integer"},
+        "pageSize": {"type": "integer"}
+      }
+    }
+  }
+}
+```
+
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "datasets": [
+      {
+        "id": "ds_001",
+        "name": "客户数据集",
+        "description": "包含客户基本信息的数据集",
+        "type": "transformed",
+        "sourceType": "database",
+        "sourceResourceId": "res_001",
+        "sourceResourceName": "客户信息表",
+        "format": "CSV",
+        "size": "2.5MB",
+        "recordCount": 10000,
+        "status": "active",
+        "category": "客户管理",
+        "accessLevel": "private",
+        "tags": ["客户", "CRM"],
+        "createdAt": "2024-01-15T10:30:00Z",
+        "updatedAt": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "total": 25,
+    "page": 1,
+    "pageSize": 10
+  }
+}
+```
+
+### 4.2 获取单个数据集详情
+
+**接口名称**: 获取数据集详情  
+**对应页面**: provider/datasets/DatasetList.tsx (查看详情)  
+**接口描述**: 根据ID获取单个数据集的详细信息  
+**接口报文格式**: GET /api/datasets/{id}  
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+        "type": {"type": "string", "enum": ["uploaded", "transformed"]},
+        "sourceType": {"type": "string", "enum": ["file", "database", "api"]},
+        "sourceResourceId": {"type": "string"},
+        "sourceResourceName": {"type": "string"},
+        "format": {"type": "string"},
+        "size": {"type": "string"},
+        "recordCount": {"type": "number"},
+        "status": {"type": "string", "enum": ["active", "processing", "error", "archived"]},
+        "category": {"type": "string"},
+        "accessLevel": {"type": "string", "enum": ["public", "private", "restricted"]},
+        "tags": {"type": "array", "items": {"type": "string"}},
+        "createdAt": {"type": "string", "format": "date-time"},
+        "updatedAt": {"type": "string", "format": "date-time"},
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {"type": "string"},
+                      "type": {"type": "string"},
+                      "nullable": {"type": "boolean"},
+                      "description": {"type": "string"}
+                    }
+                  }
+                }
+              }
+            },
+            "transformConfig": {
+              "type": "object",
+              "properties": {
+                "selectedFields": {"type": "array", "items": {"type": "string"}},
+                "filters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "field": {"type": "string"},
+                      "operator": {"type": "string"},
+                      "value": {"type": "string"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### 4.3 创建数据集（文件上传）
+
+**接口名称**: 创建数据集（文件上传）  
+**对应页面**: provider/datasets/DatasetUpload.tsx  
+**接口描述**: 通过文件上传创建新的数据集  
+**接口报文格式**: POST /api/datasets/upload  
+
+**请求体**: multipart/form-data
+- file: 上传的文件
+- metadata: JSON字符串，包含数据集元数据
+
+**metadata JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {"type": "string"},
+    "description": {"type": "string"},
+    "category": {"type": "string"},
+    "accessLevel": {"type": "string", "enum": ["public", "private", "restricted"]},
+    "tags": {"type": "array", "items": {"type": "string"}}
+  },
+  "required": ["name"]
+}
+```
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "name": {"type": "string"},
+        "status": {"type": "string"},
+        "uploadProgress": {"type": "number"}
+      }
+    }
+  }
+}
+```
+
+### 4.4 创建数据集（资源转换）
+
+**接口名称**: 创建数据集（资源转换）  
+**对应页面**: provider/datasets/DatasetTransform.tsx  
+**接口描述**: 从现有数据资源转换生成新的数据集  
+**接口报文格式**: POST /api/datasets/transform  
+
+**请求体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "sourceResourceId": {"type": "string"},
+    "transformConfig": {
+      "type": "object",
+      "properties": {
+        "selectedFields": {"type": "array", "items": {"type": "string"}},
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {"type": "string"},
+              "operator": {"type": "string", "enum": ["equals", "not_equals", "greater_than", "less_than", "contains", "not_contains"]},
+              "value": {"type": "string"}
+            },
+            "required": ["field", "operator", "value"]
+          }
+        },
+        "limit": {"type": "number"}
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+        "category": {"type": "string"},
+        "accessLevel": {"type": "string", "enum": ["public", "private", "restricted"]},
+        "tags": {"type": "array", "items": {"type": "string"}}
+      },
+      "required": ["name"]
+    }
+  },
+  "required": ["sourceResourceId", "metadata"]
+}
+```
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "name": {"type": "string"},
+        "status": {"type": "string"},
+        "estimatedRecords": {"type": "number"},
+        "estimatedSize": {"type": "string"}
+      }
+    }
+  }
+}
+```
+
+### 4.5 更新数据集
+
+**接口名称**: 更新数据集  
+**对应页面**: provider/datasets/DatasetList.tsx (编辑功能)  
+**接口描述**: 更新数据集的元数据信息  
+**接口报文格式**: PUT /api/datasets/{id}  
+
+**请求体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {"type": "string"},
+    "description": {"type": "string"},
+    "category": {"type": "string"},
+    "accessLevel": {"type": "string", "enum": ["public", "private", "restricted"]},
+    "tags": {"type": "array", "items": {"type": "string"}}
+  }
+}
+```
+
+### 4.6 删除数据集
+
+**接口名称**: 删除数据集  
+**对应页面**: provider/datasets/DatasetList.tsx  
+**接口描述**: 删除指定的数据集  
+**接口报文格式**: DELETE /api/datasets/{id}  
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "deleted": {"type": "boolean"}
+      }
+    }
+  }
+}
+```
+
+### 4.7 获取数据集预览
+
+**接口名称**: 获取数据集预览  
+**对应页面**: provider/datasets/DatasetList.tsx, DatasetTransform.tsx  
+**接口描述**: 获取数据集的数据预览  
+**接口报文格式**: GET /api/datasets/{id}/preview  
+
+**查询参数**:
+- limit: 预览行数，默认为10
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "headers": {"type": "array", "items": {"type": "string"}},
+        "rows": {"type": "array", "items": {"type": "array", "items": {"type": "string"}}},
+        "totalRows": {"type": "number"},
+        "previewRows": {"type": "number"}
+      }
+    }
+  }
+}
+```
+
+### 4.8 获取资源字段信息
+
+**接口名称**: 获取资源字段信息  
+**对应页面**: provider/datasets/DatasetTransform.tsx  
+**接口描述**: 获取数据资源的字段信息，用于转换配置  
+**接口报文格式**: GET /api/resources/{id}/fields  
+
+**响应体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": {"type": "boolean"},
+    "data": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "type": {"type": "string"},
+              "nullable": {"type": "boolean"},
+              "description": {"type": "string"}
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+## 5. 数据集策略管理模块
+
+### 5.1 获取数据集策略配置
 
 **接口名称**: 获取数据集策略配置  
 **对应页面**: provider/dataset-policy-edit/DatasetPolicyEdit.tsx  
@@ -1498,7 +1893,7 @@
 }
 ```
 
-### 4.2 设置数据集策略配置
+### 5.2 设置数据集策略配置
 
 **接口名称**: 设置数据集策略配置  
 **对应页面**: provider/dataset-policy-edit/DatasetPolicyEdit.tsx  
@@ -1587,7 +1982,7 @@
 }
 ```
 
-### 4.3 更新数据集策略配置
+### 5.3 更新数据集策略配置
 
 **接口名称**: 更新数据集策略配置  
 **对应页面**: provider/dataset-policy-edit/DatasetPolicyEdit.tsx  
@@ -1615,7 +2010,7 @@
 }
 ```
 
-### 4.4 删除数据集策略配置
+### 5.4 删除数据集策略配置
 
 **接口名称**: 删除数据集策略配置  
 **对应页面**: provider/dataset-policy-edit/DatasetPolicyEdit.tsx  
@@ -1633,9 +2028,9 @@
 }
 ```  
 
-## 5. 提供者连接器管理模块
+## 6. 提供者连接器管理模块
 
-### 5.1 获取提供者连接器状态
+### 6.1 获取提供者连接器状态
 
 **接口名称**: 获取提供者连接器状态列表  
 **对应页面**: provider/connections/ConnectorStatus.tsx  
@@ -1682,7 +2077,7 @@
 }
 ```
 
-### 5.2 获取提供者数据交换记录
+### 6.2 获取提供者数据交换记录
 
 **接口名称**: 获取提供者数据交换记录  
 **对应页面**: provider/connections/DataExchange.tsx  
@@ -1725,11 +2120,11 @@
 }
 ```
 
-## 6. 消费者模块
+## 7. 消费者模块
 
-### 6.1 数据订阅
+### 7.1 数据订阅
 
-#### 6.1.1 验证连接器地址
+#### 7.1.1 验证连接器地址
 
 **接口名称**: 验证Provider连接器地址  
 **对应页面**: consumer/subscriptions/DataSubscription.tsx  
@@ -1809,7 +2204,7 @@
 }
 ```
 
-#### 6.1.2 发现数据资源
+#### 7.1.2 发现数据资源
 
 **接口名称**: 发现Provider的数据资源  
 **对应页面**: consumer/subscriptions/DataSubscription.tsx  
@@ -1898,7 +2293,7 @@
 }
 ```
 
-#### 6.1.3 获取合同模板
+#### 7.1.3 获取合同模板
 
 **接口名称**: 获取数据订阅合同模板  
 **对应页面**: consumer/subscriptions/DataSubscription.tsx  
@@ -1974,14 +2369,14 @@
 }
 ```
 
-#### 6.1.4 协商合同条款
+#### 7.1.4 协商合同条款
 
 **接口名称**: 协商合同条款  
 **对应页面**: consumer/subscriptions/DataSubscription.tsx  
 **接口描述**: 与Provider协商合同条款  
 **接口报文格式**: POST /api/consumer/subscription/negotiate-contract  
 
-#### 6.1.5 签署合同
+#### 7.1.5 签署合同
 
 **接口名称**: 签署订阅合同  
 **对应页面**: consumer/subscriptions/DataSubscription.tsx  
@@ -2050,9 +2445,9 @@
 }
 ```
 
-### 6.2 订阅管理
+### 7.2 订阅管理
 
-#### 6.2.1 获取订阅列表
+#### 7.2.1 获取订阅列表
 
 **接口名称**: 获取消费者订阅列表  
 **对应页面**: consumer/subscriptions/ManageSubscription.tsx  
@@ -2167,23 +2562,23 @@
 }
 ```
 
-#### 6.2.2 获取订阅详情
+#### 7.2.2 获取订阅详情
 
 **接口名称**: 获取订阅详细信息  
 **对应页面**: consumer/subscriptions/ManageSubscription.tsx  
 **接口描述**: 获取指定订阅的详细信息  
 **接口报文格式**: GET /api/consumer/subscriptions/{subscriptionId}  
 
-#### 6.2.3 取消订阅
+#### 7.2.3 取消订阅
 
 **接口名称**: 取消数据订阅  
 **对应页面**: consumer/subscriptions/ManageSubscription.tsx  
 **接口描述**: 取消指定的数据订阅  
 **接口报文格式**: DELETE /api/consumer/subscriptions/{subscriptionId}  
 
-### 6.3 消费者连接器状态管理
+### 7.3 消费者连接器状态管理
 
-#### 6.3.1 获取消费者连接器状态
+#### 7.3.1 获取消费者连接器状态
 
 **接口名称**: 获取消费者连接器状态  
 **对应页面**: consumer/connections/ConnectorStatus.tsx  
@@ -2229,9 +2624,9 @@
 }
 ```
 
-### 6.4 数据交换管理
+### 7.4 数据交换管理
 
-#### 6.4.1 获取消费者数据交换记录
+#### 7.4.1 获取消费者数据交换记录
 
 **接口名称**: 获取消费者数据交换记录  
 **对应页面**: consumer/connections/DataExchange.tsx  
@@ -2279,7 +2674,7 @@
 }
 ```
 
-#### 6.4.2 启动数据拉取
+#### 7.4.2 启动数据拉取
 
 **接口名称**: 启动数据拉取  
 **对应页面**: consumer/connections/DataExchange.tsx  
@@ -2348,9 +2743,9 @@
 }
 ```
 
-## 7. 通用接口
+## 8. 通用接口
 
-### 7.1 获取过滤选项
+### 8.1 获取过滤选项
 
 **接口名称**: 获取过滤选项  
 **对应页面**: 多个列表页面  
@@ -2401,19 +2796,20 @@
 }
 ```
 
-### 7.2 文件上传
+### 8.2 文件上传
 
 **接口名称**: 文件上传  
 **对应页面**: 多个编辑页面  
 **接口描述**: 通用文件上传接口  
 **接口报文格式**: POST /api/common/upload  
 
-### 7.3 文件下载
+### 8.3 文件下载
 
 **接口名称**: 文件下载  
 **对应页面**: 多个列表页面  
 **接口描述**: 通用文件下载接口  
 **接口报文格式**: GET /api/common/download/{fileId}  
+
 
 ## 接口设计原则
 

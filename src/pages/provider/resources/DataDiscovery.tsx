@@ -31,7 +31,6 @@ import {
   Cloud as CloudIcon,
   Api as ApiIcon,
   CheckCircle as CheckIcon,
-  Warning as WarningIcon
 } from '@mui/icons-material';
 
 interface DataSource {
@@ -117,7 +116,7 @@ const DataDiscovery: React.FC = () => {
   
   // 资源信息完善相关状态
   const [resourcesInfo, setResourcesInfo] = useState<ResourceInfo[]>([]);
-  const [sessionId, setSessionId] = useState<string>('');
+  const [_sessionId, setSessionId] = useState<string>('');
   
   const [discoveryResults, setDiscoveryResults] = useState<DiscoveryResult[]>([
     {

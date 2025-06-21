@@ -3,7 +3,6 @@ import { FormControl, Select, MenuItem, Box, Typography } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
 import { useRole } from '../contexts/RoleContext';
 import type { UserRole } from '../contexts/RoleContext';
-import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const roleOptions: UserRole[] = [
