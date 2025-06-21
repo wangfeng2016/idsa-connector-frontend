@@ -1271,10 +1271,13 @@
     "description": {"type": "string"},
     "type": {"type": "string"},
     "domain": {"type": "string"},
+    "owner": {"type": "string"},
     "accessLevel": {"type": "string"},
-    "tags": {"type": "array", "items": {"type": "string"}}
+    "status": {"type": "string"},
+    "tags": {"type": "array", "items": {"type": "string"}},
+    "dataVolume": {"type": "string"}
   },
-  "required": ["name", "description", "type", "domain", "accessLevel"]
+  "required": ["name", "description", "type", "domain", "owner", "accessLevel", "status"]
 }
 ```
 
@@ -1283,10 +1286,13 @@
 {
   "name": "产品库存表",
   "description": "产品库存信息，包含产品编号、库存数量、仓库位置等",
-  "type": "数据库表",
-  "domain": "库存管理",
-  "accessLevel": "internal",
-  "tags": ["库存", "产品", "仓储"]
+  "type": "结构化数据",
+  "domain": "供应链",
+  "owner": "张三",
+  "accessLevel": "内部",
+  "status": "草稿",
+  "tags": ["库存", "产品", "仓储"],
+  "dataVolume": "2.3 GB"
 }
 ```
 
@@ -1298,12 +1304,17 @@
     "id": 3,
     "name": "产品库存表",
     "description": "产品库存信息，包含产品编号、库存数量、仓库位置等",
-    "type": "数据库表",
-    "domain": "库存管理",
-    "accessLevel": "internal",
-    "status": "active",
+    "type": "结构化数据",
+    "domain": "供应链",
+    "owner": "张三",
+    "accessLevel": "内部",
+    "status": "草稿",
     "tags": ["库存", "产品", "仓储"],
-    "createdAt": "2024-01-15T16:45:00Z"
+    "qualityScore": 0,
+    "usageFrequency": 0,
+    "dataVolume": "2.3 GB",
+    "lastAccessed": "2024-01-15",
+    "isFavorite": false
   }
 }
 ```
@@ -1322,6 +1333,72 @@
 **对应页面**: provider/resources/ResourceEdit.tsx  
 **接口描述**: 更新现有数据资源信息  
 **接口报文格式**: PUT /api/resources/{id}  
+
+**请求体 JSON Schema**:
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {"type": "string"},
+    "description": {"type": "string"},
+    "type": {"type": "string"},
+    "domain": {"type": "string"},
+    "owner": {"type": "string"},
+    "accessLevel": {"type": "string"},
+    "status": {"type": "string"},
+    "tags": {"type": "array", "items": {"type": "string"}},
+    "dataVolume": {"type": "string"}
+  },
+  "required": ["name", "description", "type", "domain", "owner", "accessLevel", "status"]
+}
+```
+
+**请求体示例**:
+```json
+{
+  "name": "产品库存表",
+  "description": "产品库存信息，包含产品编号、库存数量、仓库位置等",
+  "type": "结构化数据",
+  "domain": "供应链",
+  "owner": "张三",
+  "accessLevel": "内部",
+  "status": "已发布",
+  "tags": ["库存", "产品", "仓储"],
+  "dataVolume": "2.3 GB"
+}
+```
+
+**响应体成功示例**:
+```json
+{
+  "success": true,
+  "data": {
+    "id": 3,
+    "name": "产品库存表",
+    "description": "产品库存信息，包含产品编号、库存数量、仓库位置等",
+    "type": "结构化数据",
+    "domain": "供应链",
+    "owner": "张三",
+    "accessLevel": "内部",
+    "status": "已发布",
+    "tags": ["库存", "产品", "仓储"],
+    "qualityScore": 85,
+    "usageFrequency": 12,
+    "dataVolume": "2.3 GB",
+    "lastAccessed": "2024-01-15",
+    "isFavorite": false
+  }
+}
+```
+
+**响应体失败示例**:
+```json
+{
+  "success": false,
+  "message": "资源不存在或无权限修改"
+}
+```
+
 
 ### 3.5 删除数据资源
 
