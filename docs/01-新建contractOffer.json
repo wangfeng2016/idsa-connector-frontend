@@ -1,0 +1,75 @@
+﻿{
+    "@context": {
+        "ids": "https://w3id.org/idsa/core/",
+        "idsc": "https://w3id.org/idsa/code/"
+    },
+    "@type": "ids:ContractOffer",
+    "@id": "https://w3id.org/idsa/autogen/contractOffer/{{contractOfferId}}",
+    "ids:permission": [
+        {
+            "@type": "ids:Permission",
+            "@id": "https://w3id.org/idsa/autogen/permission/{{permissionId}}",
+            "ids:target": {
+                "@id": "http://w3id.org/navicloud/connector/artifact/test"
+            },
+            "ids:description": [
+                {
+                    "@value": "Allow Access",
+                    "@type": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            ],
+            "ids:action": [
+                {
+                    "@id": "https://w3id.org/idsa/code/USE"
+                }
+            ],
+            "ids:title": [
+                {
+                    "@value": "Allow Access",
+                    "@type": "http://www.w3.org/2001/XMLSchema#string"
+                }
+            ],
+            "ids:constraint": [
+                {
+                    "@type": "ids:Constraint",
+                    "@id": "https://w3id.org/idsa/autogen/constraint/{{firstConstraintId}}",
+                    "ids:rightOperand": {
+                        "@value": "{{$isoTimestamp}}",
+                        "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
+                    },
+                    "ids:leftOperand": {
+                        "@id": "https://w3id.org/idsa/code/POLICY_EVALUATION_TIME"
+                    },
+                    "ids:operator": {
+                        "@id": "https://w3id.org/idsa/code/AFTER"
+                    }
+                },
+                {
+                    "@type": "ids:Constraint",
+                    "@id": "https://w3id.org/idsa/autogen/constraint/{{secondConstraintId}}",
+                    "ids:rightOperand": {
+                        "@value": "{{futureDate}}",
+                        "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
+                    },
+                    "ids:leftOperand": {
+                        "@id": "https://w3id.org/idsa/code/POLICY_EVALUATION_TIME"
+                    },
+                    "ids:operator": {
+                        "@id": "https://w3id.org/idsa/code/BEFORE"
+                    }
+                }
+            ]
+        }
+    ],
+    "ids:provider": {
+        "@id": "https://w3id.org/navicloud/connector/"
+    },
+    "ids:contractStart": {
+        "@value": "{{$isoTimestamp}}",
+        "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
+    },
+    "ids:contractDate": {
+        "@value": "{{$isoTimestamp}}",
+        "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
+    }
+}

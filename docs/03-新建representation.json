@@ -1,0 +1,25 @@
+﻿{
+    "@context": {
+        "ids": "https://w3id.org/idsa/core/",
+        "idsc": "https://w3id.org/idsa/code/"
+    },
+    "@type": "ids:TextRepresentation",
+    "@id": "https://w3id.org/idsa/autogen/textRepresentation/{{representationId}}",
+    "ids:instance": [
+        {
+            "@type": "ids:Artifact",
+            "@id": "http://w3id.org/navicloud/connector/artifact/postman",
+            "ids:creationDate": {
+                "@value": "{{$isoTimestamp}}",
+                "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
+            }
+        }
+    ],
+    "ids:language": {
+        "@id": "https://w3id.org/idsa/code/ZH"
+    },
+    "ids:created": {
+        "@value": "{{$isoTimestamp}}",
+        "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
+    }
+}
