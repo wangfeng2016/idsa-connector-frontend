@@ -27,84 +27,220 @@ import {
   Visibility as ViewIcon,
   CloudUpload as UploadIcon,
   Transform as TransformIcon,
+  ExpandMore as ExpandMoreIcon,
+  ExpandLess as ExpandLessIcon,
+  Download as DownloadIcon,
+  Description as FileIcon,
+  DataObject as RepresentationIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
-// 数据集接口定义
-interface Dataset {
+// IDS标准接口定义
+
+// 制品(Artifact) - 数据的物理实例
+interface Artifact {
   id: string;
-  name: string;
+  fileName: string;
+  filePath: string;
+  fileSize: string;
+  checksum: string;
+  createdAt: string;
+  accessUrl: string;
+  downloadCount: number;
+}
+
+// 表示(Representation) - 数据的格式化表示
+interface Representation {
+  id: string;
+  mediaType: string; // MIME类型，如 text/csv, application/json
+  format: string; // 格式描述，如 CSV, JSON, Excel
+  language?: string;
+  recordCount?: number;
+  schema?: string; // 数据模式描述
+  artifacts: Artifact[]; // 关联的制品
+  createdAt: string;
+  updatedAt: string;
+}
+
+// 资源(Resource) - 数据的逻辑描述
+interface Resource {
+  id: string;
+  title: string;
   description: string;
-  type: 'uploaded' | 'transformed';
-  sourceType: 'file' | 'database' | 'api';
-  sourceResourceId?: string;
-  sourceResourceName?: string;
-  format: string;
-  size: string;
-  recordCount: number;
+  keyword: string[]; // 关键词/标签
+  theme: string[]; // 主题分类
+  publisher: string;
+  license?: string;
+  accessRights: 'public' | 'private' | 'restricted';
+  temporal?: {
+    startDate?: string;
+    endDate?: string;
+  };
+  spatial?: string; // 地理范围
+  representations: Representation[]; // 关联的表示
   createdAt: string;
   updatedAt: string;
   status: 'active' | 'processing' | 'error' | 'archived';
-  tags: string[];
+  sourceType: 'uploaded' | 'transformed';
+  sourceResourceId?: string;
+  sourceResourceName?: string;
 }
 
-// 模拟数据集数据
-const mockDatasets: Dataset[] = [
+// 模拟IDS标准数据
+const mockResources: Resource[] = [
   {
-    id: 'ds-001',
-    name: '客户行为分析数据集',
-    description: '包含客户购买行为、浏览记录等分析数据',
-    type: 'transformed',
-    sourceType: 'database',
-    sourceResourceId: 'res-001',
-    sourceResourceName: '客户数据库',
-    format: 'CSV',
-    size: '2.5 MB',
-    recordCount: 15000,
+    id: 'res-001',
+    title: '客户行为分析数据集',
+    description: '包含客户购买行为、浏览记录等分析数据，用于客户行为模式分析和营销策略制定',
+    keyword: ['客户分析', '行为数据', '营销'],
+    theme: ['商业智能', '客户关系管理'],
+    publisher: '数据分析部门',
+    license: 'CC BY 4.0',
+    accessRights: 'private',
+    temporal: {
+      startDate: '2024-01-01',
+      endDate: '2024-01-31'
+    },
+    spatial: '全国',
+    representations: [
+      {
+        id: 'rep-001-csv',
+        mediaType: 'text/csv',
+        format: 'CSV',
+        recordCount: 15000,
+        schema: 'customer_id,action_type,timestamp,product_id,value',
+        artifacts: [
+          {
+            id: 'art-001-csv',
+            fileName: 'customer_behavior_analysis.csv',
+            filePath: '/data/customer_behavior_analysis.csv',
+            fileSize: '2.5 MB',
+            checksum: 'sha256:abc123...',
+            createdAt: '2024-01-15',
+            accessUrl: '/api/artifacts/art-001-csv/download',
+            downloadCount: 23
+          }
+        ],
+        createdAt: '2024-01-15',
+        updatedAt: '2024-01-20'
+      },
+      {
+        id: 'rep-001-json',
+        mediaType: 'application/json',
+        format: 'JSON',
+        recordCount: 15000,
+        schema: '{"customer_id": "string", "actions": []}',
+        artifacts: [
+          {
+            id: 'art-001-json',
+            fileName: 'customer_behavior_analysis.json',
+            filePath: '/data/customer_behavior_analysis.json',
+            fileSize: '3.2 MB',
+            checksum: 'sha256:def456...',
+            createdAt: '2024-01-15',
+            accessUrl: '/api/artifacts/art-001-json/download',
+            downloadCount: 12
+          }
+        ],
+        createdAt: '2024-01-15',
+        updatedAt: '2024-01-20'
+      }
+    ],
     createdAt: '2024-01-15',
     updatedAt: '2024-01-20',
     status: 'active',
-    tags: ['客户分析', '行为数据', '营销'],
+    sourceType: 'transformed',
+    sourceResourceId: 'db-001',
+    sourceResourceName: '客户数据库'
   },
   {
-    id: 'ds-002',
-    name: '产品销售报告',
-    description: '月度产品销售数据汇总',
-    type: 'uploaded',
-    sourceType: 'file',
-    format: 'Excel',
-    size: '1.8 MB',
-    recordCount: 8500,
+    id: 'res-002',
+    title: '产品销售报告',
+    description: '月度产品销售数据汇总，包含销售额、销量、地区分布等关键指标',
+    keyword: ['销售', '报告', '月度'],
+    theme: ['销售管理', '业务报告'],
+    publisher: '销售部门',
+    license: '内部使用',
+    accessRights: 'restricted',
+    temporal: {
+      startDate: '2024-01-01',
+      endDate: '2024-01-31'
+    },
+    representations: [
+      {
+        id: 'rep-002-excel',
+        mediaType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        format: 'Excel',
+        recordCount: 8500,
+        artifacts: [
+          {
+            id: 'art-002-excel',
+            fileName: 'monthly_sales_report_202401.xlsx',
+            filePath: '/data/monthly_sales_report_202401.xlsx',
+            fileSize: '1.8 MB',
+            checksum: 'sha256:ghi789...',
+            createdAt: '2024-01-10',
+            accessUrl: '/api/artifacts/art-002-excel/download',
+            downloadCount: 45
+          }
+        ],
+        createdAt: '2024-01-10',
+        updatedAt: '2024-01-18'
+      }
+    ],
     createdAt: '2024-01-10',
     updatedAt: '2024-01-18',
     status: 'active',
-    tags: ['销售', '报告', '月度'],
+    sourceType: 'uploaded'
   },
   {
-    id: 'ds-003',
-    name: '用户反馈数据',
-    description: '从API收集的用户反馈和评价数据',
-    type: 'transformed',
-    sourceType: 'api',
-    sourceResourceId: 'res-003',
-    sourceResourceName: '反馈API',
-    format: 'JSON',
-    size: '850 KB',
-    recordCount: 3200,
+    id: 'res-003',
+    title: '用户反馈数据',
+    description: '从API收集的用户反馈和评价数据，包含用户满意度、建议和投诉信息',
+    keyword: ['用户反馈', 'API数据', '评价'],
+    theme: ['用户体验', '质量管理'],
+    publisher: '产品部门',
+    accessRights: 'private',
+    representations: [
+      {
+        id: 'rep-003-json',
+        mediaType: 'application/json',
+        format: 'JSON',
+        recordCount: 3200,
+        schema: '{"feedback_id": "string", "user_id": "string", "rating": "number", "comment": "string"}',
+        artifacts: [
+          {
+            id: 'art-003-json',
+            fileName: 'user_feedback_data.json',
+            filePath: '/data/user_feedback_data.json',
+            fileSize: '850 KB',
+            checksum: 'sha256:jkl012...',
+            createdAt: '2024-01-12',
+            accessUrl: '/api/artifacts/art-003-json/download',
+            downloadCount: 8
+          }
+        ],
+        createdAt: '2024-01-12',
+        updatedAt: '2024-01-19'
+      }
+    ],
     createdAt: '2024-01-12',
     updatedAt: '2024-01-19',
     status: 'processing',
-    tags: ['用户反馈', 'API数据', '评价'],
-  },
+    sourceType: 'transformed',
+    sourceResourceId: 'api-003',
+    sourceResourceName: '反馈API'
+  }
 ];
 
 const DatasetList: React.FC = () => {
   const navigate = useNavigate();
-  const [datasets, setDatasets] = useState<Dataset[]>(mockDatasets);
+  const [resources, setResources] = useState<Resource[]>(mockResources);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [createType, setCreateType] = useState<'upload' | 'transform'>('upload');
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
 
-  const getStatusColor = (status: Dataset['status']) => {
+  const getStatusColor = (status: Resource['status']) => {
     switch (status) {
       case 'active':
         return 'success';
@@ -119,7 +255,7 @@ const DatasetList: React.FC = () => {
     }
   };
 
-  const getStatusText = (status: Dataset['status']) => {
+  const getStatusText = (status: Resource['status']) => {
     switch (status) {
       case 'active':
         return '活跃';
@@ -134,8 +270,44 @@ const DatasetList: React.FC = () => {
     }
   };
 
-  const getTypeText = (type: Dataset['type']) => {
+  const getSourceTypeText = (type: Resource['sourceType']) => {
     return type === 'uploaded' ? '上传' : '转换';
+  };
+
+  const getAccessRightsText = (accessRights: Resource['accessRights']) => {
+    switch (accessRights) {
+      case 'public':
+        return '公开';
+      case 'private':
+        return '私有';
+      case 'restricted':
+        return '受限';
+      default:
+        return '未知';
+    }
+  };
+
+  const getAccessRightsColor = (accessRights: Resource['accessRights']) => {
+    switch (accessRights) {
+      case 'public':
+        return 'success';
+      case 'private':
+        return 'error';
+      case 'restricted':
+        return 'warning';
+      default:
+        return 'default';
+    }
+  };
+
+  const toggleRowExpansion = (resourceId: string) => {
+    const newExpanded = new Set(expandedRows);
+    if (newExpanded.has(resourceId)) {
+      newExpanded.delete(resourceId);
+    } else {
+      newExpanded.add(resourceId);
+    }
+    setExpandedRows(newExpanded);
   };
 
   const handleCreateDataset = () => {
@@ -152,13 +324,18 @@ const DatasetList: React.FC = () => {
   };
 
   const handleViewDataset = (id: string) => {
-    navigate(`/enterprise/datasets/view/${id}`);
+    navigate(`/enterprise/datasets/${id}`);
   };
 
   const handleDeleteDataset = (id: string) => {
     if (window.confirm('确定要删除这个数据集吗？')) {
-      setDatasets(datasets.filter(ds => ds.id !== id));
+      setResources(resources.filter(res => res.id !== id));
     }
+  };
+
+  const handleDownloadArtifact = (artifact: Artifact) => {
+    // 模拟下载
+    window.open(artifact.accessUrl, '_blank');
   };
 
   return (
@@ -182,97 +359,220 @@ const DatasetList: React.FC = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>名称</TableCell>
+                  <TableCell width="40"></TableCell>
+                  <TableCell width="23%">数据集/表示/制品</TableCell>
                   <TableCell>类型</TableCell>
-                  <TableCell>来源</TableCell>
-                  <TableCell>格式</TableCell>
-                  <TableCell>大小</TableCell>
-                  <TableCell>记录数</TableCell>
-                  <TableCell>状态</TableCell>
-                  <TableCell>标签</TableCell>
+                  <TableCell>格式/大小</TableCell>
+                  <TableCell>记录数/下载数</TableCell>
+                  <TableCell>状态/权限</TableCell>
+                  <TableCell>主题/关键词</TableCell>
                   <TableCell>更新时间</TableCell>
                   <TableCell>操作</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {datasets.map((dataset) => (
-                  <TableRow key={dataset.id}>
-                    <TableCell>
-                      <Box>
-                        <Typography variant="subtitle2">{dataset.name}</Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {dataset.description}
-                        </Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        label={getTypeText(dataset.type)}
-                        size="small"
-                        color={dataset.type === 'uploaded' ? 'primary' : 'secondary'}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Box>
+                {resources.map((resource) => (
+                  <React.Fragment key={resource.id}>
+                    {/* Resource 行 */}
+                    <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+                      <TableCell>
+                        <IconButton
+                          size="small"
+                          onClick={() => toggleRowExpansion(resource.id)}
+                        >
+                          {expandedRows.has(resource.id) ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                        </IconButton>
+                      </TableCell>
+                      <TableCell>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <FileIcon color="primary" />
+                          <Box>
+                            <Typography variant="subtitle2" fontWeight="bold">
+                              {resource.title}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {resource.description}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          label={getSourceTypeText(resource.sourceType)}
+                          size="small"
+                          color={resource.sourceType === 'uploaded' ? 'primary' : 'secondary'}
+                        />
+                      </TableCell>
+                      <TableCell>
                         <Typography variant="body2">
-                          {dataset.sourceType === 'file' ? '文件上传' : 
-                           dataset.sourceType === 'database' ? '数据库' : 'API'}
+                          {resource.representations.length} 个表示
                         </Typography>
-                        {dataset.sourceResourceName && (
-                          <Typography variant="caption" color="text.secondary">
-                            {dataset.sourceResourceName}
-                          </Typography>
-                        )}
-                      </Box>
-                    </TableCell>
-                    <TableCell>{dataset.format}</TableCell>
-                    <TableCell>{dataset.size}</TableCell>
-                    <TableCell>{dataset.recordCount.toLocaleString()}</TableCell>
-                    <TableCell>
-                      <Chip
-                        label={getStatusText(dataset.status)}
-                        size="small"
-                        color={getStatusColor(dataset.status)}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {dataset.tags.map((tag, index) => (
-                          <Chip key={index} label={tag} size="small" variant="outlined" />
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2">
+                          总计: {resource.representations.reduce((sum, rep) => sum + (rep.recordCount || 0), 0).toLocaleString()}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                          <Chip
+                            label={getStatusText(resource.status)}
+                            size="small"
+                            color={getStatusColor(resource.status)}
+                          />
+                          <Chip
+                            label={getAccessRightsText(resource.accessRights)}
+                            size="small"
+                            color={getAccessRightsColor(resource.accessRights)}
+                          />
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                            {resource.theme.slice(0, 2).map((theme, index) => (
+                              <Chip key={index} label={theme} size="small" variant="outlined" color="secondary" />
+                            ))}
+                          </Box>
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                            {resource.keyword.slice(0, 3).map((keyword, index) => (
+                              <Chip key={index} label={keyword} size="small" variant="outlined" />
+                            ))}
+                          </Box>
+                        </Box>
+                      </TableCell>
+                      <TableCell>{resource.updatedAt}</TableCell>
+                      <TableCell>
+                        <Box sx={{ display: 'flex', gap: 1 }}>
+                          <Tooltip title="查看">
+                            <IconButton
+                              size="small"
+                              onClick={() => handleViewDataset(resource.id)}
+                            >
+                              <ViewIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="编辑">
+                            <IconButton
+                              size="small"
+                              onClick={() => handleEditDataset(resource.id)}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="删除">
+                            <IconButton
+                              size="small"
+                              color="error"
+                              onClick={() => handleDeleteDataset(resource.id)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                    
+                    {/* Representation 和 Artifact 行 */}
+                    {expandedRows.has(resource.id) && resource.representations.map((representation) => (
+                      <React.Fragment key={representation.id}>
+                        {/* Representation 行 */}
+                        <TableRow sx={{ bgcolor: 'action.hover' }}>
+                          <TableCell sx={{ pl: 6 }}></TableCell>
+                          <TableCell>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <RepresentationIcon color="secondary" fontSize="small" />
+                              <Box>
+                                <Typography variant="body2" fontWeight="medium">
+                                  表示: {representation.format}
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                  {representation.mediaType}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          </TableCell>
+                          <TableCell>
+                            <Chip label="表示" size="small" color="secondary" variant="outlined" />
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="body2">
+                              {representation.format}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="body2">
+                              {representation.recordCount?.toLocaleString() || 'N/A'}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="body2" color="text.secondary">
+                              {representation.artifacts.length} 个制品
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            {representation.schema && (
+                              <Tooltip title={representation.schema}>
+                                <Chip label="有模式" size="small" variant="outlined" />
+                              </Tooltip>
+                            )}
+                          </TableCell>
+                          <TableCell>{representation.updatedAt}</TableCell>
+                          <TableCell></TableCell>
+                        </TableRow>
+                        
+                        {/* Artifact 行 */}
+                        {representation.artifacts.map((artifact) => (
+                          <TableRow key={artifact.id} sx={{ bgcolor: 'grey.50' }}>
+                            <TableCell sx={{ pl: 8 }}></TableCell>
+                            <TableCell>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <DownloadIcon color="action" fontSize="small" />
+                                <Box>
+                                  <Typography variant="body2">
+                                    {artifact.fileName}
+                                  </Typography>
+                                  <Typography variant="caption" color="text.secondary">
+                                    制品 ID: {artifact.id}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                            </TableCell>
+                            <TableCell>
+                              <Chip label="制品" size="small" color="default" variant="outlined" />
+                            </TableCell>
+                            <TableCell>
+                              <Typography variant="body2">
+                                {artifact.fileSize}
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography variant="body2">
+                                下载 {artifact.downloadCount} 次
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography variant="caption" color="text.secondary">
+                                {artifact.checksum.substring(0, 16)}...
+                              </Typography>
+                            </TableCell>
+                            <TableCell></TableCell>
+                            <TableCell>{artifact.createdAt}</TableCell>
+                            <TableCell>
+                              <Tooltip title="下载">
+                                <IconButton
+                                  size="small"
+                                  onClick={() => handleDownloadArtifact(artifact)}
+                                >
+                                  <DownloadIcon />
+                                </IconButton>
+                              </Tooltip>
+                            </TableCell>
+                          </TableRow>
                         ))}
-                      </Box>
-                    </TableCell>
-                    <TableCell>{dataset.updatedAt}</TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', gap: 1 }}>
-                        <Tooltip title="查看">
-                          <IconButton
-                            size="small"
-                            onClick={() => handleViewDataset(dataset.id)}
-                          >
-                            <ViewIcon />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="编辑">
-                          <IconButton
-                            size="small"
-                            onClick={() => handleEditDataset(dataset.id)}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="删除">
-                          <IconButton
-                            size="small"
-                            color="error"
-                            onClick={() => handleDeleteDataset(dataset.id)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
+                      </React.Fragment>
+                    ))}
+                  </React.Fragment>
                 ))}
               </TableBody>
             </Table>
@@ -280,12 +580,12 @@ const DatasetList: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* 创建数据集对话框 */}
+      {/* 创建数据资源对话框 */}
       <Dialog open={createDialogOpen} onClose={() => setCreateDialogOpen(false)} maxWidth="sm" fullWidth>
         <DialogTitle>创建数据集</DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            选择创建数据集的方式：
+            选择创建数据集的方式
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
             <Box sx={{ flex: 1 }}>
@@ -302,9 +602,9 @@ const DatasetList: React.FC = () => {
                 <CardContent sx={{ textAlign: 'center', py: 3, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                   <UploadIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
                   <Typography variant="h6">上传文件</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    直接上传CSV、Excel等文件创建数据集
-                  </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  上传文件创建数据集，系统将自动生成相应的表示和制品
+                </Typography>
                 </CardContent>
               </Card>
             </Box>
@@ -321,10 +621,10 @@ const DatasetList: React.FC = () => {
               >
                 <CardContent sx={{ textAlign: 'center', py: 3, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                   <TransformIcon sx={{ fontSize: 48, color: 'secondary.main', mb: 1 }} />
-                  <Typography variant="h6">转换资源</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    从现有数据资源转换生成数据集
-                  </Typography>
+                  <Typography variant="h6">转换数据集</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  从现有数据集转换生成新的数据集，支持格式转换和数据处理
+                </Typography>
                 </CardContent>
               </Card>
             </Box>

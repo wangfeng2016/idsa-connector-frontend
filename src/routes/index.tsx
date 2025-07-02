@@ -16,6 +16,7 @@ const ProviderResourceEdit = lazy(() => import('../pages/provider/resources/Reso
 
 // 数据集管理组件
 const ProviderDatasetList = lazy(() => import('../pages/provider/datasets/DatasetList'));
+const ProviderDatasetDetail = lazy(() => import('../pages/provider/datasets/DatasetDetail'));
 const ProviderDatasetUpload = lazy(() => import('../pages/provider/datasets/DatasetUpload'));
 const ProviderDatasetTransform = lazy(() => import('../pages/provider/datasets/DatasetTransform'));
 const ProviderPolicyList = lazy(() => import('../pages/provider/policies/PolicyList'));
@@ -96,11 +97,11 @@ const router = createHashRouter([
         element: <ProviderDatasetTransform />,
       },
       {
-        path: 'enterprise/datasets/edit/:id',
-        element: <ProviderToBeConstructed />,
+        path: 'enterprise/datasets/:id',
+        element: <ProviderDatasetDetail />,
       },
       {
-        path: 'enterprise/datasets/view/:id',
+        path: 'enterprise/datasets/edit/:id',
         element: <ProviderToBeConstructed />,
       },
 
@@ -112,6 +113,10 @@ const router = createHashRouter([
       {
         path: 'enterprise/policies/edit',
         element: <ProviderPolicyEdit />,
+      },
+      {
+        path: 'enterprise/policies/management',
+        element: <ToBeConstructed pageName="策略管理" />,
       },
       {
         path: 'enterprise/policies/dataset-policy-edit',
