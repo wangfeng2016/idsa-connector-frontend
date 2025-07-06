@@ -21,7 +21,6 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Box from '@mui/material/Box';
 import useResponsive from '../hooks/useResponsive';
 import logoWhite from '../assets/images/navicloud_logo-white.png';
-import RoleSwitcher from '../components/RoleSwitcher';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -127,9 +126,6 @@ const Topbar: React.FC<TopbarProps> = ({ open, onDrawerToggle, drawerWidth }) =>
         </Typography>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          {/* 角色选择器 */}
-          <RoleSwitcher />
-          
           {/* 帮助按钮 */}
           <IconButton color="inherit" size="small">
             <HelpIcon />

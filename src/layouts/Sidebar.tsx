@@ -18,15 +18,11 @@ import { useRole } from '../contexts/RoleContext';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import FolderIcon from '@mui/icons-material/Folder';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ListIcon from '@mui/icons-material/List';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import ExploreIcon from '@mui/icons-material/Explore';
 import TuneIcon from '@mui/icons-material/Tune';
-import SystemUpdateIcon from '@mui/icons-material/SystemUpdate';
-import BusinessIcon from '@mui/icons-material/Business';
 import DatasetIcon from '@mui/icons-material/Dataset';
 // 新增角色特定图标
 import PublishIcon from '@mui/icons-material/Publish';
@@ -112,15 +108,12 @@ const enterpriseMenuGroups: MenuGroup[] = [
     title: '数据提供',
     icon: <PublishIcon />,
     items: [
-      { id: 'data-discovery', title: '数据发现', path: '/enterprise/resources/data-discovery', icon: <ExploreIcon /> },
-      { id: 'resource-list', title: '资源列表', path: '/enterprise/resources', icon: <FolderIcon /> },
       { id: 'dataset-management', title: '数据集管理', path: '/enterprise/datasets', icon: <DatasetIcon /> },
       { id: 'policy-management', title: '策略管理', path: '/enterprise/policies/management', icon: <TuneIcon /> },
       { id: 'dataset-policy-edit', title: '新增数据供应', path: '/enterprise/policies/dataset-policy-edit', icon: <DescriptionIcon /> },
       { id: 'dataset-policy-list', title: '数据供应列表', path: '/enterprise/policies/dataset-policy-list', icon: <ListIcon /> },
       { id: 'connector-status', title: '连接器状态', path: '/enterprise/connections', icon: <SwapHorizIcon /> },
       { id: 'data-exchange', title: '数据交换', path: '/enterprise/connections/exchange', icon: <SwapHorizIcon /> },
-      { id: 'register-dataspace', title: '数据空间机构注册', path: '/enterprise/identity/register-dataspace', icon: <BusinessIcon /> },
     ],
   },
   {
@@ -141,7 +134,6 @@ const enterpriseMenuGroups: MenuGroup[] = [
     icon: <SettingsIcon />,
     items: [
       { id: 'system-params', title: '系统参数配置', path: '/enterprise/system', icon: <TuneIcon /> },
-      { id: 'updates', title: '系统更新管理', path: '/enterprise/system/updates', icon: <SystemUpdateIcon /> },
     ],
   },
 ];

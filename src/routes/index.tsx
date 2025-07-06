@@ -9,11 +9,6 @@ import Login from '../pages/Login';
 
 
 
-// 懒加载页面组件 - 提供者
-const ProviderDataDiscovery = lazy(() => import('../pages/provider/resources/DataDiscovery'));
-const ProviderResourceList = lazy(() => import('../pages/provider/resources/ResourceList'));
-const ProviderResourceEdit = lazy(() => import('../pages/provider/resources/ResourceEdit'));
-
 // 数据集管理组件
 const ProviderDatasetList = lazy(() => import('../pages/provider/datasets/DatasetList'));
 const ProviderDatasetDetail = lazy(() => import('../pages/provider/datasets/DatasetDetail'));
@@ -34,7 +29,6 @@ const ProviderSystemConfig = lazy(() => import('../pages/provider/system/SystemC
 // 提供者系统备份、插件、更新组件已映射到ToBeConstructed
 const ProviderAuthentication = lazy(() => import('../pages/provider/identity/Authentication'));
 const ProviderCertificateManagement = lazy(() => import('../pages/provider/identity/CertificateManagement'));
-const ProviderRegisterDataSpace = lazy(() => import('../pages/provider/identity/RegisterDataSpace'));
 const DatasetUsageAnalysis = lazy(() => import('../pages/provider/analytics/DatasetUsageAnalysis'));
 const ProviderComplianceReports = lazy(() => import('../pages/provider/analytics/ComplianceReports'));
 const ProviderDashboards = lazy(() => import('../pages/provider/analytics/Dashboards'));
@@ -70,19 +64,6 @@ const router = createHashRouter([
       },
 
       
-      // 企业用户路由
-      {
-        path: 'enterprise/resources',
-        element: <ProviderResourceList />,
-      },
-      {
-        path: 'enterprise/resources/edit/:id?',
-        element: <ProviderResourceEdit />,
-      },
-      {
-        path: 'enterprise/quality',
-        element: <ProviderToBeConstructed />,
-      },
       // 数据集管理路由
       {
         path: 'enterprise/datasets',
@@ -155,10 +136,6 @@ const router = createHashRouter([
         element: <ProviderServiceDiscovery />,
       },
       {
-        path: 'enterprise/resources/data-discovery',
-        element: <ProviderDataDiscovery />,
-      },
-      {
         path: 'enterprise/ecosystem/transactions',
         element: <ProviderTransactions />,
       },
@@ -181,14 +158,6 @@ const router = createHashRouter([
       {
         path: 'enterprise/system/plugins',
         element: <ProviderToBeConstructed />,
-      },
-      {
-        path: 'enterprise/system/updates',
-        element: <ProviderToBeConstructed />,
-      },
-      {
-        path: 'enterprise/identity/register-dataspace',
-        element: <ProviderRegisterDataSpace />,
       },
       {
         path: 'enterprise/auth',

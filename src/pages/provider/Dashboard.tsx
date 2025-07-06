@@ -78,7 +78,6 @@ const mockData = {
     { id: 1, type: 'exchange', message: '数据交换请求 #1031 已完成', timestamp: '10分钟前', status: 'success' },
     { id: 2, type: 'policy', message: '新策略 "数据使用限制-财务数据" 已创建', timestamp: '1小时前', status: 'success' },
     { id: 3, type: 'security', message: '发现潜在安全风险', timestamp: '3小时前', status: 'warning' },
-    { id: 4, type: 'system', message: '系统更新可用', timestamp: '1天前', status: 'info' },
   ],
 };
 

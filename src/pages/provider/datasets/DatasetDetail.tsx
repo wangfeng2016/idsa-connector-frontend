@@ -20,7 +20,7 @@ import {
   Description as FileIcon,
   DataObject as RepresentationIcon,
 } from '@mui/icons-material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // 使用与DatasetList相同的接口定义
 interface Artifact {

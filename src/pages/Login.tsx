@@ -172,9 +172,9 @@ const Login: React.FC = () => {
 
           <Box sx={{ mt: 3, textAlign: 'center' }}>
             <Typography variant="caption" color="text.secondary">
-              测试账号：enterprise_admin
+              测试账号：admin
               <br />
-              密码：admin123
+              密码：admin
             </Typography>
           </Box>
         </CardContent>

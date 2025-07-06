@@ -22,7 +22,7 @@ interface AuthProviderProps {
 // 预定义的用户角色映射
 const getUserRole = (username: string): UserRole | null => {
   switch (username) {
-    case 'enterprise_admin':
+    case 'admin':
       return {
         type: 'enterprise',
         name: '企业用户',
@@ -40,7 +40,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (username: string, password: string): Promise<boolean> => {
     // 简单的用户名密码验证（实际项目中应该调用后端API）
     const validCredentials = [
-      { username: 'enterprise_admin', password: 'admin123' }
+      { username: 'admin', password: 'admin' }
     ];
 
     const credential = validCredentials.find(
