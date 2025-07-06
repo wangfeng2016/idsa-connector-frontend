@@ -28,7 +28,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 // import { useDropzone } from 'react-dropzone'; // 暂时注释掉，使用原生文件上传
 
-interface DatasetMetadata {
+interface ResourceMetadata {
   name: string;
   description: string;
   tags: string[];
@@ -47,13 +47,13 @@ interface UploadedFile {
 
 const steps = ['上传文件', '预览数据', '设置元数据', '完成创建'];
 
-const DatasetUpload: React.FC = () => {
+const ResourceUpload: React.FC = () => {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const [metadata, setMetadata] = useState<DatasetMetadata>({
+  const [metadata, setMetadata] = useState<ResourceMetadata>({
     name: '',
     description: '',
     tags: [],
@@ -132,10 +132,10 @@ const DatasetUpload: React.FC = () => {
     });
   };
 
-  const handleCreateDataset = () => {
-    // 模拟创建数据集
+  const handleCreateResource = () => {
+    // 模拟创建资源
     setTimeout(() => {
-      navigate('/enterprise/datasets');
+      navigate('/enterprise/resources');
     }, 1000);
   };
 
@@ -250,7 +250,7 @@ const DatasetUpload: React.FC = () => {
                 </Paper>
                 
                 <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-                  显示前 5 行数据，实际数据集包含 {uploadedFile.preview.totalRows.toLocaleString()} 行
+                  显示前 5 行数据，实际资源包含 {uploadedFile.preview.totalRows.toLocaleString()} 行
                 </Typography>
               </Box>
             )}
@@ -261,20 +261,20 @@ const DatasetUpload: React.FC = () => {
         return (
           <Box>
             <Typography variant="h6" gutterBottom>
-              设置数据集元数据
+              设置资源元数据
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              为数据集添加描述信息，便于管理和发现
+              为资源添加描述信息，便于管理和发现
             </Typography>
 
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
               <TextField
                 fullWidth
-                label="数据集名称"
+                label="资源名称"
                 value={metadata.name}
                 onChange={(e) => setMetadata({ ...metadata, name: e.target.value })}
                 required
-                helperText="为数据集指定一个有意义的名称"
+                helperText="为资源指定一个有意义的名称"
               />
               
               <TextField
@@ -285,7 +285,7 @@ const DatasetUpload: React.FC = () => {
                 multiline
                 rows={3}
                 required
-                helperText="详细描述数据集的内容和用途"
+                helperText="详细描述资源的内容和用途"
               />
 
               <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 3 }}>
@@ -304,7 +304,7 @@ const DatasetUpload: React.FC = () => {
                       <MenuItem value="operational">运营数据</MenuItem>
                       <MenuItem value="other">其他</MenuItem>
                     </Select>
-                    <FormHelperText>选择数据集的业务分类</FormHelperText>
+                    <FormHelperText>选择资源的业务分类</FormHelperText>
                   </FormControl>
                 </Box>
 
@@ -320,7 +320,7 @@ const DatasetUpload: React.FC = () => {
                       <MenuItem value="private">私有</MenuItem>
                       <MenuItem value="restricted">受限</MenuItem>
                     </Select>
-                    <FormHelperText>设置数据集的访问权限</FormHelperText>
+                    <FormHelperText>设置资源的访问权限</FormHelperText>
                   </FormControl>
                 </Box>
               </Box>
@@ -367,15 +367,15 @@ const DatasetUpload: React.FC = () => {
           <Box sx={{ textAlign: 'center' }}>
             <CheckIcon sx={{ fontSize: 64, color: 'success.main', mb: 2 }} />
             <Typography variant="h6" gutterBottom>
-              数据集创建成功！
+              资源创建成功！
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              数据集 "{metadata.name}" 已成功创建并可以使用
+              资源 "{metadata.name}" 已成功创建并可以使用
             </Typography>
             
             <Paper sx={{ p: 2, textAlign: 'left', maxWidth: 400, mx: 'auto' }}>
               <Typography variant="subtitle2" gutterBottom>
-                数据集信息：
+                资源信息：
               </Typography>
               <Typography variant="body2">名称：{metadata.name}</Typography>
               <Typography variant="body2">文件：{uploadedFile?.file.name}</Typography>
@@ -396,13 +396,13 @@ const DatasetUpload: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
         <Button
           startIcon={<BackIcon />}
-          onClick={() => navigate('/enterprise/datasets')}
+          onClick={() => navigate('/enterprise/resources')}
           sx={{ mr: 2 }}
         >
           返回
         </Button>
         <Typography variant="h4" component="h1">
-          上传数据集
+          上传资源
         </Typography>
       </Box>
 
@@ -431,7 +431,7 @@ const DatasetUpload: React.FC = () => {
             {activeStep === steps.length - 1 ? (
               <Button
                 variant="contained"
-                onClick={handleCreateDataset}
+                onClick={handleCreateResource}
               >
                 完成
               </Button>
@@ -451,4 +451,4 @@ const DatasetUpload: React.FC = () => {
   );
 };
 
-export default DatasetUpload;
+export default ResourceUpload;

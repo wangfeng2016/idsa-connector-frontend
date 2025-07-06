@@ -60,7 +60,7 @@ interface Policy {
 
 // 模拟数据
 const mockResources = [
-  '销售数据集',
+  '销售资源',
   '客户信息数据库',
   '产品目录',
   '财务报表',
@@ -135,7 +135,7 @@ const PolicyEdit = () => {
           type: 'access',
           status: 'active',
           priority: 'high',
-          targetResources: ['销售数据集', '客户信息数据库'],
+          targetResources: ['销售资源', '客户信息数据库'],
           targetUsers: ['销售部门', '管理层'],
           rules: [
             {

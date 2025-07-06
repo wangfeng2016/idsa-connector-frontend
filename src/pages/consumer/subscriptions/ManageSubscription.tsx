@@ -35,7 +35,7 @@ import {
   Error as ErrorIcon,
   Schedule as ScheduleIcon,
   Business as BusinessIcon,
-  Dataset as DatasetIcon,
+  Dataset,
   CalendarToday as CalendarTodayIcon,
   CloudDownload as CloudDownloadIcon,
   Gavel as GavelIcon,
@@ -48,8 +48,8 @@ type SubscriptionStatus = 'active' | 'expired' | 'suspended' | 'pending';
 // 订阅记录接口
 interface SubscriptionRecord {
   id: string;
-  datasetName: string;
-  datasetUuid: string;
+  resourceName: string;
+  resourceUuid: string;
   providerName: string;
   providerId: string;
   subscriptionDate: string;
@@ -68,8 +68,8 @@ interface SubscriptionRecord {
 const mockSubscriptions: SubscriptionRecord[] = [
   {
     id: 'SUB-2024-001',
-    datasetName: '生产线实时监控数据集',
-    datasetUuid: 'DS-PROD-2024-0156',
+    resourceName: '生产线实时监控资源',
+    resourceUuid: 'RS-PROD-2024-0156',
     providerName: '智能制造数据中心',
     providerId: 'ORG-2024-001',
     subscriptionDate: '2024-01-15',
@@ -85,8 +85,8 @@ const mockSubscriptions: SubscriptionRecord[] = [
   },
   {
     id: 'SUB-2024-002',
-    datasetName: '供应链物流追踪数据',
-    datasetUuid: 'DS-SCM-2024-0089',
+    resourceName: '供应链物流追踪数据',
+    resourceUuid: 'RS-SCM-2024-0089',
     providerName: '全球物流数据平台',
     providerId: 'ORG-2024-002',
     subscriptionDate: '2024-02-20',
@@ -102,8 +102,8 @@ const mockSubscriptions: SubscriptionRecord[] = [
   },
   {
     id: 'SUB-2024-003',
-    datasetName: '市场消费行为分析数据',
-    datasetUuid: 'DS-MKT-2024-0234',
+    resourceName: '市场消费行为分析数据',
+    resourceUuid: 'RS-MKT-2024-0234',
     providerName: '消费者洞察研究院',
     providerId: 'ORG-2024-003',
     subscriptionDate: '2024-03-10',
@@ -119,8 +119,8 @@ const mockSubscriptions: SubscriptionRecord[] = [
   },
   {
     id: 'SUB-2024-004',
-    datasetName: '能源消耗优化数据集',
-    datasetUuid: 'DS-ENE-2024-0178',
+    resourceName: '能源消耗优化资源',
+    resourceUuid: 'RS-ENE-2024-0178',
     providerName: '绿色能源数据中心',
     providerId: 'ORG-2024-004',
     subscriptionDate: '2024-04-05',
@@ -136,8 +136,8 @@ const mockSubscriptions: SubscriptionRecord[] = [
   },
   {
     id: 'SUB-2024-005',
-    datasetName: '质量检测标准数据库',
-    datasetUuid: 'DS-QUA-2024-0312',
+    resourceName: '质量检测标准数据库',
+    resourceUuid: 'RS-QUA-2024-0312',
     providerName: '质量认证机构',
     providerId: 'ORG-2024-005',
     subscriptionDate: '2024-05-12',
@@ -153,8 +153,8 @@ const mockSubscriptions: SubscriptionRecord[] = [
   },
   {
     id: 'SUB-2024-006',
-    datasetName: '客户服务交互数据',
-    datasetUuid: 'DS-CUS-2024-0445',
+    resourceName: '客户服务交互数据',
+    resourceUuid: 'RS-CUS-2024-0445',
     providerName: '客户体验研究中心',
     providerId: 'ORG-2024-006',
     subscriptionDate: '2024-06-18',
@@ -170,8 +170,8 @@ const mockSubscriptions: SubscriptionRecord[] = [
   },
   {
     id: 'SUB-2024-007',
-    datasetName: '财务风险评估数据',
-    datasetUuid: 'DS-FIN-2024-0567',
+    resourceName: '财务风险评估数据',
+    resourceUuid: 'RS-FIN-2024-0567',
     providerName: '金融风控数据服务',
     providerId: 'ORG-2024-007',
     subscriptionDate: '2024-07-25',
@@ -187,8 +187,8 @@ const mockSubscriptions: SubscriptionRecord[] = [
   },
   {
     id: 'SUB-2024-008',
-    datasetName: '人力资源分析数据',
-    datasetUuid: 'DS-HR-2024-0689',
+    resourceName: '人力资源分析数据',
+    resourceUuid: 'RS-HR-2024-0689',
     providerName: '人才发展研究院',
     providerId: 'ORG-2024-008',
     subscriptionDate: '2024-08-30',
@@ -222,7 +222,7 @@ const ManageSubscription: React.FC = () => {
     if (searchTerm) {
       filtered = filtered.filter(
         (sub) =>
-          sub.datasetName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          sub.resourceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           sub.providerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           sub.id.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -356,7 +356,7 @@ const ManageSubscription: React.FC = () => {
           <CardContent>
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
               <TextField
-                placeholder="搜索数据集名称、提供方或订阅ID..."
+                placeholder="搜索资源名称、提供方或订阅ID..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 InputProps={{
@@ -393,7 +393,7 @@ const ManageSubscription: React.FC = () => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>数据集信息</TableCell>
+                    <TableCell>资源信息</TableCell>
                     <TableCell>提供方</TableCell>
                     <TableCell>订阅时间</TableCell>
                     <TableCell>状态</TableCell>
@@ -413,11 +413,11 @@ const ManageSubscription: React.FC = () => {
                         <TableCell>
                           <Box>
                             <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
-                              {subscription.datasetName}
+                              {subscription.resourceName}
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
-                              <DatasetIcon sx={{ fontSize: 14, mr: 0.5, verticalAlign: 'middle' }} />
-                              {subscription.datasetUuid}
+                              <Dataset sx={{ fontSize: 14, mr: 0.5, verticalAlign: 'middle' }} />
+                              {subscription.resourceUuid}
                             </Typography>
                           </Box>
                         </TableCell>

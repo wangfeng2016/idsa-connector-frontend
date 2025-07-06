@@ -95,8 +95,8 @@ const defaultFilterState: FilterState = {
 export const mockResources: DataResource[] = [
   {
     id: 1,
-    name: '客户信息数据集',
-    description: '包含客户基本信息、联系方式和交易历史的综合数据集',
+    name: '客户信息资源',
+    description: '包含客户基本信息、联系方式和交易历史的综合资源',
     type: '结构化数据',
     domain: '销售',
     owner: '张三',

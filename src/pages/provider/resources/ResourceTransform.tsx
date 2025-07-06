@@ -124,7 +124,7 @@ const mockDatabaseFields: DatabaseField[] = [
   { name: 'status', type: 'VARCHAR(20)', nullable: false, description: '客户状态' },
 ];
 
-const DatasetTransform: React.FC = () => {
+const ResourceTransform: React.FC = () => {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const [config, setConfig] = useState<TransformConfig>({
@@ -163,7 +163,7 @@ const DatasetTransform: React.FC = () => {
       filters: [],
       metadata: {
         ...config.metadata,
-        name: resource ? `${resource.name}_数据集` : '',
+        name: resource ? `${resource.name}_资源` : '',
       },
     });
   };
@@ -260,10 +260,10 @@ const DatasetTransform: React.FC = () => {
     setPreviewData(mockData);
   };
 
-  const handleCreateDataset = () => {
-    // 模拟创建数据集
+  const handleCreateResource = () => {
+    // 模拟创建资源
     setTimeout(() => {
-      navigate('/enterprise/datasets');
+      navigate('/enterprise/resources');
     }, 1000);
   };
 
@@ -276,7 +276,7 @@ const DatasetTransform: React.FC = () => {
               选择数据源
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              从现有数据资源中选择一个作为数据集的来源
+              从现有数据资源中选择一个作为资源的来源
             </Typography>
 
             <Box
@@ -461,7 +461,7 @@ const DatasetTransform: React.FC = () => {
 
             {selectedResource?.type === 'file' && (
               <Alert severity="info">
-                文件类型的数据资源将直接转换为数据集，无需额外配置。
+                文件类型的数据资源将直接转换为资源，无需额外配置。
               </Alert>
             )}
 
@@ -483,23 +483,23 @@ const DatasetTransform: React.FC = () => {
         return (
           <Box>
             <Typography variant="h6" gutterBottom>
-              设置数据集元数据
+              设置资源元数据
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              为转换后的数据集添加描述信息
+              为转换后的资源添加描述信息
             </Typography>
 
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
               <TextField
                 fullWidth
-                label="数据集名称"
+                label="资源名称"
                 value={config.metadata.name}
                 onChange={(e) => setConfig({
                   ...config,
                   metadata: { ...config.metadata, name: e.target.value }
                 })}
                 required
-                helperText="为数据集指定一个有意义的名称"
+                helperText="为资源指定一个有意义的名称"
               />
               
               <TextField
@@ -513,7 +513,7 @@ const DatasetTransform: React.FC = () => {
                 multiline
                 rows={3}
                 required
-                helperText="详细描述数据集的内容和用途"
+                helperText="详细描述资源的内容和用途"
               />
 
               <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 3 }}>
@@ -535,7 +535,7 @@ const DatasetTransform: React.FC = () => {
                       <MenuItem value="operational">运营数据</MenuItem>
                       <MenuItem value="other">其他</MenuItem>
                     </Select>
-                    <FormHelperText>选择数据集的业务分类</FormHelperText>
+                    <FormHelperText>选择资源的业务分类</FormHelperText>
                   </FormControl>
                 </Box>
 
@@ -554,7 +554,7 @@ const DatasetTransform: React.FC = () => {
                       <MenuItem value="private">私有</MenuItem>
                       <MenuItem value="restricted">受限</MenuItem>
                     </Select>
-                    <FormHelperText>设置数据集的访问权限</FormHelperText>
+                    <FormHelperText>设置资源的访问权限</FormHelperText>
                   </FormControl>
                 </Box>
               </Box>
@@ -600,10 +600,10 @@ const DatasetTransform: React.FC = () => {
         return (
           <Box>
             <Typography variant="h6" gutterBottom>
-              预览并创建数据集
+              预览并创建资源
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              确认转换配置并预览生成的数据集
+              确认转换配置并预览生成的资源
             </Typography>
 
             <Box
@@ -621,7 +621,7 @@ const DatasetTransform: React.FC = () => {
                   <Typography variant="body2">数据源：{selectedResource?.name}</Typography>
                   <Typography variant="body2">选择字段：{config.selectedFields.length} 个</Typography>
                   <Typography variant="body2">过滤条件：{config.filters.length} 个</Typography>
-                  <Typography variant="body2">数据集名称：{config.metadata.name}</Typography>
+                  <Typography variant="body2">资源名称：{config.metadata.name}</Typography>
                   <Typography variant="body2">分类：{config.metadata.category}</Typography>
                 </Paper>
               </Box>
@@ -669,7 +669,7 @@ const DatasetTransform: React.FC = () => {
 
             <Alert severity="success" sx={{ mt: 3 }}>
               <CheckIcon sx={{ mr: 1 }} />
-              配置验证通过，可以开始创建数据集
+              配置验证通过，可以开始创建资源
             </Alert>
           </Box>
         );
@@ -684,13 +684,13 @@ const DatasetTransform: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
         <Button
           startIcon={<BackIcon />}
-          onClick={() => navigate('/enterprise/datasets')}
+          onClick={() => navigate('/enterprise/resources')}
           sx={{ mr: 2 }}
         >
           返回
         </Button>
         <Typography variant="h4" component="h1">
-          转换数据集
+          转换资源
         </Typography>
       </Box>
 
@@ -719,9 +719,9 @@ const DatasetTransform: React.FC = () => {
             {activeStep === steps.length - 1 ? (
               <Button
                 variant="contained"
-                onClick={handleCreateDataset}
+                onClick={handleCreateResource}
               >
-                创建数据集
+                创建资源
               </Button>
             ) : (
               <Button
@@ -738,4 +738,4 @@ const DatasetTransform: React.FC = () => {
   );
 };
 
-export default DatasetTransform;
+export default ResourceTransform;

@@ -46,7 +46,7 @@ const mockItems: MarketItem[] = [
   // 研发数据类
   {
     id: 1,
-    title: '产品设计数据集',
+    title: '产品设计资源',
     description: '包含CAD模型、设计图纸、技术规格等产品设计全流程数据',
     type: 'data',
     provider: '汽车研发中心A',
@@ -59,7 +59,7 @@ const mockItems: MarketItem[] = [
   {
     id: 2,
     title: '测试验证数据',
-    description: '车辆性能测试、安全测试、耐久性测试等验证数据集',
+    description: '车辆性能测试、安全测试、耐久性测试等验证资源',
     type: 'data',
     provider: '测试验证实验室B',
     price: 12000,
@@ -83,7 +83,7 @@ const mockItems: MarketItem[] = [
   },
   {
     id: 4,
-    title: '竞品分析数据集',
+    title: '竞品分析资源',
     description: '竞争对手产品信息、价格策略、市场份额等竞品分析数据',
     type: 'data',
     provider: '商业情报公司D',
@@ -121,7 +121,7 @@ const mockItems: MarketItem[] = [
   // 生产制造数据类
   {
     id: 7,
-    title: '生产工艺数据集',
+    title: '生产工艺资源',
     description: '生产线工艺参数、设备运行数据、质量控制指标等制造数据',
     type: 'data',
     provider: '智能制造工厂G',

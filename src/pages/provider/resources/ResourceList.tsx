@@ -90,7 +90,7 @@ interface Resource {
 const mockResources: Resource[] = [
   {
     id: 'res-001',
-    title: '客户行为分析数据集',
+    title: '客户行为分析资源',
     description: '包含客户购买行为、浏览记录等分析数据，用于客户行为模式分析和营销策略制定',
     keyword: ['客户分析', '行为数据', '营销'],
     theme: ['商业智能', '客户关系管理'],
@@ -233,7 +233,7 @@ const mockResources: Resource[] = [
   }
 ];
 
-const DatasetList: React.FC = () => {
+const ResourceList: React.FC = () => {
   const navigate = useNavigate();
   const [resources, setResources] = useState<Resource[]>(mockResources);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -310,25 +310,25 @@ const DatasetList: React.FC = () => {
     setExpandedRows(newExpanded);
   };
 
-  const handleCreateDataset = () => {
+  const handleCreateResource = () => {
     setCreateDialogOpen(false);
     if (createType === 'upload') {
-      navigate('/enterprise/datasets/upload');
+      navigate('/enterprise/resources/upload');
     } else {
-      navigate('/enterprise/datasets/transform');
+      navigate('/enterprise/resources/transform');
     }
   };
 
-  const handleEditDataset = (id: string) => {
-    navigate(`/enterprise/datasets/edit/${id}`);
+  const handleEditResource = (id: string) => {
+    navigate(`/enterprise/resources/edit/${id}`);
   };
 
-  const handleViewDataset = (id: string) => {
-    navigate(`/enterprise/datasets/${id}`);
+  const handleViewResource = (id: string) => {
+    navigate(`/enterprise/resources/${id}`);
   };
 
-  const handleDeleteDataset = (id: string) => {
-    if (window.confirm('确定要删除这个数据集吗？')) {
+  const handleDeleteResource = (id: string) => {
+    if (window.confirm('确定要删除这个资源吗？')) {
       setResources(resources.filter(res => res.id !== id));
     }
   };
@@ -342,14 +342,14 @@ const DatasetList: React.FC = () => {
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" component="h1">
-          数据集管理
+          资源管理
         </Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => setCreateDialogOpen(true)}
         >
-          创建数据集
+          创建资源
         </Button>
       </Box>
 
@@ -360,7 +360,7 @@ const DatasetList: React.FC = () => {
               <TableHead>
                 <TableRow>
                   <TableCell width="40"></TableCell>
-                  <TableCell width="23%">数据集/表示/制品</TableCell>
+                  <TableCell width="23%">资源/表示/制品</TableCell>
                   <TableCell>类型</TableCell>
                   <TableCell>格式/大小</TableCell>
                   <TableCell>记录数/下载数</TableCell>
@@ -447,7 +447,7 @@ const DatasetList: React.FC = () => {
                           <Tooltip title="查看">
                             <IconButton
                               size="small"
-                              onClick={() => handleViewDataset(resource.id)}
+                              onClick={() => handleViewResource(resource.id)}
                             >
                               <ViewIcon />
                             </IconButton>
@@ -455,7 +455,7 @@ const DatasetList: React.FC = () => {
                           <Tooltip title="编辑">
                             <IconButton
                               size="small"
-                              onClick={() => handleEditDataset(resource.id)}
+                              onClick={() => handleEditResource(resource.id)}
                             >
                               <EditIcon />
                             </IconButton>
@@ -464,7 +464,7 @@ const DatasetList: React.FC = () => {
                             <IconButton
                               size="small"
                               color="error"
-                              onClick={() => handleDeleteDataset(resource.id)}
+                              onClick={() => handleDeleteResource(resource.id)}
                             >
                               <DeleteIcon />
                             </IconButton>
@@ -582,10 +582,10 @@ const DatasetList: React.FC = () => {
 
       {/* 创建数据资源对话框 */}
       <Dialog open={createDialogOpen} onClose={() => setCreateDialogOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>创建数据集</DialogTitle>
+        <DialogTitle>创建资源</DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            选择创建数据集的方式
+            选择创建资源的方式
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
             <Box sx={{ flex: 1 }}>
@@ -603,7 +603,7 @@ const DatasetList: React.FC = () => {
                   <UploadIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
                   <Typography variant="h6">上传文件</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  上传文件创建数据集，系统将自动生成相应的表示和制品
+                  上传文件创建资源，系统将自动生成相应的表示和制品
                 </Typography>
                 </CardContent>
               </Card>
@@ -621,9 +621,9 @@ const DatasetList: React.FC = () => {
               >
                 <CardContent sx={{ textAlign: 'center', py: 3, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                   <TransformIcon sx={{ fontSize: 48, color: 'secondary.main', mb: 1 }} />
-                  <Typography variant="h6">转换数据集</Typography>
+                  <Typography variant="h6">转换资源</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  从现有数据集转换生成新的数据集，支持格式转换和数据处理
+                  从现有资源转换生成新的资源，支持格式转换和数据处理
                 </Typography>
                 </CardContent>
               </Card>
@@ -632,7 +632,7 @@ const DatasetList: React.FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setCreateDialogOpen(false)}>取消</Button>
-          <Button variant="contained" onClick={handleCreateDataset}>
+          <Button variant="contained" onClick={handleCreateResource}>
             继续
           </Button>
         </DialogActions>
@@ -641,4 +641,4 @@ const DatasetList: React.FC = () => {
   );
 };
 
-export default DatasetList;
+export default ResourceList;

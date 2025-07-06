@@ -22,7 +22,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
-// 使用与DatasetList相同的接口定义
+// 使用与ResourceList相同的接口定义
 interface Artifact {
   id: string;
   fileName: string;
@@ -72,8 +72,8 @@ interface Resource {
 // 模拟数据 - 实际应用中应该从API获取
 const mockResource: Resource = {
   id: 'res-001',
-  title: '客户行为分析数据集',
-  description: '包含客户购买行为、浏览记录等分析数据，用于客户行为模式分析和营销策略制定。该数据集涵盖了2024年1月份的完整客户交互数据，包括页面浏览、商品查看、购买转化等关键行为指标。',
+  title: '客户行为分析资源',
+  description: '包含客户购买行为、浏览记录等分析数据，用于客户行为模式分析和营销策略制定。该资源涵盖了2024年1月份的完整客户交互数据，包括页面浏览、商品查看、购买转化等关键行为指标。',
   keyword: ['客户分析', '行为数据', '营销', '转化率', '用户体验'],
   theme: ['商业智能', '客户关系管理', '数据分析'],
   publisher: '数据分析部门',
@@ -162,7 +162,7 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-const DatasetDetail: React.FC = () => {
+const ResourceDetail: React.FC = () => {
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   
@@ -221,7 +221,7 @@ const DatasetDetail: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
         <Button
           startIcon={<BackIcon />}
-          onClick={() => navigate('/enterprise/datasets')}
+          onClick={() => navigate('/enterprise/resources')}
           sx={{ mr: 2 }}
         >
           返回列表
@@ -239,7 +239,7 @@ const DatasetDetail: React.FC = () => {
         </Box>
       </Box>
 
-      {/* 数据集基本信息卡片 */}
+      {/* 资源基本信息卡片 */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Box sx={{ 
@@ -257,7 +257,7 @@ const DatasetDetail: React.FC = () => {
                 color: 'primary.main',
                 fontWeight: 600
               }}>
-                数据集描述
+                资源描述
               </Typography>
               <Typography variant="body1" paragraph sx={{ 
                 lineHeight: 1.7,
@@ -326,7 +326,7 @@ const DatasetDetail: React.FC = () => {
               </Box>
             </Box>
             
-            {/* 右侧：数据集信息 */}
+            {/* 右侧：资源信息 */}
             <Box sx={{ 
               flex: { xs: '1 1 100%', md: '1 1 0' },
               minWidth: { xs: '100%', md: '300px' },
@@ -339,7 +339,7 @@ const DatasetDetail: React.FC = () => {
                 fontWeight: 600,
                 mb: 2.5
               }}>
-                数据集信息
+                资源信息
               </Typography>
               <Box sx={{ 
                 display: 'flex', 
@@ -463,7 +463,7 @@ const DatasetDetail: React.FC = () => {
             数据表示
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            该数据集的不同格式表示，每种表示可能包含多个制品文件。
+            该资源的不同格式表示，每种表示可能包含多个制品文件。
           </Typography>
           
           {resource.representations.map((representation) => (
@@ -580,7 +580,7 @@ const DatasetDetail: React.FC = () => {
             制品文件
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            该数据集的所有物理文件制品，包含文件信息和下载统计。
+            该资源的所有物理文件制品，包含文件信息和下载统计。
           </Typography>
           
           <Box sx={{ 
@@ -732,7 +732,7 @@ const DatasetDetail: React.FC = () => {
             完整元数据
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            该数据集的完整IDS标准元数据信息。
+            该资源的完整IDS标准元数据信息。
           </Typography>
           
           <Box sx={{ bgcolor: 'grey.100', p: 3, borderRadius: 1 }}>
@@ -746,4 +746,4 @@ const DatasetDetail: React.FC = () => {
   );
 };
 
-export default DatasetDetail;
+export default ResourceDetail;

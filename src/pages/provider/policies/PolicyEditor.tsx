@@ -56,7 +56,7 @@ const PolicyEditor: React.FC = () => {
         id: parseInt(id),
         name: '数据访问限制-财务数据',
         type: '访问控制',
-        target: '财务数据集',
+        target: '财务资源',
         status: 'active' as const,
         description: '限制财务数据只能被财务部门访问',
         createdAt: '2023-09-01',

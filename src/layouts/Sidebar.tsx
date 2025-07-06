@@ -23,7 +23,7 @@ import ListIcon from '@mui/icons-material/List';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import TuneIcon from '@mui/icons-material/Tune';
-import DatasetIcon from '@mui/icons-material/Dataset';
+import StorageIcon from '@mui/icons-material/Storage';
 // 新增角色特定图标
 import PublishIcon from '@mui/icons-material/Publish';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
@@ -108,10 +108,10 @@ const enterpriseMenuGroups: MenuGroup[] = [
     title: '数据提供',
     icon: <PublishIcon />,
     items: [
-      { id: 'dataset-management', title: '数据集管理', path: '/enterprise/datasets', icon: <DatasetIcon /> },
+      { id: 'resource-management', title: '资源管理', path: '/enterprise/resources', icon: <StorageIcon /> },
       { id: 'policy-management', title: '策略管理', path: '/enterprise/policies/management', icon: <TuneIcon /> },
-      { id: 'dataset-policy-edit', title: '新增数据供应', path: '/enterprise/policies/dataset-policy-edit', icon: <DescriptionIcon /> },
-      { id: 'dataset-policy-list', title: '数据供应列表', path: '/enterprise/policies/dataset-policy-list', icon: <ListIcon /> },
+      { id: 'resource-policy-edit', title: '新增数据供应', path: '/enterprise/policies/resource-policy-edit', icon: <DescriptionIcon /> },
+      { id: 'resource-policy-list', title: '数据供应列表', path: '/enterprise/policies/resource-policy-list', icon: <ListIcon /> },
       { id: 'connector-status', title: '连接器状态', path: '/enterprise/connections', icon: <SwapHorizIcon /> },
       { id: 'data-exchange', title: '数据交换', path: '/enterprise/connections/exchange', icon: <SwapHorizIcon /> },
     ],

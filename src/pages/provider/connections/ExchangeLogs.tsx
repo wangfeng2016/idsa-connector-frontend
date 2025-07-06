@@ -4,8 +4,8 @@ import { Card, CardContent, Typography } from '@mui/material';
 
 // 模拟数据交换日志数据
 const rows = [
-  { id: 1, timestamp: '2024-01-20 10:30:00', type: '数据请求', status: '成功', source: 'Connector A', target: 'Connector B', details: '请求数据集XYZ' },
-  { id: 2, timestamp: '2024-01-20 11:15:00', type: '数据传输', status: '成功', source: 'Connector B', target: 'Connector A', details: '传输数据集XYZ' },
+  { id: 1, timestamp: '2024-01-20 10:30:00', type: '数据请求', status: '成功', source: 'Connector A', target: 'Connector B', details: '请求资源XYZ' },
+  { id: 2, timestamp: '2024-01-20 11:15:00', type: '数据传输', status: '成功', source: 'Connector B', target: 'Connector A', details: '传输资源XYZ' },
   { id: 3, timestamp: '2024-01-20 14:20:00', type: '数据请求', status: '失败', source: 'Connector C', target: 'Connector A', details: '连接超时' },
   // 更多模拟数据...
 ];

@@ -49,7 +49,7 @@ interface ValueAssessmentItem {
 const mockAssessments: ValueAssessmentItem[] = [
   {
     id: 1,
-    assetName: '企业信用数据集',
+    assetName: '企业信用资源',
     assetType: 'data',
     monetaryValue: 50000,
     nonMonetaryValue: 85,
@@ -88,7 +88,7 @@ const mockAssessments: ValueAssessmentItem[] = [
   },
   {
     id: 4,
-    assetName: '市场分析数据集',
+    assetName: '市场分析资源',
     assetType: 'data',
     monetaryValue: 45000,
     nonMonetaryValue: 80,

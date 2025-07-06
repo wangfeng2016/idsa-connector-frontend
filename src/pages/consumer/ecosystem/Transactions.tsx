@@ -37,9 +37,9 @@ interface Transaction {
 const mockTransactions: Transaction[] = [
   {
     id: 1,
-    title: '采购企业信用数据集',
+    title: '采购企业信用资源',
     type: 'purchase',
-    asset: '企业信用数据集',
+    asset: '企业信用资源',
     counterparty: '数据提供商A',
     amount: 1000,
     status: 'completed',

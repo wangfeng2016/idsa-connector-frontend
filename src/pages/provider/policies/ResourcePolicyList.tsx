@@ -27,12 +27,12 @@ import {
 // 策略类型定义
 type PolicyType = 'specific_consumer' | 'specific_connector' | 'time_limit' | 'usage_count';
 
-// 数据集策略接口
-interface DatasetPolicy {
+// 资源策略接口
+interface ResourcePolicy {
   id: string;
-  datasetId: string;
-  datasetName: string;
-  datasetDescription: string;
+  resourceId: string;
+  resourceName: string;
+  resourceDescription: string;
   businessType: string;
   domain: string;
   owner: string;
@@ -49,13 +49,13 @@ interface DatasetPolicy {
   status: 'active' | 'inactive' | 'expired';
 }
 
-// 模拟数据集策略数据
-const mockDatasetPolicies: DatasetPolicy[] = [
+// 模拟资源策略数据
+const mockResourcePolicies: ResourcePolicy[] = [
   {
     id: 'policy-001',
-    datasetId: 'dataset-001',
-    datasetName: '客户交易数据',
-    datasetDescription: '包含客户的历史交易记录和行为分析数据',
+    resourceId: 'resource-001',
+    resourceName: '客户交易数据',
+    resourceDescription: '包含客户的历史交易记录和行为分析数据',
     businessType: '金融服务',
     domain: 'finance',
     owner: '数据管理部',
@@ -69,9 +69,9 @@ const mockDatasetPolicies: DatasetPolicy[] = [
   },
   {
     id: 'policy-002',
-    datasetId: 'dataset-002',
-    datasetName: '产品销售数据',
-    datasetDescription: '各产品线的销售数据和市场表现指标',
+    resourceId: 'resource-002',
+    resourceName: '产品销售数据',
+    resourceDescription: '各产品线的销售数据和市场表现指标',
     businessType: '零售电商',
     domain: 'retail',
     owner: '销售部',
@@ -86,9 +86,9 @@ const mockDatasetPolicies: DatasetPolicy[] = [
   },
   {
     id: 'policy-003',
-    datasetId: 'dataset-003',
-    datasetName: '用户行为数据',
-    datasetDescription: '用户在平台上的浏览、点击、购买等行为数据',
+    resourceId: 'resource-003',
+    resourceName: '用户行为数据',
+    resourceDescription: '用户在平台上的浏览、点击、购买等行为数据',
     businessType: '互联网服务',
     domain: 'internet',
     owner: '产品部',
@@ -102,9 +102,9 @@ const mockDatasetPolicies: DatasetPolicy[] = [
   },
   {
     id: 'policy-004',
-    datasetId: 'dataset-004',
-    datasetName: '供应链数据',
-    datasetDescription: '供应商信息、采购记录和库存管理数据',
+    resourceId: 'resource-004',
+    resourceName: '供应链数据',
+    resourceDescription: '供应商信息、采购记录和库存管理数据',
     businessType: '制造业',
     domain: 'manufacturing',
     owner: '采购部',
@@ -118,9 +118,9 @@ const mockDatasetPolicies: DatasetPolicy[] = [
   },
   {
     id: 'policy-005',
-    datasetId: 'dataset-005',
-    datasetName: '医疗诊断数据',
-    datasetDescription: '患者诊断记录和医疗影像数据',
+    resourceId: 'resource-005',
+    resourceName: '医疗诊断数据',
+    resourceDescription: '患者诊断记录和医疗影像数据',
     businessType: '医疗健康',
     domain: 'healthcare',
     owner: '医疗信息部',
@@ -134,9 +134,9 @@ const mockDatasetPolicies: DatasetPolicy[] = [
   },
   {
     id: 'policy-006',
-    datasetId: 'dataset-006',
-    datasetName: '物流运输数据',
-    datasetDescription: '货物运输路线、时效和成本数据',
+    resourceId: 'resource-006',
+    resourceName: '物流运输数据',
+    resourceDescription: '货物运输路线、时效和成本数据',
     businessType: '物流运输',
     domain: 'logistics',
     owner: '运营部',
@@ -156,7 +156,7 @@ const sortOptions = [
   { value: 'businessType', label: '按业务类型排序' },
   { value: 'policyClass', label: '按策略类型排序' },
   { value: 'createdAt', label: '按创建时间排序' },
-  { value: 'datasetName', label: '按数据集名称排序' }
+  { value: 'resourceName', label: '按资源名称排序' }
 ];
 
 // 策略类型图标映射
@@ -181,12 +181,12 @@ const statusLabels = {
   expired: '已过期'
 };
 
-const DatasetPolicyList: React.FC = () => {
+const ResourcePolicyList: React.FC = () => {
   const [sortBy, setSortBy] = useState<string>('businessType');
 
   // 排序后的数据
   const sortedPolicies = useMemo(() => {
-    const sorted = [...mockDatasetPolicies].sort((a, b) => {
+    const sorted = [...mockResourcePolicies].sort((a, b) => {
       switch (sortBy) {
         case 'businessType':
           return a.businessType.localeCompare(b.businessType);
@@ -194,8 +194,8 @@ const DatasetPolicyList: React.FC = () => {
           return a.policyClass.localeCompare(b.policyClass);
         case 'createdAt':
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        case 'datasetName':
-          return a.datasetName.localeCompare(b.datasetName);
+        case 'resourceName':
+        return a.resourceName.localeCompare(b.resourceName);
         default:
           return 0;
       }
@@ -204,7 +204,7 @@ const DatasetPolicyList: React.FC = () => {
   }, [sortBy]);
 
   // 格式化策略详情
-  const formatPolicyDetails = (policy: DatasetPolicy) => {
+  const formatPolicyDetails = (policy: ResourcePolicy) => {
     const { policyType, policyDetails } = policy;
     switch (policyType) {
       case 'specific_consumer':
@@ -223,11 +223,11 @@ const DatasetPolicyList: React.FC = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom sx={{ fontWeight: 600, mb: 3 }}>
-        数据集策略列表
+        资源策略列表
       </Typography>
       
       <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-        查看所有已配置策略的数据集，支持按不同维度排序浏览
+        查看所有已配置策略的资源，支持按不同维度排序浏览
       </Typography>
 
       {/* 排序控制 */}
@@ -272,7 +272,7 @@ const DatasetPolicyList: React.FC = () => {
           >
             <CardContent>
               <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
-                {/* 左侧：数据集信息 */}
+                {/* 左侧：资源信息 */}
                 <Box sx={{ flex: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                     <Avatar sx={{ bgcolor: 'primary.main' }}>
@@ -280,10 +280,10 @@ const DatasetPolicyList: React.FC = () => {
                     </Avatar>
                     <Box>
                       <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                        {policy.datasetName}
+                        {policy.resourceName}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {policy.datasetDescription}
+                        {policy.resourceDescription}
                       </Typography>
                     </Box>
                   </Box>
@@ -366,15 +366,15 @@ const DatasetPolicyList: React.FC = () => {
           </Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
             <Chip 
-              label={`总计: ${mockDatasetPolicies.length} 个策略`}
+              label={`总计: ${mockResourcePolicies.length} 个策略`}
               color="primary"
             />
             <Chip 
-              label={`生效中: ${mockDatasetPolicies.filter(p => p.status === 'active').length} 个`}
+              label={`生效中: ${mockResourcePolicies.filter(p => p.status === 'active').length} 个`}
               color="success"
             />
             <Chip 
-              label={`已过期: ${mockDatasetPolicies.filter(p => p.status === 'expired').length} 个`}
+              label={`已过期: ${mockResourcePolicies.filter(p => p.status === 'expired').length} 个`}
               color="error"
             />
           </Box>
@@ -384,4 +384,4 @@ const DatasetPolicyList: React.FC = () => {
   );
 };
 
-export default DatasetPolicyList;
+export default ResourcePolicyList;

@@ -10,26 +10,21 @@ import Login from '../pages/Login';
 
 
 // 数据集管理组件
-const ProviderDatasetList = lazy(() => import('../pages/provider/datasets/DatasetList'));
-const ProviderDatasetDetail = lazy(() => import('../pages/provider/datasets/DatasetDetail'));
-const ProviderDatasetUpload = lazy(() => import('../pages/provider/datasets/DatasetUpload'));
-const ProviderDatasetTransform = lazy(() => import('../pages/provider/datasets/DatasetTransform'));
+const ProviderResourceList = lazy(() => import('../pages/provider/resources/ResourceList'));
+const ProviderResourceDetail = lazy(() => import('../pages/provider/resources/ResourceDetail'));
+const ProviderResourceUpload = lazy(() => import('../pages/provider/resources/ResourceUpload'));
+const ProviderResourceTransform = lazy(() => import('../pages/provider/resources/ResourceTransform'));
 const ProviderPolicyList = lazy(() => import('../pages/provider/policies/PolicyList'));
 const ProviderPolicyEdit = lazy(() => import('../pages/provider/policies/PolicyEdit'));
-const ProviderDatasetPolicyEdit = lazy(() => import('../pages/provider/policies/DatasetPolicyEdit'));
-const ProviderDatasetPolicyList = lazy(() => import('../pages/provider/policies/DatasetPolicyList'));
+const ProviderResourcePolicyEdit = lazy(() => import('../pages/provider/policies/ResourcePolicyEdit'));
+const ProviderResourcePolicyList = lazy(() => import('../pages/provider/policies/ResourcePolicyList'));
 const ProviderConnectorStatus = lazy(() => import('../pages/provider/connections/ConnectorStatus'));
 const ProviderDataExchange = lazy(() => import('../pages/provider/connections/DataExchange'));
 const ProviderExchangeLogs = lazy(() => import('../pages/provider/connections/ExchangeLogs'));
 const ConsumerMarketplace = lazy(() => import('../pages/consumer/ecosystem/Marketplace'));
-const ProviderOnShelf = lazy(() => import('../pages/provider/ecosystem/onshelf'));
-const ProviderServiceDiscovery = lazy(() => import('../pages/provider/ecosystem/ServiceDiscovery'));
-const ProviderTransactions = lazy(() => import('../pages/provider/ecosystem/Transactions'));
 const ProviderSystemConfig = lazy(() => import('../pages/provider/system/SystemConfig'));
 // 提供者系统备份、插件、更新组件已映射到ToBeConstructed
-const ProviderAuthentication = lazy(() => import('../pages/provider/identity/Authentication'));
-const ProviderCertificateManagement = lazy(() => import('../pages/provider/identity/CertificateManagement'));
-const DatasetUsageAnalysis = lazy(() => import('../pages/provider/analytics/DatasetUsageAnalysis'));
+const ResourceUsageAnalysis = lazy(() => import('../pages/provider/analytics/ResourceUsageAnalysis'));
 const ProviderComplianceReports = lazy(() => import('../pages/provider/analytics/ComplianceReports'));
 const ProviderDashboards = lazy(() => import('../pages/provider/analytics/Dashboards'));
 
@@ -66,23 +61,23 @@ const router = createHashRouter([
       
       // 数据集管理路由
       {
-        path: 'enterprise/datasets',
-        element: <ProviderDatasetList />,
+        path: 'enterprise/resources',
+        element: <ProviderResourceList />,
       },
       {
-        path: 'enterprise/datasets/upload',
-        element: <ProviderDatasetUpload />,
+        path: 'enterprise/resources/upload',
+        element: <ProviderResourceUpload />,
       },
       {
-        path: 'enterprise/datasets/transform',
-        element: <ProviderDatasetTransform />,
+        path: 'enterprise/resources/transform',
+        element: <ProviderResourceTransform />,
       },
       {
-        path: 'enterprise/datasets/:id',
-        element: <ProviderDatasetDetail />,
+        path: 'enterprise/resources/:id',
+        element: <ProviderResourceDetail />,
       },
       {
-        path: 'enterprise/datasets/edit/:id',
+        path: 'enterprise/resources/edit/:id',
         element: <ProviderToBeConstructed />,
       },
 
@@ -100,12 +95,12 @@ const router = createHashRouter([
         element: <ToBeConstructed pageName="策略管理" />,
       },
       {
-        path: 'enterprise/policies/dataset-policy-edit',
-        element: <ProviderDatasetPolicyEdit />,
+        path: 'enterprise/policies/resources-policy-edit',
+        element: <ProviderResourcePolicyEdit />,
       },
       {
-        path: 'enterprise/policies/dataset-policy-list',
-        element: <ProviderDatasetPolicyList />,
+        path: 'enterprise/policies/resources-policy-list',
+        element: <ProviderResourcePolicyList />,
       },
       {
         path: 'enterprise/publishing',
@@ -128,20 +123,8 @@ const router = createHashRouter([
         element: <ConsumerMarketplace />,
       },
       {
-        path: 'enterprise/ecosystem/onshelf',
-        element: <ProviderOnShelf />,
-      },
-      {
-        path: 'enterprise/ecosystem/services',
-        element: <ProviderServiceDiscovery />,
-      },
-      {
-        path: 'enterprise/ecosystem/transactions',
-        element: <ProviderTransactions />,
-      },
-      {
         path: 'enterprise/analytics',
-        element: <DatasetUsageAnalysis />,
+        element: <ResourceUsageAnalysis />,
       },
       {
         path: 'enterprise/revenue',
@@ -158,14 +141,6 @@ const router = createHashRouter([
       {
         path: 'enterprise/system/plugins',
         element: <ProviderToBeConstructed />,
-      },
-      {
-        path: 'enterprise/auth',
-        element: <ProviderAuthentication />,
-      },
-      {
-        path: 'enterprise/auth/certificates',
-        element: <ProviderCertificateManagement />,
       },
       {
         path: 'enterprise/analytics/compliance',

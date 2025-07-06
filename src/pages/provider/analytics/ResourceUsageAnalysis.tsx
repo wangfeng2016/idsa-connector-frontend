@@ -20,14 +20,14 @@ import {
   Download,
   People,
   AttachMoney,
-  Dataset,
+  Storage,
   Share,
   Analytics,
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 
-// 数据集使用统计接口
-interface DatasetUsage {
+// 资源使用统计接口
+interface ResourceUsage {
   id: string;
   name: string;
   category: string;
@@ -41,7 +41,7 @@ interface DatasetUsage {
 
 // 总体统计接口
 interface OverallStats {
-  totalDatasets: number;
+  totalResources: number;
   totalDownloads: number;
   totalConsumers: number;
   totalRevenue: number;
@@ -52,27 +52,27 @@ interface OverallStats {
 // 时间段选项
 type TimePeriod = 'week' | 'month' | 'quarter';
 
-const DatasetUsageAnalysis: React.FC = () => {
+const ResourceUsageAnalysis: React.FC = () => {
   const theme = useTheme();
   const [timePeriod, setTimePeriod] = useState<TimePeriod>('month');
   const [overallStats, setOverallStats] = useState<OverallStats>({
-    totalDatasets: 0,
+    totalResources: 0,
     totalDownloads: 0,
     totalConsumers: 0,
     totalRevenue: 0,
     platformCommission: 0,
     netRevenue: 0,
   });
-  const [datasetUsages, setDatasetUsages] = useState<DatasetUsage[]>([]);
+  const [resourceUsages, setResourceUsages] = useState<ResourceUsage[]>([]);
 
   // 模拟数据生成
   const generateMockData = (period: TimePeriod) => {
     const multiplier = period === 'week' ? 0.25 : period === 'month' ? 1 : 3;
     
-    const mockDatasets: DatasetUsage[] = [
+    const mockResources: ResourceUsage[] = [
       {
         id: '1',
-        name: '车辆行驶轨迹数据集',
+        name: '车辆行驶轨迹资源',
         category: '行驶数据',
         downloadCount: Math.floor(156 * multiplier),
         consumerCount: Math.floor(23 * multiplier),
@@ -138,15 +138,15 @@ const DatasetUsageAnalysis: React.FC = () => {
       },
     ];
 
-    const totalDownloads = mockDatasets.reduce((sum, item) => sum + item.downloadCount, 0);
-    const totalConsumers = mockDatasets.reduce((sum, item) => sum + item.consumerCount, 0);
-    const totalRevenue = mockDatasets.reduce((sum, item) => sum + item.revenue, 0);
+    const totalDownloads = mockResources.reduce((sum, item) => sum + item.downloadCount, 0);
+    const totalConsumers = mockResources.reduce((sum, item) => sum + item.consumerCount, 0);
+    const totalRevenue = mockResources.reduce((sum, item) => sum + item.revenue, 0);
     const platformCommission = Math.floor(totalRevenue * 0.15); // 15%平台分成
     const netRevenue = totalRevenue - platformCommission;
 
-    setDatasetUsages(mockDatasets);
+    setResourceUsages(mockResources);
     setOverallStats({
-      totalDatasets: mockDatasets.length,
+      totalResources: mockResources.length,
       totalDownloads,
       totalConsumers,
       totalRevenue,
@@ -199,7 +199,7 @@ const DatasetUsageAnalysis: React.FC = () => {
         gap: 2
       }}>
         <Typography variant="h4" sx={{ fontWeight: 'bold', color: theme.palette.primary.dark }}>
-          数据集使用分析
+          资源使用分析
         </Typography>
         <FormControl sx={{ minWidth: 150 }}>
           <InputLabel>时间范围</InputLabel>
@@ -230,14 +230,14 @@ const DatasetUsageAnalysis: React.FC = () => {
           <CardContent>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Avatar sx={{ bgcolor: theme.palette.primary.main }}>
-                <Dataset />
+                 <Storage />
               </Avatar>
               <Box>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', color: theme.palette.primary.dark }}>
-                  {overallStats.totalDatasets}
+                  {overallStats.totalResources}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  提供的数据集总数
+                  提供的资源总数
                 </Typography>
               </Box>
             </Box>
@@ -347,41 +347,41 @@ const DatasetUsageAnalysis: React.FC = () => {
         </Card>
       </Box>
 
-      {/* 数据集详细使用情况 */}
+      {/* 资源详细使用情况 */}
       <Card>
         <CardContent>
           <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold', color: theme.palette.primary.dark }}>
-            数据集使用详情 - {getTimePeriodLabel(timePeriod)}
+            资源使用详情 - {getTimePeriodLabel(timePeriod)}
           </Typography>
           
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {datasetUsages.map((dataset) => (
-              <Card key={dataset.id} variant="outlined" sx={{ p: 2 }}>
+            {resourceUsages.map((resource) => (
+              <Card key={resource.id} variant="outlined" sx={{ p: 2 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  {/* 数据集基本信息 */}
+                  {/* 资源基本信息 */}
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2 }}>
                     <Box sx={{ flex: 1, minWidth: '200px' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                         <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                          {dataset.name}
+                          {resource.name}
                         </Typography>
                         <Chip 
-                          label={dataset.category} 
+                          label={resource.category} 
                           size="small" 
                           color="primary" 
                           variant="outlined"
                         />
-                        <Tooltip title={`趋势: ${dataset.popularityTrend === 'up' ? '上升' : dataset.popularityTrend === 'down' ? '下降' : '稳定'}`}>
+                        <Tooltip title={`趋势: ${resource.popularityTrend === 'up' ? '上升' : resource.popularityTrend === 'down' ? '下降' : '稳定'}`}>
                           <IconButton size="small">
-                            {getTrendIcon(dataset.popularityTrend)}
+                            {getTrendIcon(resource.popularityTrend)}
                           </IconButton>
                         </Tooltip>
                       </Box>
                       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                        {dataset.description}
+                        {resource.description}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        最后访问: {dataset.lastAccessed}
+                        最后访问: {resource.lastAccessed}
                       </Typography>
                     </Box>
                   </Box>
@@ -400,7 +400,7 @@ const DatasetUsageAnalysis: React.FC = () => {
                   }}>
                     <Box sx={{ textAlign: 'center' }}>
                       <Typography variant="h5" sx={{ fontWeight: 'bold', color: theme.palette.info.main }}>
-                        {dataset.downloadCount}
+                        {resource.downloadCount}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
                         下载次数
@@ -409,7 +409,7 @@ const DatasetUsageAnalysis: React.FC = () => {
                     
                     <Box sx={{ textAlign: 'center' }}>
                       <Typography variant="h5" sx={{ fontWeight: 'bold', color: theme.palette.success.main }}>
-                        {dataset.consumerCount}
+                        {resource.consumerCount}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
                         消费者数量
@@ -418,7 +418,7 @@ const DatasetUsageAnalysis: React.FC = () => {
                     
                     <Box sx={{ textAlign: 'center' }}>
                       <Typography variant="h5" sx={{ fontWeight: 'bold', color: theme.palette.warning.main }}>
-                        {formatCurrency(dataset.revenue)}
+                        {formatCurrency(resource.revenue)}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
                         产生收入
@@ -427,7 +427,7 @@ const DatasetUsageAnalysis: React.FC = () => {
                     
                     <Box sx={{ textAlign: 'center' }}>
                       <Typography variant="h5" sx={{ fontWeight: 'bold', color: theme.palette.secondary.main }}>
-                        {formatCurrency(Math.floor(dataset.revenue * 0.85))}
+                        {formatCurrency(Math.floor(resource.revenue * 0.85))}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
                         净收入
@@ -440,12 +440,12 @@ const DatasetUsageAnalysis: React.FC = () => {
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                       <Typography variant="body2">收入占比</Typography>
                       <Typography variant="body2">
-                        {((dataset.revenue / overallStats.totalRevenue) * 100).toFixed(1)}%
+                        {((resource.revenue / overallStats.totalRevenue) * 100).toFixed(1)}%
                       </Typography>
                     </Box>
                     <LinearProgress 
                       variant="determinate" 
-                      value={(dataset.revenue / overallStats.totalRevenue) * 100}
+                      value={(resource.revenue / overallStats.totalRevenue) * 100}
                       sx={{ height: 8, borderRadius: 4 }}
                     />
                   </Box>
@@ -459,4 +459,4 @@ const DatasetUsageAnalysis: React.FC = () => {
   );
 };
 
-export default DatasetUsageAnalysis;
+export default ResourceUsageAnalysis;

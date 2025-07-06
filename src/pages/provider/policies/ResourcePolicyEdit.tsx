@@ -19,8 +19,8 @@ import { mockResources } from '../../../contexts/ResourceContext';
 // 策略类型定义
 type PolicyType = 'restrict_consumer' | 'restrict_connector' | 'time_limit' | 'usage_count';
 
-// 数据集接口
-interface Dataset {
+// 资源接口
+interface Resource {
   id: number;
   name: string;
   description: string;
@@ -71,8 +71,8 @@ const generateUUID = () => {
   });
 };
 
-// 转换资源数据为数据集格式
-const convertToDatasets = (): Dataset[] => {
+// 转换资源数据为资源格式
+const convertToResources = (): Resource[] => {
   return mockResources.map(resource => ({
     id: resource.id,
     name: resource.name,
@@ -82,20 +82,20 @@ const convertToDatasets = (): Dataset[] => {
 };
 
 // 生成IDS策略规范
-const generateIDSPolicy = (dataset: Dataset, config: CombinedPolicyConfig): string => {
+const generateIDSPolicy = (resource: Resource, config: CombinedPolicyConfig): string => {
   const basePolicy = {
     "@context": {
       "ids": "https://w3id.org/idsa/core/",
       "idsc": "https://w3id.org/idsa/code/"
     },
     "@type": "ids:ContractAgreement",
-    "@id": `https://w3id.org/idsa/autogen/contract/${dataset.uuid}`,
+    "@id": `https://w3id.org/idsa/autogen/contract/${resource.uuid}`,
     "profile": "http://example.com/ids-profile",
     "ids:provider": "http://example.com/party/data-provider",
     "ids:consumer": "http://example.com/party/data-consumer",
     "ids:permission": [{
       "ids:target": {
-        "@id": `http://example.com/ids/target/${dataset.uuid}`
+        "@id": `http://example.com/ids/target/${resource.uuid}`
       },
       "ids:action": [{
         "@id": "idsc:USE"
@@ -176,7 +176,7 @@ const generateIDSPolicy = (dataset: Dataset, config: CombinedPolicyConfig): stri
 };
 
 // 生成ODRL策略规范
-const generateODRLPolicy = (dataset: Dataset, config: CombinedPolicyConfig): string => {
+const generateODRLPolicy = (resource: Resource, config: CombinedPolicyConfig): string => {
   const basePolicy = {
     "@context": [
       "http://www.w3.org/ns/odrl.jsonld",
@@ -187,13 +187,13 @@ const generateODRLPolicy = (dataset: Dataset, config: CombinedPolicyConfig): str
       }
     ],
     "@type": "Agreement",
-    "uid": `http://example.com/policy/${dataset.uuid}`,
+    "uid": `http://example.com/policy/${resource.uuid}`,
     "profile": "http://www.w3.org/ns/odrl/2/core",
     "dc:creator": "Data Provider",
-    "dc:description": `Policy for dataset: ${dataset.name}`,
+    "dc:description": `Policy for resource: ${resource.name}`,
     "dc:issued": new Date().toISOString(),
     "permission": [{
-      "target": `http://example.com/ids/data/${dataset.uuid}`,
+      "target": `http://example.com/ids/data/${resource.uuid}`,
       "assigner": "http://example.com/ids/party/data-provider",
       "assignee": "http://example.com/ids/party/data-consumer",
       "action": "use"
@@ -255,9 +255,9 @@ const generateODRLPolicy = (dataset: Dataset, config: CombinedPolicyConfig): str
   return JSON.stringify(basePolicy, null, 2);
 };
 
-const DatasetPolicyEdit: React.FC = () => {
-  const [datasets] = useState<Dataset[]>(convertToDatasets());
-  const [selectedDataset, setSelectedDataset] = useState<Dataset | null>(null);
+const ResourcePolicyEdit: React.FC = () => {
+  const [resources] = useState<Resource[]>(convertToResources());
+  const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
   const [policyConfig, setPolicyConfig] = useState<CombinedPolicyConfig>({
     policyClasses: [
       {
@@ -290,15 +290,15 @@ const DatasetPolicyEdit: React.FC = () => {
   const [idsPolicy, setIdsPolicy] = useState<string>('');
   const [odrlPolicy, setOdrlPolicy] = useState<string>('');
 
-  // 当数据集或策略配置改变时，更新策略规范
+  // 当资源或策略配置改变时，更新策略规范
   useEffect(() => {
-    if (selectedDataset) {
-      const ids = generateIDSPolicy(selectedDataset, policyConfig);
-      const odrl = generateODRLPolicy(selectedDataset, policyConfig);
+    if (selectedResource) {
+      const ids = generateIDSPolicy(selectedResource, policyConfig);
+      const odrl = generateODRLPolicy(selectedResource, policyConfig);
       setIdsPolicy(ids);
       setOdrlPolicy(odrl);
     }
-  }, [selectedDataset, policyConfig]);
+  }, [selectedResource, policyConfig]);
 
   // 处理策略类启用/禁用
   const handlePolicyClassToggle = (policyType: PolicyType) => {
@@ -353,14 +353,14 @@ const DatasetPolicyEdit: React.FC = () => {
 
   // 保存策略
   const handleSavePolicy = () => {
-    if (!selectedDataset) {
-      alert('请先选择数据集');
+    if (!selectedResource) {
+      alert('请先选择资源');
       return;
     }
     
     // 这里可以添加保存策略的逻辑
     console.log('保存策略:', {
-      dataset: selectedDataset,
+      resource: selectedResource,
       config: policyConfig,
       idsPolicy,
       odrlPolicy,
@@ -500,31 +500,31 @@ const DatasetPolicyEdit: React.FC = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        数据集策略管理
+        资源策略管理
       </Typography>
       
       <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-        为数据集定义使用策略，控制数据的访问和使用权限。
+        为资源定义使用策略，控制数据的访问和使用权限。
       </Typography>
 
       <Stack spacing={3}>
-        {/* 数据集选择区域 */}
+        {/* 资源选择区域 */}
         <Card sx={{ borderRadius: 2, boxShadow: 2 }}>
           <CardContent>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
-              选择数据集
+              选择资源
             </Typography>
             
             <Autocomplete
-              options={datasets}
+              options={resources}
               getOptionLabel={(option) => `${option.name} (${option.description})`}
-              value={selectedDataset}
-              onChange={(_event, newValue) => setSelectedDataset(newValue)}
+              value={selectedResource}
+              onChange={(_event, newValue) => setSelectedResource(newValue)}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="选择要配置策略的数据集"
-                  placeholder="请选择数据集"
+                  label="选择要配置策略的资源"
+                  placeholder="请选择资源"
                   fullWidth
                 />
               )}
@@ -543,18 +543,18 @@ const DatasetPolicyEdit: React.FC = () => {
               )}
             />
             
-            {selectedDataset && (
-              <Alert severity="info" sx={{ mt: 2, borderRadius: 1 }}>
-                已选择数据集：<strong>{selectedDataset.name}</strong>
+            {selectedResource && (
+              <Alert severity="info" sx={{ mt: 2 }}>
+                已选择资源：<strong>{selectedResource.name}</strong>
                 <br />
-                UUID: {selectedDataset.uuid}
+                UUID: {selectedResource.uuid}
               </Alert>
             )}
           </CardContent>
         </Card>
 
         {/* 策略配置区域 */}
-        {selectedDataset && (
+        {selectedResource && (
           <Card sx={{ borderRadius: 2, boxShadow: 2 }}>
             <CardContent>
               <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
@@ -606,7 +606,7 @@ const DatasetPolicyEdit: React.FC = () => {
         )}
 
         {/* 策略规范显示区域 */}
-        {selectedDataset && idsPolicy && (
+        {selectedResource && idsPolicy && (
           <Card sx={{ borderRadius: 2, boxShadow: 2 }}>
             <CardContent>
               <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
@@ -673,4 +673,4 @@ const DatasetPolicyEdit: React.FC = () => {
   );
 };
 
-export default DatasetPolicyEdit;
+export default ResourcePolicyEdit;

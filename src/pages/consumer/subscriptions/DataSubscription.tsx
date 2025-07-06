@@ -38,7 +38,7 @@ import {
   Download as DownloadIcon,
   Print as PrintIcon,
   Business as BusinessIcon,
-  Dataset as DatasetIcon,
+  Dataset,
   Gavel as GavelIcon,
   Security as SecurityIcon,
 } from '@mui/icons-material';
@@ -115,7 +115,7 @@ interface DataResource {
 const mockRemoteResources: DataResource[] = [
   {
     id: 'DS-PROD-2024-0156',
-    name: '生产线实时监控数据集',
+    name: '生产线实时监控资源',
     description: '包含温度、压力、振动等传感器数据，用于设备状态监控和预测性维护',
     type: '传感器数据',
     size: '2.5GB',
@@ -150,9 +150,9 @@ const mockDataSource = {
   providerId: 'ORG-2024-001',
   providerName: '智能制造数据中心',
   connectorEndpoint: 'https://connector.smart-manufacturing.com',
-  datasetUuid: 'DS-PROD-2024-0156',
-  datasetName: '生产线实时监控数据集',
-  datasetDescription: '包含温度、压力、振动等传感器数据，用于设备状态监控和预测性维护',
+  resourceUuid: 'RS-PROD-2024-0156',
+  resourceName: '生产线实时监控资源',
+  resourceDescription: '包含温度、压力、振动等传感器数据，用于设备状态监控和预测性维护',
 };
 
 // 模拟合同条款
@@ -360,9 +360,9 @@ const DataSubscription: React.FC = () => {
 Connector端点：${mockDataSource.connectorEndpoint}
 
 数据源信息：
-数据集名称：${mockDataSource.datasetName}
-数据集UUID：${mockDataSource.datasetUuid}
-数据集描述：${mockDataSource.datasetDescription}
+资源名称：${mockDataSource.resourceName}
+资源UUID：${mockDataSource.resourceUuid}
+资源描述：${mockDataSource.resourceDescription}
 
 合同条款：
 使用政策：${mockContractTerms.usagePolicy}
@@ -382,7 +382,7 @@ Connector端点：${mockDataSource.connectorEndpoint}
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `数据订阅合同_${mockDataSource.datasetName}_${new Date().toISOString().split('T')[0]}.txt`;
+    a.download = `数据订阅合同_${mockDataSource.resourceName}_${new Date().toISOString().split('T')[0]}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -421,7 +421,7 @@ Connector端点：${mockDataSource.connectorEndpoint}
             
             <Alert severity="info" sx={{ mb: 3 }}>
               本次活动的目的是与 <strong>{mockDataSource.providerName}</strong> 机构的 
-              <strong>{mockDataSource.datasetName}</strong> 数据源订购事宜进行合同协商。
+              <strong>{mockDataSource.resourceName}</strong> 数据源订购事宜进行合同协商。
             </Alert>
 
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3 }}>
@@ -456,23 +456,23 @@ Connector端点：${mockDataSource.connectorEndpoint}
               {/* 数据源信息 */}
               <Paper sx={{ p: 2, bgcolor: alpha(theme.palette.secondary.main, 0.05) }}>
                 <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
-                  <DatasetIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+                  <Dataset sx={{ mr: 1, verticalAlign: 'middle' }} />
                   数据源信息
                 </Typography>
                 <TableContainer>
                   <Table size="small">
                     <TableBody>
                       <TableRow>
-                        <TableCell>数据集名称</TableCell>
-                        <TableCell>{mockDataSource.datasetName}</TableCell>
+                        <TableCell>资源名称</TableCell>
+                        <TableCell>{mockDataSource.resourceName}</TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>数据集UUID</TableCell>
-                        <TableCell>{mockDataSource.datasetUuid}</TableCell>
+                        <TableCell>资源UUID</TableCell>
+                        <TableCell>{mockDataSource.resourceUuid}</TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell>描述</TableCell>
-                        <TableCell>{mockDataSource.datasetDescription}</TableCell>
+                        <TableCell>{mockDataSource.resourceDescription}</TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
