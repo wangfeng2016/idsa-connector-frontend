@@ -8,62 +8,32 @@ import {
   Tabs,
   Tab,
   Chip,
-  IconButton,
-  Tooltip,
-  Divider,
 } from '@mui/material';
 import {
   ArrowBack as BackIcon,
-  Download as DownloadIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
+  TextFields as TextIcon,
+  Image as ImageIcon,
+  AudioFile as AudioIcon,
+  VideoFile as VideoIcon,
   Description as FileIcon,
-  DataObject as RepresentationIcon,
+  InsertDriveFile as FileGenericIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
-// 使用与ResourceList相同的接口定义
-interface Artifact {
-  id: string;
-  fileName: string;
-  filePath: string;
-  fileSize: string;
-  checksum: string;
-  createdAt: string;
-  accessUrl: string;
-  downloadCount: number;
-}
-
-interface Representation {
-  id: string;
-  mediaType: string;
-  format: string;
-  language?: string;
-  recordCount?: number;
-  schema?: string;
-  artifacts: Artifact[];
-  createdAt: string;
-  updatedAt: string;
-}
-
+// 使用与ResourceList相同的简化接口定义
 interface Resource {
   id: string;
-  title: string;
-  description: string;
-  keyword: string[];
-  theme: string[];
+  title: string; // 名称
+  description: string; // 描述
+  type: 'text' | 'image' | 'audio' | 'video' | 'document' | 'other'; // 类型（文本、图像、音频等）
+  format: string; // 格式（CSV、TXT、JSON等）
+  keywords: string[]; // 关键词
+  created: string; // 创建时间
+  status: 'private' | 'offered' | 'subscribed'; // 私有、已提供、已订阅
   publisher: string;
   license?: string;
-  accessRights: 'public' | 'private' | 'restricted';
-  temporal?: {
-    startDate?: string;
-    endDate?: string;
-  };
-  spatial?: string;
-  representations: Representation[];
-  createdAt: string;
-  updatedAt: string;
-  status: 'active' | 'processing' | 'error' | 'archived';
   sourceType: 'uploaded' | 'transformed';
   sourceResourceId?: string;
   sourceResourceName?: string;
@@ -74,63 +44,13 @@ const mockResource: Resource = {
   id: 'res-001',
   title: '客户行为分析资源',
   description: '包含客户购买行为、浏览记录等分析数据，用于客户行为模式分析和营销策略制定。该资源涵盖了2024年1月份的完整客户交互数据，包括页面浏览、商品查看、购买转化等关键行为指标。',
-  keyword: ['客户分析', '行为数据', '营销', '转化率', '用户体验'],
-  theme: ['商业智能', '客户关系管理', '数据分析'],
+  type: 'document',
+  format: 'CSV',
+  keywords: ['客户分析', '行为数据', '营销', '转化率', '用户体验'],
+  created: '2024-01-15',
+  status: 'subscribed',
   publisher: '数据分析部门',
   license: 'CC BY 4.0',
-  accessRights: 'private',
-  temporal: {
-    startDate: '2024-01-01',
-    endDate: '2024-01-31'
-  },
-  spatial: '全国',
-  representations: [
-    {
-      id: 'rep-001-csv',
-      mediaType: 'text/csv',
-      format: 'CSV',
-      recordCount: 15000,
-      schema: 'customer_id,action_type,timestamp,product_id,value,session_id,user_agent',
-      artifacts: [
-        {
-          id: 'art-001-csv',
-          fileName: 'customer_behavior_analysis.csv',
-          filePath: '/data/customer_behavior_analysis.csv',
-          fileSize: '2.5 MB',
-          checksum: 'sha256:abc123def456ghi789jkl012mno345pqr678stu901vwx234yz',
-          createdAt: '2024-01-15',
-          accessUrl: '/api/artifacts/art-001-csv/download',
-          downloadCount: 23
-        }
-      ],
-      createdAt: '2024-01-15',
-      updatedAt: '2024-01-20'
-    },
-    {
-      id: 'rep-001-json',
-      mediaType: 'application/json',
-      format: 'JSON',
-      recordCount: 15000,
-      schema: '{"customer_id": "string", "actions": [{"type": "string", "timestamp": "datetime", "details": {}}]}',
-      artifacts: [
-        {
-          id: 'art-001-json',
-          fileName: 'customer_behavior_analysis.json',
-          filePath: '/data/customer_behavior_analysis.json',
-          fileSize: '3.2 MB',
-          checksum: 'sha256:def456ghi789jkl012mno345pqr678stu901vwx234yz567abc',
-          createdAt: '2024-01-15',
-          accessUrl: '/api/artifacts/art-001-json/download',
-          downloadCount: 12
-        }
-      ],
-      createdAt: '2024-01-15',
-      updatedAt: '2024-01-20'
-    }
-  ],
-  createdAt: '2024-01-15',
-  updatedAt: '2024-01-20',
-  status: 'active',
   sourceType: 'transformed',
   sourceResourceId: 'db-001',
   sourceResourceName: '客户数据库'
@@ -173,44 +93,46 @@ const ResourceDetail: React.FC = () => {
     setTabValue(newValue);
   };
 
-  const handleDownloadArtifact = (artifact: Artifact) => {
-    window.open(artifact.accessUrl, '_blank');
-  };
 
-  const getAccessRightsText = (accessRights: Resource['accessRights']) => {
-    switch (accessRights) {
-      case 'public': return '公开';
-      case 'private': return '私有';
-      case 'restricted': return '受限';
-      default: return '未知';
+
+  const getTypeIcon = (type: Resource['type']) => {
+    switch (type) {
+      case 'text': return <TextIcon />;
+      case 'image': return <ImageIcon />;
+      case 'audio': return <AudioIcon />;
+      case 'video': return <VideoIcon />;
+      case 'document': return <FileIcon />;
+      default: return <FileGenericIcon />;
     }
   };
 
-  const getAccessRightsColor = (accessRights: Resource['accessRights']) => {
-    switch (accessRights) {
-      case 'public': return 'success';
-      case 'private': return 'error';
-      case 'restricted': return 'warning';
-      default: return 'default';
+  const getTypeText = (type: Resource['type']) => {
+    switch (type) {
+      case 'text': return '文本';
+      case 'image': return '图像';
+      case 'audio': return '音频';
+      case 'video': return '视频';
+      case 'document': return '文档';
+      default: return '其他';
     }
   };
+
+
 
   const getStatusText = (status: Resource['status']) => {
     switch (status) {
-      case 'active': return '活跃';
-      case 'processing': return '处理中';
-      case 'error': return '错误';
-      case 'archived': return '已归档';
+      case 'private': return '私有';
+      case 'offered': return '已提供';
+      case 'subscribed': return '已订阅';
       default: return '未知';
     }
   };
 
   const getStatusColor = (status: Resource['status']) => {
     switch (status) {
-      case 'active': return 'success';
-      case 'processing': return 'warning';
-      case 'error': return 'error';
-      case 'archived': return 'default';
+      case 'private': return 'default';
+      case 'offered': return 'warning';
+      case 'subscribed': return 'success';
       default: return 'default';
     }
   };
@@ -277,10 +199,9 @@ const ResourceDetail: React.FC = () => {
                 <Box sx={{ 
                   display: 'flex', 
                   flexWrap: 'wrap', 
-                  gap: 1,
-                  mb: 3
+                  gap: 1
                 }}>
-                  {resource.keyword.map((keyword, index) => (
+                  {resource.keywords.map((keyword, index) => (
                     <Chip 
                       key={index} 
                       label={keyword} 
@@ -291,34 +212,6 @@ const ResourceDetail: React.FC = () => {
                         '&:hover': {
                           backgroundColor: 'primary.50'
                         }
-                      }}
-                    />
-                  ))}
-                </Box>
-              </Box>
-              
-              <Box>
-                <Typography variant="h6" gutterBottom sx={{ 
-                  color: 'primary.main',
-                  fontWeight: 600,
-                  mb: 1.5
-                }}>
-                  主题分类
-                </Typography>
-                <Box sx={{ 
-                  display: 'flex', 
-                  flexWrap: 'wrap', 
-                  gap: 1
-                }}>
-                  {resource.theme.map((theme, index) => (
-                    <Chip 
-                      key={index} 
-                      label={theme} 
-                      size="small" 
-                      color="secondary"
-                      sx={{ 
-                        borderRadius: 2,
-                        fontWeight: 500
                       }}
                     />
                   ))}
@@ -350,6 +243,29 @@ const ResourceDetail: React.FC = () => {
                   <Typography variant="body2" color="text.secondary" sx={{ 
                     fontWeight: 500,
                     mb: 0.5
+                  }}>类型</Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    {getTypeIcon(resource.type)}
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      {getTypeText(resource.type)}
+                    </Typography>
+                  </Box>
+                </Box>
+                
+                <Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ 
+                    fontWeight: 500,
+                    mb: 0.5
+                  }}>格式</Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    {resource.format}
+                  </Typography>
+                </Box>
+                
+                <Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ 
+                    fontWeight: 500,
+                    mb: 0.5
                   }}>发布者</Typography>
                   <Typography variant="body1" sx={{ fontWeight: 500 }}>
                     {resource.publisher}
@@ -370,22 +286,6 @@ const ResourceDetail: React.FC = () => {
                   <Typography variant="body2" color="text.secondary" sx={{ 
                     fontWeight: 500,
                     mb: 0.5
-                  }}>访问权限</Typography>
-                  <Chip 
-                    label={getAccessRightsText(resource.accessRights)} 
-                    size="small" 
-                    color={getAccessRightsColor(resource.accessRights)}
-                    sx={{ 
-                      borderRadius: 1.5,
-                      fontWeight: 500
-                    }}
-                  />
-                </Box>
-                
-                <Box>
-                  <Typography variant="body2" color="text.secondary" sx={{ 
-                    fontWeight: 500,
-                    mb: 0.5
                   }}>状态</Typography>
                   <Chip 
                     label={getStatusText(resource.status)} 
@@ -398,49 +298,16 @@ const ResourceDetail: React.FC = () => {
                   />
                 </Box>
                 
-                {resource.temporal && (
-                  <Box>
-                    <Typography variant="body2" color="text.secondary" sx={{ 
-                      fontWeight: 500,
-                      mb: 0.5
-                    }}>时间范围</Typography>
-                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                      {resource.temporal.startDate} 至 {resource.temporal.endDate}
-                    </Typography>
-                  </Box>
-                )}
-                
-                {resource.spatial && (
-                  <Box>
-                    <Typography variant="body2" color="text.secondary" sx={{ 
-                      fontWeight: 500,
-                      mb: 0.5
-                    }}>空间范围</Typography>
-                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                      {resource.spatial}
-                    </Typography>
-                  </Box>
-                )}
-                
                 <Box>
                   <Typography variant="body2" color="text.secondary" sx={{ 
                     fontWeight: 500,
                     mb: 0.5
                   }}>创建时间</Typography>
                   <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                    {resource.createdAt}
+                    {resource.created}
                   </Typography>
                 </Box>
                 
-                <Box>
-                  <Typography variant="body2" color="text.secondary" sx={{ 
-                    fontWeight: 500,
-                    mb: 0.5
-                  }}>更新时间</Typography>
-                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                    {resource.updatedAt}
-                  </Typography>
-                </Box>
               </Box>
             </Box>
           </Box>
@@ -451,283 +318,12 @@ const ResourceDetail: React.FC = () => {
       <Card>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={tabValue} onChange={handleTabChange}>
-            <Tab label="表示 (Representations)" />
-            <Tab label="制品 (Artifacts)" />
             <Tab label="元数据" />
           </Tabs>
         </Box>
         
-        {/* 表示标签页 */}
-        <TabPanel value={tabValue} index={0}>
-          <Typography variant="h6" gutterBottom>
-            数据表示
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            该资源的不同格式表示，每种表示可能包含多个制品文件。
-          </Typography>
-          
-          {resource.representations.map((representation) => (
-            <Card key={representation.id} variant="outlined" sx={{ mb: 2 }}>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                  <RepresentationIcon color="secondary" />
-                  <Typography variant="h6">
-                    {representation.format} 表示
-                  </Typography>
-                  <Chip label={representation.mediaType} size="small" variant="outlined" />
-                </Box>
-                
-                <Box sx={{ 
-                  display: 'flex', 
-                  flexDirection: 'column',
-                  gap: 2.5
-                }}>
-                  {/* 统计信息行 */}
-                  <Box sx={{ 
-                    display: 'flex', 
-                    flexDirection: { xs: 'column', sm: 'row' },
-                    gap: { xs: 2, sm: 4 },
-                    p: 2,
-                    backgroundColor: 'grey.50',
-                    borderRadius: 1.5
-                  }}>
-                    <Box sx={{ flex: 1 }}>
-                      <Typography variant="body2" color="text.secondary" sx={{ 
-                        fontWeight: 500,
-                        mb: 0.5
-                      }}>记录数</Typography>
-                      <Typography variant="h6" sx={{ 
-                        color: 'primary.main',
-                        fontWeight: 600
-                      }}>
-                        {representation.recordCount?.toLocaleString() || 'N/A'}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ flex: 1 }}>
-                      <Typography variant="body2" color="text.secondary" sx={{ 
-                        fontWeight: 500,
-                        mb: 0.5
-                      }}>制品数量</Typography>
-                      <Typography variant="h6" sx={{ 
-                        color: 'secondary.main',
-                        fontWeight: 600
-                      }}>
-                        {representation.artifacts.length} 个文件
-                      </Typography>
-                    </Box>
-                  </Box>
-                  
-                  {/* 数据模式 */}
-                  {representation.schema && (
-                    <Box>
-                      <Typography variant="body2" color="text.secondary" sx={{ 
-                        fontWeight: 500,
-                        mb: 1
-                      }}>数据模式</Typography>
-                      <Box sx={{ 
-                        bgcolor: 'grey.100', 
-                        p: 2.5, 
-                        borderRadius: 1.5,
-                        border: '1px solid',
-                        borderColor: 'grey.200'
-                      }}>
-                        <Typography variant="body2" component="pre" sx={{ 
-                          fontFamily: 'monospace', 
-                          whiteSpace: 'pre-wrap',
-                          fontSize: '0.875rem',
-                          lineHeight: 1.5
-                        }}>
-                          {representation.schema}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  )}
-                </Box>
-                
-                <Divider sx={{ my: 2 }} />
-                
-                <Typography variant="subtitle2" gutterBottom>
-                  关联制品
-                </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  {representation.artifacts.map((artifact) => (
-                    <Box key={artifact.id} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 1, bgcolor: 'grey.50', borderRadius: 1 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <FileIcon fontSize="small" />
-                        <Box>
-                          <Typography variant="body2">{artifact.fileName}</Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            {artifact.fileSize} • 下载 {artifact.downloadCount} 次
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <Tooltip title="下载">
-                        <IconButton size="small" onClick={() => handleDownloadArtifact(artifact)}>
-                          <DownloadIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                  ))}
-                </Box>
-              </CardContent>
-            </Card>
-          ))}
-        </TabPanel>
-        
-        {/* 制品标签页 */}
-        <TabPanel value={tabValue} index={1}>
-          <Typography variant="h6" gutterBottom>
-            制品文件
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            该资源的所有物理文件制品，包含文件信息和下载统计。
-          </Typography>
-          
-          <Box sx={{ 
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2.5
-          }}>
-            {resource.representations.flatMap(rep => 
-              rep.artifacts.map(artifact => (
-                <Card 
-                  key={artifact.id} 
-                  variant="outlined" 
-                  sx={{ 
-                    transition: 'all 0.2s ease-in-out',
-                    '&:hover': {
-                      boxShadow: 2,
-                      transform: 'translateY(-2px)'
-                    }
-                  }}
-                >
-                  <CardContent>
-                    <Box sx={{ 
-                      display: 'flex', 
-                      flexDirection: { xs: 'column', sm: 'row' },
-                      alignItems: { xs: 'flex-start', sm: 'center' },
-                      justifyContent: 'space-between',
-                      gap: 2
-                    }}>
-                      {/* 文件信息部分 */}
-                      <Box sx={{ 
-                        display: 'flex',
-                        flexDirection: 'column',
-                        flex: 1,
-                        minWidth: 0
-                      }}>
-                        <Box sx={{ 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          mb: 1.5
-                        }}>
-                          <FileIcon sx={{ 
-                            mr: 1.5, 
-                            color: 'primary.main',
-                            fontSize: '1.5rem'
-                          }} />
-                          <Typography variant="h6" component="div" sx={{
-                            fontWeight: 600,
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap'
-                          }}>
-                            {artifact.fileName}
-                          </Typography>
-                          <Chip 
-                            label={rep.format} 
-                            size="small" 
-                            color="secondary" 
-                            variant="outlined"
-                            sx={{ ml: 2 }}
-                          />
-                        </Box>
-                        
-                        {/* 文件详情 */}
-                        <Box sx={{ 
-                          display: 'flex',
-                          flexDirection: { xs: 'column', md: 'row' },
-                          gap: { xs: 1, md: 3 },
-                          flexWrap: 'wrap'
-                        }}>
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                            <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
-                              大小:
-                            </Typography>
-                            <Typography variant="body2">
-                              {artifact.fileSize}
-                            </Typography>
-                          </Box>
-                          
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                            <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
-                              校验和:
-                            </Typography>
-                            <Tooltip title={artifact.checksum}>
-                              <Typography variant="body2" sx={{ 
-                                fontFamily: 'monospace',
-                                bgcolor: 'grey.100',
-                                px: 1,
-                                py: 0.25,
-                                borderRadius: 0.5,
-                                fontSize: '0.75rem'
-                              }}>
-                                {artifact.checksum.substring(0, 16)}...
-                              </Typography>
-                            </Tooltip>
-                          </Box>
-                          
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                            <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
-                              下载次数:
-                            </Typography>
-                            <Typography variant="body2">
-                              {artifact.downloadCount}
-                            </Typography>
-                          </Box>
-                          
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                            <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
-                              创建时间:
-                            </Typography>
-                            <Typography variant="body2">
-                              {artifact.createdAt}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Box>
-                      
-                      {/* 操作按钮 */}
-                      <Box sx={{ 
-                        display: 'flex',
-                        alignItems: 'center',
-                        flexShrink: 0
-                      }}>
-                        <Tooltip title="下载">
-                          <Button
-                            variant="outlined"
-                            size="medium"
-                            startIcon={<DownloadIcon />}
-                            onClick={() => handleDownloadArtifact(artifact)}
-                            sx={{
-                              minWidth: '100px',
-                              fontWeight: 500
-                            }}
-                          >
-                            下载
-                          </Button>
-                        </Tooltip>
-                      </Box>
-                    </Box>
-                  </CardContent>
-                </Card>
-              ))
-            )}
-          </Box>
-        </TabPanel>
-        
         {/* 元数据标签页 */}
-        <TabPanel value={tabValue} index={2}>
+        <TabPanel value={tabValue} index={0}>
           <Typography variant="h6" gutterBottom>
             完整元数据
           </Typography>

@@ -29,11 +29,11 @@ import { useNavigate } from 'react-router-dom';
 // import { useDropzone } from 'react-dropzone'; // 暂时注释掉，使用原生文件上传
 
 interface ResourceMetadata {
-  name: string;
-  description: string;
-  tags: string[];
-  category: string;
-  accessLevel: 'public' | 'private' | 'restricted';
+  title: string; // 名称
+  description: string; // 描述
+  type: 'text' | 'image' | 'audio' | 'video' | 'document' | 'other'; // 类型
+  format: string; // 格式
+  keywords: string[]; // 关键词
 }
 
 interface UploadedFile {
@@ -54,11 +54,11 @@ const ResourceUpload: React.FC = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [metadata, setMetadata] = useState<ResourceMetadata>({
-    name: '',
+    title: '',
     description: '',
-    tags: [],
-    category: '',
-    accessLevel: 'private',
+    type: 'document',
+    format: '',
+    keywords: [],
   });
   const [tagInput, setTagInput] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -89,7 +89,7 @@ const ResourceUpload: React.FC = () => {
               totalRows: 15000,
             };
             setUploadedFile({ file, preview });
-            setMetadata(prev => ({ ...prev, name: file.name.replace(/\.[^/.]+$/, '') }));
+            setMetadata(prev => ({ ...prev, title: file.name.replace(/\.[^/.]+$/, ''), format: file.name.split('.').pop()?.toUpperCase() || '' }));
             setActiveStep(1);
             return 100;
           }
@@ -102,7 +102,7 @@ const ResourceUpload: React.FC = () => {
   const handleNext = () => {
     if (activeStep === 2) {
       // 验证元数据
-      if (!metadata.name || !metadata.description || !metadata.category) {
+      if (!metadata.title || !metadata.description || !metadata.format) {
         setError('请填写所有必填字段');
         return;
       }
@@ -116,10 +116,10 @@ const ResourceUpload: React.FC = () => {
   };
 
   const handleAddTag = () => {
-    if (tagInput.trim() && !metadata.tags.includes(tagInput.trim())) {
+    if (tagInput.trim() && !metadata.keywords.includes(tagInput.trim())) {
       setMetadata({
         ...metadata,
-        tags: [...metadata.tags, tagInput.trim()],
+        keywords: [...metadata.keywords, tagInput.trim()],
       });
       setTagInput('');
     }
@@ -128,7 +128,7 @@ const ResourceUpload: React.FC = () => {
   const handleRemoveTag = (tagToRemove: string) => {
     setMetadata({
       ...metadata,
-      tags: metadata.tags.filter(tag => tag !== tagToRemove),
+      keywords: metadata.keywords.filter(tag => tag !== tagToRemove),
     });
   };
 
@@ -271,8 +271,8 @@ const ResourceUpload: React.FC = () => {
               <TextField
                 fullWidth
                 label="资源名称"
-                value={metadata.name}
-                onChange={(e) => setMetadata({ ...metadata, name: e.target.value })}
+                value={metadata.title}
+                onChange={(e) => setMetadata({ ...metadata, title: e.target.value })}
                 required
                 helperText="为资源指定一个有意义的名称"
               />
@@ -291,50 +291,45 @@ const ResourceUpload: React.FC = () => {
               <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 3 }}>
                 <Box sx={{ flex: 1 }}>
                   <FormControl fullWidth required>
-                    <InputLabel>分类</InputLabel>
+                    <InputLabel>类型</InputLabel>
                     <Select
-                      value={metadata.category}
-                      label="分类"
-                      onChange={(e) => setMetadata({ ...metadata, category: e.target.value })}
+                      value={metadata.type}
+                      label="类型"
+                      onChange={(e) => setMetadata({ ...metadata, type: e.target.value as any })}
                     >
-                      <MenuItem value="customer">客户数据</MenuItem>
-                      <MenuItem value="sales">销售数据</MenuItem>
-                      <MenuItem value="product">产品数据</MenuItem>
-                      <MenuItem value="financial">财务数据</MenuItem>
-                      <MenuItem value="operational">运营数据</MenuItem>
+                      <MenuItem value="text">文本</MenuItem>
+                      <MenuItem value="image">图像</MenuItem>
+                      <MenuItem value="audio">音频</MenuItem>
+                      <MenuItem value="video">视频</MenuItem>
+                      <MenuItem value="document">文档</MenuItem>
                       <MenuItem value="other">其他</MenuItem>
                     </Select>
-                    <FormHelperText>选择资源的业务分类</FormHelperText>
+                    <FormHelperText>选择资源的数据类型</FormHelperText>
                   </FormControl>
                 </Box>
 
                 <Box sx={{ flex: 1 }}>
-                  <FormControl fullWidth>
-                    <InputLabel>访问级别</InputLabel>
-                    <Select
-                      value={metadata.accessLevel}
-                      label="访问级别"
-                      onChange={(e) => setMetadata({ ...metadata, accessLevel: e.target.value as any })}
-                    >
-                      <MenuItem value="public">公开</MenuItem>
-                      <MenuItem value="private">私有</MenuItem>
-                      <MenuItem value="restricted">受限</MenuItem>
-                    </Select>
-                    <FormHelperText>设置资源的访问权限</FormHelperText>
-                  </FormControl>
+                  <TextField
+                    fullWidth
+                    label="格式"
+                    value={metadata.format}
+                    onChange={(e) => setMetadata({ ...metadata, format: e.target.value })}
+                    required
+                    helperText="如：CSV、JSON、TXT等"
+                  />
                 </Box>
               </Box>
 
               <Box>
                 <Typography variant="subtitle2" gutterBottom>
-                  标签
+                  关键词
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
-                  {metadata.tags.map((tag, index) => (
+                  {metadata.keywords.map((keyword, index) => (
                     <Chip
                       key={index}
-                      label={tag}
-                      onDelete={() => handleRemoveTag(tag)}
+                      label={keyword}
+                      onDelete={() => handleRemoveTag(keyword)}
                       size="small"
                     />
                   ))}
@@ -342,7 +337,7 @@ const ResourceUpload: React.FC = () => {
                 <Box sx={{ display: 'flex', gap: 1 }}>
                   <TextField
                     size="small"
-                    placeholder="添加标签"
+                    placeholder="添加关键词"
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleAddTag()}
@@ -370,18 +365,18 @@ const ResourceUpload: React.FC = () => {
               资源创建成功！
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              资源 "{metadata.name}" 已成功创建并可以使用
+              资源 "{metadata.title}" 已成功创建并可以使用
             </Typography>
             
             <Paper sx={{ p: 2, textAlign: 'left', maxWidth: 400, mx: 'auto' }}>
               <Typography variant="subtitle2" gutterBottom>
                 资源信息：
               </Typography>
-              <Typography variant="body2">名称：{metadata.name}</Typography>
+              <Typography variant="body2">名称：{metadata.title}</Typography>
               <Typography variant="body2">文件：{uploadedFile?.file.name}</Typography>
               <Typography variant="body2">大小：{((uploadedFile?.file.size || 0) / 1024 / 1024).toFixed(2)} MB</Typography>
-              <Typography variant="body2">分类：{metadata.category}</Typography>
-              <Typography variant="body2">访问级别：{metadata.accessLevel}</Typography>
+              <Typography variant="body2">类型：{metadata.type}</Typography>
+              <Typography variant="body2">格式：{metadata.format}</Typography>
             </Paper>
           </Box>
         );
